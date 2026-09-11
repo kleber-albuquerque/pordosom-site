@@ -1,0 +1,36 @@
+name: Render e Publicar Site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # permite rodar manualmente na aba Actions
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixa o repositório
+        uses: actions/checkout@v4
+
+      - name: Roda o render do catálogo
+        run: python3 render.py
+
+      - name: Configura Pages
+        uses: actions/configure-pages@v4
+
+      - name: Prepara o pacote do site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Publica no GitHub Pages
+        uses: actions/deploy-pages@v4
