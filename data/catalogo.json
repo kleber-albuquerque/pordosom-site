@@ -104,7 +104,7 @@
       "artista": "",
       "ano": "",
       "capa": "/images/uploads/teste.jpg",
-      "generos": [],
+      "generos": "[]",
       "destaque": false,
       "spotify": "",
       "youtube": ""
