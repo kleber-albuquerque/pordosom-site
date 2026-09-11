@@ -11,7 +11,9 @@ spotify: ""
 youtube: "https://www.youtube.com/results?search_query=Marco+Vilane+Zeca+Baleiro+Pelo+Caminho"
 apple: ""
 deezer: ""
-texto_en: ""
+texto_en: "When two songwriters Brazil respects share a song, the result tends to exceed the arrangement. \"Pelo Caminho Que Eu Trilho\" brings together Marco Vilane and Zeca Baleiro — a guest who entered as family: a road partner, not a studio one. A sung reflection on path and choice, the way only fine MPB can."
 ---
 
-[TEXTO A REDIGIR - parceria com Zeca Baleiro, artista convidado do selo.]
+Quando dois compositores que o Brasil respeita dividem uma canção, o resultado costuma passar do combinado. "Pelo Caminho Que Eu Trilho" reúne Marco Vilane e Zeca Baleiro — o convidado que entrou de casa: parceiro de estrada, não de estúdio.
+
+Uma reflexão cantada sobre trajetória e escolha, do jeito que só a boa MPB faz: sem sermão, com melodia que fica tocando na lembrança depois que a música acabou.
