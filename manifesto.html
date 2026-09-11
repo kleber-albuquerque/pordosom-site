@@ -3,19 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Por do Som | Selo Independente & Produtora Cultural</title>
-<meta name="description" content="Por do Som — selo independente e produtora cultural dedicado às Brasilidades: música popular brasileira de raiz, cultura afro-brasileira, samba raiz e tambores do Brasil.">
-<meta property="og:title" content="Por do Som | Selo Independente & Produtora Cultural">
-<meta property="og:description" content="Selo independente dedicado às Brasilidades — música popular brasileira de raiz.">
-<meta property="og:type" content="website">
-<meta property="og:image" content="/pordosom-profile.jpg">
+<title>Manifesto | Por do Som</title>
+<meta name="description" content="O Manifesto do Por do Som: por que a música brasileira de raiz merece ser ouvida, registrada e celebrada. Brasilidades, ancestralidade e resistência cultural.">
 <link rel="icon" type="image/jpeg" href="/pordosom-profile.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
+<body class="page-interna">
 
 <header class="header" id="header">
     <a href="/" class="logo">
@@ -27,62 +21,19 @@
         <a href="/projetos.html" class="nav-link">Projetos</a>
         <a href="/audiovisual.html" class="nav-link">Audiovisual</a>
         <a href="/blog.html" class="nav-link">Notícias</a>
-        <a href="/manifesto.html" class="nav-link">Manifesto</a>
+        <a href="/manifesto.html" class="nav-link" style="color:var(--brand-primary-light)">Manifesto</a>
         <a href="/quem-somos.html" class="nav-link">Quem Somos</a>
         <a href="/contato.html" class="nav-link nav-cta">Fale com o Selo</a>
     </nav>
     <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </header>
 
-<section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-bg-overlay"></div>
-    <div class="hero-noise"></div>
-    <div class="hero-content">
-        <p class="hero-subtitle">Selo Independente · Produtora Cultural</p>
-        <h1 class="hero-title">
-            Onde a música
-            <span class="gradient">nasce.</span>
-        </h1>
-        <p class="hero-description">
-            Um selo dedicado às <strong>Brasilidades</strong> — à cultura afro-brasileira,
-            aos mestres da tradição popular, aos tambores do norte e ao samba de raiz.
-            Onde a ancestralidade encontra o tempo presente.
-        </p>
-        <div class="hero-actions">
-            <a href="/gravadora.html" class="btn btn-primary">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                Ouça o catálogo
-            </a>
-            <a href="/manifesto.html" class="btn btn-outline">Conheça o selo</a>
-        </div>
-    </div>
-    <div class="hero-scroll">
-        <span>Role para descobrir</span>
-        <div class="hero-scroll-line"></div>
-    </div>
-</section>
-
-<section class="services" id="vitrine-secao">
-    <div class="container">
-        <span class="section-subtitle">Do Catálogo</span>
-        <h2 class="section-title">Lançamentos & <span class="gradient">clássicos do selo</span></h2>
-        <p class="section-description">
-            Uma seleção do que o Por do Som já gravou. O catálogo completo,
-            com filtros por gênero, está a um clique.
-        </p>
-        <div class="vitrine-grid" id="vitrine"></div>
-        <div style="text-align:center;margin-top:3rem">
-            <a href="/gravadora.html" class="btn btn-outline">Catálogo completo →</a>
-        </div>
-    </div>
-</section>
-
-<section class="manifesto" id="manifesto">
+<section class="manifesto" style="padding-top:calc(var(--spacing-section) + 3rem)">
     <div class="container">
         <div class="manifesto-content">
             <span class="section-subtitle">Manifesto</span>
-            <h2 class="section-title">Som que <span class="gradient">pulsa Brasil</span></h2>
+            <h1 class="section-title">Som que <span class="gradient">pulsa Brasil</span></h1>
+
             <p class="manifesto-text">
                 O <strong>Por do Som</strong> nasceu de uma certeza simples: a música brasileira
                 de raiz merece ser ouvida, registrada e celebrada. Somos um selo independente
@@ -91,7 +42,15 @@
                 dos terreiros aos quintais, dos mestres aos jovens que os escutam.
             </p>
             <p class="manifesto-text">
+                Trabalhamos com <strong>cultura afro-brasileira</strong>, com samba raiz,
+                com bumba meu boi, com tambores e cantigas. Gravamos, produzimos, curamos.
+                Homenageamos mestres e abrigamos parcerias que atravessam gerações — porque
+                a tradição só é viva quando segue sendo cantada.
+            </p>
+            <p class="manifesto-text">
                 Cada lançamento é um <span class="highlight">ato de resistência cultural</span>.
+                Cada projeto, uma forma de dizer: a música popular brasileira segue inventando,
+                segue ensinando, segue reunindo gente em torno do que é nosso.
             </p>
             <p class="manifesto-signature">— Por do Som Cultural</p>
 
@@ -140,7 +99,6 @@
     </div>
 </footer>
 
-<script src="/js/catalogo.js"></script>
 <script>
 const header = document.getElementById('header');
 const nav = document.getElementById('nav');
@@ -152,12 +110,6 @@ window.addEventListener('scroll', () => {
 mobileMenuBtn.addEventListener('click', () => {
     nav.classList.toggle('active');
     mobileMenuBtn.textContent = nav.classList.contains('active') ? '✕' : '☰';
-});
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        nav.classList.remove('active');
-        mobileMenuBtn.textContent = '☰';
-    });
 });
 const fadeObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quem Somos | Por do Som</title>
+<meta name="description" content="Conheça o Por do Som: selo independente e produtora cultural. Artistas, mestres e parceiros que carregam a brasilidade nas vozes, violas e tambores.">
+<link rel="icon" type="image/jpeg" href="/pordosom-profile.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-interna">
+
+<header class="header" id="header">
+    <a href="/" class="logo">
+        <span class="logo-mark"><img src="/pordosom-profile.jpg" alt="Por do Som"></span>
+        <span class="logo-text">PÔR DO SOM</span>
+    </a>
+    <nav class="nav" id="nav">
+        <a href="/gravadora.html" class="nav-link">Gravadora</a>
+        <a href="/projetos.html" class="nav-link">Projetos</a>
+        <a href="/audiovisual.html" class="nav-link">Audiovisual</a>
+        <a href="/blog.html" class="nav-link">Notícias</a>
+        <a href="/manifesto.html" class="nav-link">Manifesto</a>
+        <a href="/quem-somos.html" class="nav-link" style="color:var(--brand-primary-light)">Quem Somos</a>
+        <a href="/contato.html" class="nav-link nav-cta">Fale com o Selo</a>
+    </nav>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+</header>
+
+<section class="artistas" style="padding-top:calc(var(--spacing-section) + 3rem)">
+    <div class="container">
+        <span class="section-subtitle">Quem Somos</span>
+        <h1 class="section-title">Artistas que <span class="gradient">cantam o Brasil</span></h1>
+        <p class="section-description">
+            Compositores, intérpretes e mestres que carregam a brasilidade nas vozes,
+            nas violas e nos tambores. Cada um à sua maneira, todos no mesmo compasso.
+        </p>
+
+        <div class="artistas-grid" id="artistas-grid"></div>
+
+        <div style="text-align:center;margin-top:3.5rem;max-width:640px;margin-left:auto;margin-right:auto" class="fade-in">
+            <p class="manifesto-text" style="font-size:0.95rem">
+                O Por do Som é um selo independente e produtora cultural dedicado às
+                Brasilidades — <strong>música popular brasileira de raiz</strong>, cultura
+                afro-brasileira, samba raiz e tambores do Brasil.
+            </p>
+            <a href="/manifesto.html" class="btn btn-outline" style="margin-top:1.5rem">Conheça nosso manifesto</a>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <span class="footer-logo">PÔR DO SOM</span>
+        <p class="footer-tagline">Selo Independente · Produtora Cultural · Brasilidades</p>
+        <div class="footer-social">
+            <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://www.youtube.com/user/pordosomcultural" target="_blank" rel="noopener">YouTube</a>
+            <a href="https://open.spotify.com/user/pordosom?si=386032c6b03644ad" target="_blank" rel="noopener">Spotify</a>
+            <a href="https://www.facebook.com/pordosomcultural" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://tiktok.com/@pordosom" target="_blank" rel="noopener">TikTok</a>
+            <a href="https://linktr.ee/pordosom" target="_blank" rel="noopener">Linktree</a>
+        </div>
+        <p class="footer-text">© 2026 Por do Som Cultural · Todos os direitos reservados</p>
+    </div>
+</footer>
+
+<script src="/js/catalogo.js"></script>
+<script>
+const header = document.getElementById('header');
+const nav = document.getElementById('nav');
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+}, { passive: true });
+mobileMenuBtn.addEventListener('click', () => {
+    nav.classList.toggle('active');
+    mobileMenuBtn.textContent = nav.classList.contains('active') ? '✕' : '☰';
+});
+const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            fadeObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+</script>
+</body>
+</html>

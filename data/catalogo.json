@@ -1,0 +1,101 @@
+{
+  "generos": [
+    {
+      "id": "samba-de-raiz",
+      "nome": "Samba de Raiz"
+    },
+    {
+      "id": "instrumental",
+      "nome": "Instrumental"
+    },
+    {
+      "id": "mpb",
+      "nome": "MPB/Nova MPB"
+    },
+    {
+      "id": "brasilidades",
+      "nome": "Brasilidades"
+    },
+    {
+      "id": "cultura-popular",
+      "nome": "Cultura Popular"
+    },
+    {
+      "id": "afro-brasileira",
+      "nome": "Afro-brasileira"
+    },
+    {
+      "id": "infantil",
+      "nome": "Infantil"
+    }
+  ],
+  "albuns": [
+    {
+      "slug": "eu-apenas-queria-que-voce-soubesse",
+      "titulo": "Eu Apenas Queria que Você Soubesse",
+      "artista": "Marco Vilane",
+      "ano": 2024,
+      "capa": "/images/uploads/eu-apenas-queria.jpg",
+      "generos": [
+        "mpb",
+        "brasilidades"
+      ],
+      "destaque": true,
+      "spotify": "https://open.spotify.com/track/2QJKf1SatqUhbpm5WcYeXZ",
+      "youtube": ""
+    },
+    {
+      "slug": "abebe",
+      "titulo": "Abebe",
+      "artista": "Luana Bayo",
+      "ano": 2024,
+      "capa": "/images/uploads/abebe.jpg",
+      "generos": [
+        "afro-brasileira"
+      ],
+      "destaque": true,
+      "spotify": "",
+      "youtube": ""
+    },
+    {
+      "slug": "pelo-caminho-que-eu-trilho",
+      "titulo": "Pelo Caminho Que Eu Trilho",
+      "artista": "Marco Vilane e Zeca Baleiro",
+      "ano": 2023,
+      "capa": "/images/uploads/pelo-caminho.jpg",
+      "generos": [
+        "mpb"
+      ],
+      "destaque": true,
+      "spotify": "",
+      "youtube": "https://www.youtube.com/results?search_query=Marco+Vilane+Zeca+Baleiro+Pelo+Caminho"
+    },
+    {
+      "slug": "o-urubu-esta-com-raiva-do-boi",
+      "titulo": "O Urubu Esta com Raiva do Boi",
+      "artista": "Marco Vilane e Danilo Moraes",
+      "ano": 2023,
+      "capa": "/images/uploads/urubu-boi.jpg",
+      "generos": [
+        "cultura-popular",
+        "brasilidades"
+      ],
+      "destaque": false,
+      "spotify": "",
+      "youtube": "https://www.youtube.com/results?search_query=Marco+Vilane+Danilo+Moraes+Urubu+Raiva+Boi"
+    },
+    {
+      "slug": "navalha",
+      "titulo": "Navalha",
+      "artista": "Jonathan Silva",
+      "ano": 2023,
+      "capa": "/images/uploads/navalha.jpg",
+      "generos": [
+        "mpb"
+      ],
+      "destaque": false,
+      "spotify": "",
+      "youtube": "https://www.youtube.com/results?search_query=Jonathan+Silva+Navalha"
+    }
+  ]
+}
