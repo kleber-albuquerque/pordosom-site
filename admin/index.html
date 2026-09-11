@@ -207,7 +207,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           <h1 class="page-title">Álbuns</h1>
           <p class="page-sub" style="margin-bottom:0">O catálogo completo — edite, destaque, publique</p>
         </div>
-        <button class="btn-novo" onclick="emBreve('Novo álbum')">＋ Novo Álbum</button>
+        <button class="btn-novo" onclick='abrirNovoAlbum()'>＋ Novo Álbum</button>
       </div>
       <div class="loading" id="albuns-loading">Carregando álbuns do repositório…</div>
       <div class="table-wrap hidden" id="albuns-table-wrap">
@@ -419,7 +419,7 @@ async function carregarAlbuns() {
         <td>${a.ano || '—'}</td>
         <td>${a.destaque ? '<span class="destaque-star">★</span>' : '—'}</td>
         <td><span class="status-publicado"><span class="status-dot status-ok"></span>Publicado</span></td>
-        <td><button class="side-item" style="padding:.4rem .7rem" title="Editar álbum" onclick='abrirEditor(ALBUNS[${ALBUNS.indexOf(a)}])'>✏️</button></td>
+        <td><button class="side-item" style="padding:.4rem .7rem" title="Editar álbum" onclick='abrirEditor(ALBUNS[${ALBUNS.indexOf(a)}])'>✏️</button> <button class="side-item" style="padding:.4rem .7rem" title="Excluir álbum" onclick='excluirAlbum(ALBUNS[${ALBUNS.indexOf(a)}])'>🗑️</button></td>
       </tr>`).join('');
 
     loading.classList.add('hidden');
@@ -558,6 +558,48 @@ async function salvarAlbum() {
     toast('❌ Erro ao salvar: ' + e.message);
   } finally {
     btn.disabled = false; btn.textContent = '💾 Salvar e Publicar';
+  }
+}
+
+// ==========================================================
+// PARTE 3 - CRIAR E EXCLUIR ALBUNS
+// ==========================================================
+function slugify(texto) {
+  return (texto || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')   // remove acentos
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')                        // remove pontuacao
+    .trim()
+    .replace(/[\s-]+/g, '-');                             // espacos -> hifen
+}
+
+function abrirNovoAlbum() {
+  // abre o editor em MODO CRIACAO: albumAtual com _arquivo vazio
+  albumAtual = { _arquivo: '', _sha: null, titulo: '', artista: '', ano: '',
+                 generos: [], destaque: false, faixas: '', spotify: '',
+                 youtube: '', apple: '', deezer: '', capa: '', texto_en: '',
+                 corpo: '' };
+  // reaproveita o abrirEditor (preenche tudo vazio)
+  abrirEditor(albumAtual);
+  document.getElementById('editor-titulo').textContent = 'Novo Álbum';
+}
+
+async function excluirAlbum(album) {
+  if (!confirm('Excluir o álbum "' + (album.titulo || album._arquivo) + '"?\n\nIsso apaga a página do site e o arquivo do catálogo. Não dá para desfazer (a menos que a gente recupere no GitHub).'))
+    return;
+  try {
+    await gh(`/repos/${REPO}/contents/content/albuns/${album._arquivo}`, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message: 'Exclui álbum: ' + album.titulo,
+        sha: album._sha
+      })
+    });
+    toast('✓ Álbum excluído. O site atualiza em ~2 minutos.');
+    await carregarAlbuns();
+  } catch (e) {
+    toast('❌ Erro ao excluir: ' + e.message);
   }
 }
 
