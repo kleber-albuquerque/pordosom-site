@@ -1,0 +1,18 @@
+---
+titulo: "Baticum de Bará"
+artista: "Luana Bayô"
+ano: 2021
+capa: ""
+generos:
+  - afro-brasileira
+destaque: false
+faixas: ""
+spotify: "https://open.spotify.com/track/5CqnX9m7ApGMqJ9nlAgy78"
+youtube: ""
+apple: ""
+deezer: ""
+texto_en: ""
+---
+
+[TEXTO A REDIGIR — gerado em lote]
+<!-- OBS DA PESQUISA: single -->
