@@ -1,0 +1,3 @@
+*.bak*
+fix_*.py
+__pycache__/
