@@ -152,7 +152,7 @@ def page_album(a, prev, next_):
         en_html = f'<p class="album-descricao-en">{esc(a["texto_en"])}</p>'
 
         prev_html = (f'<a class="album-nav-link" href="{caminho("/albuns/" + prev["slug"] + ".html")}">← {esc(prev["titulo"])}</a>'
-                 if prev else '<span></span>')
+                 if prev else '<span></span>'    prev_html = f'<a class="album-nav-link" href="{caminho("/albuns/" + prev["slug"] + ".html")}">&#8592; {esc(prev["titulo"])}</a>' if prev else '<span></span>'
     next_html = (f'<a class="album-nav-link" href="{caminho("/albuns/" + next_["slug"] + ".html")}">{esc(next_["titulo"])} →</a>'
                  if next_ else '<span></span>')
 
