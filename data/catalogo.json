@@ -97,17 +97,6 @@
       "destaque": false,
       "spotify": "",
       "youtube": "https://www.youtube.com/results?search_query=Marco+Vilane+Danilo+Moraes+Urubu+Raiva+Boi"
-    },
-    {
-      "slug": "teste",
-      "titulo": "teste",
-      "artista": "",
-      "ano": "",
-      "capa": "/images/uploads/teste.jpg",
-      "generos": "[]",
-      "destaque": false,
-      "spotify": "",
-      "youtube": ""
     }
   ]
 }
