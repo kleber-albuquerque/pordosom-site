@@ -1,4 +1,5 @@
 {
+  "base": "/pordosom-site",
   "generos": [
     {
       "id": "samba-de-raiz",
@@ -88,7 +89,7 @@
       "slug": "navalha",
       "titulo": "Navalha",
       "artista": "Jonathan Silva",
-      "ano": 2023,
+      "ano": 2022,
       "capa": "/images/uploads/navalha.jpg",
       "generos": [
         "mpb"
