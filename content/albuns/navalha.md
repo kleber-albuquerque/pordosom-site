@@ -1,7 +1,7 @@
 ---
 titulo: "Navalha"
 artista: "Jonathan Silva"
-ano: 2023
+ano: 2024
 capa: "/images/uploads/navalha.jpg"
 generos:
   - mpb
