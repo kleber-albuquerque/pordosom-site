@@ -521,41 +521,51 @@ async function salvarAlbum() {
   if (!albumAtual) return;
   const btn = document.getElementById('btn-salvar');
   if (!document.getElementById('f-titulo').value.trim()) {
-    toast('⚠️ O título é obrigatório'); return;
+    toast('O título é obrigatório'); return;
   }
   btn.disabled = true; btn.textContent = 'Salvando…';
   try {
     if (capaNova) {
-      const nomeArquivo = 'images/uploads/' + albumAtual._arquivo.replace('.md', '') + '.jpg';
-      const caminhoImg = `/repos/${REPO}/contents/${nomeArquivo}`;
+      const baseNome = albumAtual._arquivo ? albumAtual._arquivo.replace('.md', '') : slugify(document.getElementById('f-titulo').value);
+      const nomeImg = 'images/uploads/' + baseNome + '.jpg';
+      const caminhoImg = '/repos/' + REPO + '/contents/' + nomeImg;
       let shaImg = null;
       try { const atual = await gh(caminhoImg); shaImg = atual.sha; } catch (e) {}
       await gh(caminhoImg, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          message: 'Atualiza capa: ' + albumAtual.titulo,
+          message: 'Atualiza capa: ' + document.getElementById('f-titulo').value,
           content: capaNova.base64,
           ...(shaImg ? {sha: shaImg} : {})
         })
       });
-      albumAtual.capa = '/' + nomeArquivo;
+      albumAtual.capa = '/' + nomeImg;
     }
+
     const conteudo = btoa(unescape(encodeURIComponent(montarMd())));
-    await gh(`/repos/${REPO}/contents/content/albuns/${albumAtual._arquivo}`, {
+    const ehNovo = !albumAtual._sha;
+    const nomeArquivo = ehNovo
+      ? slugify(document.getElementById('f-titulo').value) + '.md'
+      : albumAtual._arquivo;
+
+    const bodySalvar = {
+      message: (ehNovo ? 'Novo álbum: ' : 'Edita álbum: ') + document.getElementById('f-titulo').value,
+      content: conteudo
+    };
+    if (!ehNovo) bodySalvar.sha = albumAtual._sha;
+
+    await gh('/repos/' + REPO + '/contents/content/albuns/' + nomeArquivo, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        message: 'Edita álbum: ' + document.getElementById('f-titulo').value,
-        content: conteudo,
-        sha: albumAtual._sha
-      })
+      body: JSON.stringify(bodySalvar)
     });
-    toast('✓ Álbum salvo! O site atualiza em ~2 minutos.');
+
+    toast('Álbum salvo! O site atualiza em ~2 min (Ctrl+Shift+R se não mudar na hora).');
     fecharEditor();
     await carregarAlbuns();
   } catch (e) {
-    toast('❌ Erro ao salvar: ' + e.message);
+    toast('Erro ao salvar: ' + e.message);
   } finally {
     btn.disabled = false; btn.textContent = '💾 Salvar e Publicar';
   }
