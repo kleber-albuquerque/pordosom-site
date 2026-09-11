@@ -411,7 +411,7 @@ if True:   # gera sempre
         '</article>'
         for i, p in enumerate(posts)
     )
-    blog_html = BLOG_TEMPLATE.replace('<!-- POSTS LISTA -->', '\n'.join(itens)).replace('<!-- POSTS CORPO -->', corpo_posts)
+    blog_html = BLOG_TEMPLATE.replace('BASE', BASE).replace('<!-- POSTS LISTA -->', '\n'.join(itens)).replace('<!-- POSTS CORPO -->', corpo_posts)
     with open(os.path.join(BASE_DIR, 'blog.html'), 'w', encoding='utf-8') as f:
         f.write(blog_html)
     print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
