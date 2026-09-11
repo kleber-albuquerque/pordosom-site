@@ -1,11 +1,11 @@
 ---
 titulo: "O Urubu Esta com Raiva do Boi"
 artista: "Marco Vilane e Danilo Moraes"
-ano: 2023
+ano: 2020
 capa: "/images/uploads/urubu-boi.jpg"
 generos:
-  - cultura-popular
   - brasilidades
+  - cultura-popular
 destaque: false
 faixas: 1
 spotify: ""
