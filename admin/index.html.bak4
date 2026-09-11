@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel — Por do Som</title>
+<style>
+:root{
+  --brand-primary:#a83030;--brand-primary-light:#c84545;--brand-accent:#e8a04a;
+  --bg-dark:#0d0707;--bg-darker:#060303;--bg-card:#1a0e0e;--bg-card-hover:#251515;
+  --text-primary:#f5ede0;--text-secondary:#b8a89a;--text-muted:#7a6a5e;
+  --border:rgba(168,48,48,.25);--border-light:rgba(168,48,48,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Montserrat',system-ui,sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh}
+.hidden{display:none!important}
+
+/* ===== LOGIN ===== */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.login-box{background:var(--bg-card);border:1px solid var(--border);padding:2.5rem;border-radius:8px;max-width:420px;width:100%}
+.login-logo{display:flex;align-items:center;gap:.8rem;justify-content:center;margin-bottom:.5rem}
+.login-logo img{width:48px;height:48px;border-radius:50%;border:1px solid var(--brand-primary-light)}
+.login-logo span{font-weight:800;letter-spacing:3px;font-size:1rem}
+.login-sub{text-align:center;color:var(--text-muted);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:2rem}
+.login-box label{display:block;font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-secondary);margin-bottom:.5rem}
+.login-box input{width:100%;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-primary);padding:.9rem 1rem;border-radius:4px;font-size:.9rem;font-family:inherit;outline:none}
+.login-box input:focus{border-color:var(--brand-primary-light)}
+.login-help{margin-top:1rem;font-size:.75rem;color:var(--text-muted);line-height:1.6}
+.login-help a{color:var(--brand-accent);text-decoration:none}
+.login-help a:hover{text-decoration:underline}
+.btn-primary{width:100%;margin-top:1.5rem;background:var(--brand-primary);color:var(--brand-cream,#f5ede0);border:1px solid var(--brand-primary-light);padding:.95rem;border-radius:4px;font-family:inherit;font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.btn-primary:hover{background:var(--brand-primary-light)}
+.login-error{margin-top:1rem;padding:.8rem;background:rgba(168,48,48,.15);border:1px solid var(--border);color:#f0b0b0;font-size:.8rem;border-radius:4px;display:none}
+
+/* ===== LAYOUT PRINCIPAL ===== */
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+.sidebar{background:var(--bg-darker);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:.4rem;position:sticky;top:0;height:100vh}
+.sidebar-brand{display:flex;align-items:center;gap:.6rem;padding:.5rem;margin-bottom:1.5rem}
+.sidebar-brand img{width:32px;height:32px;border-radius:50%;border:1px solid var(--brand-primary-light)}
+.sidebar-brand span{font-weight:800;font-size:.8rem;letter-spacing:2px}
+.side-item{display:flex;align-items:center;gap:.7rem;padding:.75rem 1rem;border-radius:4px;color:var(--text-secondary);text-decoration:none;font-size:.78rem;font-weight:600;letter-spacing:.5px;transition:.2s;cursor:pointer;border:none;background:none;font-family:inherit;width:100%;text-align:left}
+.side-item:hover{background:var(--bg-card);color:var(--text-primary)}
+.side-item.ativo{background:var(--brand-primary);color:#f5ede0}
+.side-item .icone{font-size:1rem;width:20px;text-align:center}
+.side-footer{margin-top:auto;padding:1rem;border-top:1px solid var(--border-light)}
+.side-user{font-size:.7rem;color:var(--text-muted)}
+.side-sair{margin-top:.5rem;background:none;border:none;color:#c08080;font-size:.7rem;cursor:pointer;font-family:inherit;padding:0}
+.side-sair:hover{color:var(--brand-primary-light);text-decoration:underline}
+
+.main{padding:2rem;max-width:1100px}
+.page-title{font-size:1.3rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:.4rem}
+.page-sub{font-size:.8rem;color:var(--text-muted);margin-bottom:2rem}
+
+/* ===== CARDS DE RESUMO ===== */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2.5rem}
+.stat-card{background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;padding:1.2rem 1.4rem}
+.stat-num{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--brand-primary-light),var(--brand-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+.stat-label{font-size:.62rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:.3rem}
+
+/* ===== TABELA DE ÁLBUNS ===== */
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:1rem;flex-wrap:wrap}
+.btn-novo{background:var(--brand-primary);color:#f5ede0;border:1px solid var(--brand-primary-light);padding:.7rem 1.3rem;border-radius:4px;font-family:inherit;font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.btn-novo:hover{background:var(--brand-primary-light)}
+.table-wrap{background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+th{font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);text-align:left;padding:.9rem 1.1rem;border-bottom:1px solid var(--border-light)}
+td{padding:.8rem 1.1rem;border-bottom:1px solid var(--border-light);font-size:.82rem;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-card-hover)}
+td img.capa-mini{width:42px;height:42px;border-radius:3px;object-fit:cover;background:var(--bg-darker)}
+.sem-capa{width:42px;height:42px;border-radius:3px;background:var(--bg-darker);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-muted)}
+td .titulo-cell{font-weight:700;color:var(--text-primary)}
+td .artista-cell{font-size:.72rem;color:var(--text-muted)}
+.tag-genero{display:inline-block;font-size:.55rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:.2rem .5rem;margin-right:.25rem;border:1px solid var(--border);color:var(--brand-accent);border-radius:2px}
+.destaque-star{color:var(--brand-accent);font-size:.9rem}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px}
+.status-ok{background:#5d9871}
+.status-publicado{color:#8dbf9f;font-size:.68rem}
+
+/* ===== ESTADOS ===== */
+.loading{text-align:center;padding:3rem;color:var(--text-muted);font-size:.85rem}
+.vazio{text-align:center;padding:3rem;color:var(--text-muted)}
+.vazio .icone{font-size:2.5rem;display:block;margin-bottom:1rem;opacity:.5}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg-card);border:1px solid var(--brand-primary-light);color:var(--text-primary);padding:1rem 1.5rem;border-radius:6px;font-size:.82rem;z-index:9999;animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===== EDITOR DE ALBUM (Parte 2) ===== */
+.editor-overlay{position:fixed;inset:0;background:rgba(6,3,3,.85);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
+.editor-box{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;max-width:860px;width:100%;padding:2rem;margin-bottom:2rem}
+.editor-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid var(--border-light)}
+.editor-header h2{font-size:1.1rem;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.editor-fechar{background:none;border:none;color:var(--text-muted);font-size:1.4rem;cursor:pointer}
+.editor-fechar:hover{color:var(--text-primary)}
+.editor-grid{display:grid;grid-template-columns:220px 1fr;gap:2rem}
+@media(max-width:700px){.editor-grid{grid-template-columns:1fr}}
+.capa-editor{width:220px;aspect-ratio:1;border-radius:6px;border:2px dashed var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg-darker);cursor:pointer;position:relative}
+.capa-editor img{width:100%;height:100%;object-fit:cover}
+.capa-editor .capa-hint{font-size:.7rem;color:var(--text-muted);text-align:center;padding:1rem;line-height:1.5}
+.capa-editor:hover{border-color:var(--brand-primary-light)}
+.btn-capa{margin-top:.8rem;width:100%;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-secondary);padding:.6rem;border-radius:4px;font-family:inherit;font-size:.68rem;font-weight:600;letter-spacing:1px;cursor:pointer}
+.btn-capa:hover{border-color:var(--brand-primary-light);color:var(--text-primary)}
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.f-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+@media(max-width:700px){.f-grid,.f-grid-3{grid-template-columns:1fr}}
+.f-field{display:flex;flex-direction:column;gap:.4rem}
+.f-field.full{grid-column:1/-1}
+.f-field label{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-secondary)}
+.f-field input,.f-field textarea{background:var(--bg-dark);border:1px solid var(--border-light);color:var(--text-primary);padding:.75rem .9rem;border-radius:4px;font-family:inherit;font-size:.88rem;outline:none;transition:border-color .2s}
+.f-field input:focus,.f-field textarea:focus{border-color:var(--brand-primary-light)}
+.f-field textarea{min-height:140px;resize:vertical;line-height:1.7}
+.f-field .hint{font-size:.65rem;color:var(--text-muted)}
+.f-checks{display:flex;flex-wrap:wrap;gap:.5rem}
+.f-check{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .9rem;border:1px solid var(--border-light);border-radius:4px;font-size:.75rem;cursor:pointer;color:var(--text-secondary);transition:.2s;user-select:none}
+.f-check input{display:none}
+.f-check.marcado{background:var(--brand-primary);border-color:var(--brand-primary-light);color:#f5ede0}
+.f-toggle{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;user-select:none}
+.f-toggle input{display:none}
+.f-toggle .trilha{width:44px;height:24px;border-radius:12px;background:var(--bg-darker);border:1px solid var(--border);position:relative;transition:.2s}
+.f-toggle .bolinha{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--text-muted);transition:.2s}
+.f-toggle input:checked + .trilha{background:var(--brand-primary);border-color:var(--brand-primary-light)}
+.f-toggle input:checked + .trilha .bolinha{left:22px;background:#f5ede0}
+.editor-rodape{display:flex;justify-content:flex-end;gap:1rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-light)}
+.btn-cancelar{background:none;border:1px solid var(--border);color:var(--text-secondary);padding:.8rem 1.6rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
+.btn-cancelar:hover{border-color:var(--text-muted);color:var(--text-primary)}
+.btn-salvar{background:var(--brand-primary);border:1px solid var(--brand-primary-light);color:#f5ede0;padding:.8rem 1.8rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.btn-salvar:hover{background:var(--brand-primary-light)}
+.btn-salvar:disabled{opacity:.5;cursor:wait}
+
+@media(max-width:800px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:.4rem}
+  .sidebar-brand{width:100%;}
+  .side-footer{display:none}
+  .main{padding:1.2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TELA DE LOGIN ===== -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="/pordosom-profile.jpg" alt="Por do Som">
+      <span>PÔR DO SOM</span>
+    </div>
+    <p class="login-sub">Painel de Edição</p>
+
+    <label for="token">Token do GitHub</label>
+    <input type="password" id="token" placeholder="ghp_... ou github_pat_..." autocomplete="off">
+    <div class="login-error" id="login-error"></div>
+
+    <button class="btn-primary" onclick="entrar()">Entrar no Painel</button>
+
+    <p class="login-help">
+      Como gerar seu token (2 minutos):
+      <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a>
+      → "Generate new token" → dê o nome "painel-pordosom" → em Repository access, escolha
+      <strong>"Only select repositories"</strong> e marque o repositório do site → em Permissions,
+      dê permissão de <strong>Contents: Read and write</strong> → Generate → copie o código.
+    </p>
+  </div>
+</div>
+
+<!-- ===== PAINEL PRINCIPAL ===== -->
+<div class="layout hidden" id="painel">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="/pordosom-profile.jpg" alt="">
+      <span>PÔR DO SOM</span>
+    </div>
+    <button class="side-item ativo" data-pagina="inicio"><span class="icone">🏠</span> Início</button>
+    <button class="side-item" data-pagina="albuns"><span class="icone">💿</span> Álbuns</button>
+    <button class="side-item" data-pagina="noticias" onclick="emBreve('Notícias')"><span class="icone">📰</span> Notícias</button>
+    <button class="side-item" data-pagina="projetos" onclick="emBreve('Projetos')"><span class="icone">🎬</span> Projetos</button>
+    <button class="side-item" data-pagina="audiovisual" onclick="emBreve('Audiovisual')"><span class="icone">🎵</span> Audiovisual</button>
+    <button class="side-item" data-pagina="config" onclick="emBreve('Configurações')"><span class="icone">⚙️</span> Configurações</button>
+    <div class="side-footer">
+      <div class="side-user" id="side-user">—</div>
+      <button class="side-sair" onclick="sair()">Sair do painel</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- PÁGINA INÍCIO -->
+    <div id="pagina-inicio">
+      <h1 class="page-title">Início</h1>
+      <p class="page-sub">Resumo do seu site — conectado ao repositório</p>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="stat-albuns">—</div><div class="stat-label">Álbuns no catálogo</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-destaques">—</div><div class="stat-label">Em destaque na home</div></div>
+        <div class="stat-card"><div class="stat-num" id="stat-generos">—</div><div class="stat-label">Gêneros ativos</div></div>
+      </div>
+      <div class="table-wrap" style="padding:1.5rem">
+        <p style="font-size:.85rem;color:var(--text-secondary);line-height:1.8">
+          💡 <strong>Como funciona:</strong> tudo o que você edita aqui é salvo direto no repositório do seu site.
+          Após salvar, o site se atualiza sozinho em 1–2 minutos.
+          Na barra lateral, clique em <strong>Álbuns</strong> para começar.
+        </p>
+      </div>
+    </div>
+
+    <!-- PÁGINA ÁLBUNS -->
+    <div id="pagina-albuns" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Álbuns</h1>
+          <p class="page-sub" style="margin-bottom:0">O catálogo completo — edite, destaque, publique</p>
+        </div>
+        <button class="btn-novo" onclick='abrirNovoAlbum()'>＋ Novo Álbum</button>
+      </div>
+      <div class="loading" id="albuns-loading">Carregando álbuns do repositório…</div>
+      <div class="table-wrap hidden" id="albuns-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Capa</th><th>Álbum</th><th>Gêneros</th><th>Ano</th><th>Home</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody id="albuns-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="albuns-vazio">
+        <span class="icone">💿</span>
+        Nenhum álbum cadastrado ainda.
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== EDITOR DE ALBUM (overlay) ===== -->
+  <div class="editor-overlay hidden" id="editor-overlay">
+    <div class="editor-box">
+      <div class="editor-header">
+        <h2 id="editor-titulo">Editar Álbum</h2>
+        <button class="editor-fechar" onclick="fecharEditor()">✕</button>
+      </div>
+      <div class="editor-grid">
+        <div>
+          <div class="capa-editor" id="capa-preview" onclick="subirCapa()">
+            <span class="capa-hint">Clique para escolher<br>a capa do álbum</span>
+          </div>
+          <input type="file" id="capa-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="capaEscolhida(event)">
+          <button class="btn-capa" onclick="subirCapa()">📷 Subir nova capa</button>
+          <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
+            Dica: imagem quadrada, ate 500KB.<br>Comprimida em tinypng.com fica perfeita.
+          </p>
+        </div>
+        <div>
+          <div class="f-grid">
+            <div class="f-field full"><label>Titulo do Album</label><input id="f-titulo" type="text"></div>
+            <div class="f-field"><label>Artista</label><input id="f-artista" type="text"></div>
+            <div class="f-field"><label>Ano</label><input id="f-ano" type="number" min="1990" max="2030"></div>
+            <div class="f-field full">
+              <label>Generos</label>
+              <div class="f-checks" id="f-generos"></div>
+            </div>
+            <div class="f-field"><label>N de faixas</label><input id="f-faixas" type="number" min="1" max="100"></div>
+            <div class="f-field">
+              <label>Destaque na home</label>
+              <label class="f-toggle">
+                <input type="checkbox" id="f-destaque">
+                <span class="trilha"><span class="bolinha"></span></span>
+                <span style="font-size:.75rem;color:var(--text-secondary)">Mostrar na vitrine</span>
+              </label>
+            </div>
+            <div class="f-field full"><label>Link do Spotify</label><input id="f-spotify" type="url" placeholder="https://open.spotify.com/album/..."></div>
+            <div class="f-field full"><label>Link do YouTube</label><input id="f-youtube" type="url" placeholder="https://youtube.com/watch?v=..."></div>
+            <div class="f-grid-3" style="grid-column:1/-1">
+              <div class="f-field"><label>Apple Music</label><input id="f-apple" type="url"></div>
+              <div class="f-field"><label>Deezer</label><input id="f-deezer" type="url"></div>
+            </div>
+            <div class="f-field full"><label>Texto do album (portugues)</label><textarea id="f-texto-pt"></textarea></div>
+            <div class="f-field full"><label>Texto em ingles (para busca internacional)</label><textarea id="f-texto-en" style="min-height:90px"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-rodape">
+        <button class="btn-cancelar" onclick="fecharEditor()">Cancelar</button>
+        <button class="btn-salvar" id="btn-salvar" onclick="salvarAlbum()">💾 Salvar e Publicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==========================================================
+// PAINEL PDS — Parte 1: login + listagem real dos álbuns
+// ==========================================================
+const REPO = 'kleber-albuquerque/pordosom-site';  // ⚠️ na entrega: repo do cliente
+const API = 'https://api.github.com';
+
+let TOKEN = localStorage.getItem('pds_token') || '';
+let ALBUNS = [];
+
+// ---------- API GitHub ----------
+async function gh(caminho, opts = {}) {
+  const res = await fetch(API + caminho, {
+    ...opts,
+    headers: {
+      'Authorization': `Bearer ${TOKEN}`,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      ...(opts.headers || {})
+    }
+  });
+  if (res.status === 401) throw new Error('Token inválido ou expirado');
+  if (res.status === 403) throw new Error('Sem permissão no repositório (verifique o token)');
+  if (!res.ok) throw new Error('Erro GitHub API: ' + res.status);
+  return res.json();
+}
+
+// ---------- Login ----------
+async function entrar() {
+  const t = document.getElementById('token').value.trim();
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
+  if (!t) { err.textContent = 'Cole o token para entrar.'; err.style.display = 'block'; return; }
+  TOKEN = t;
+  try {
+    const user = await gh('/user');           // valida o token
+    localStorage.setItem('pds_token', TOKEN);
+    document.getElementById('side-user').textContent = 'Conectado: ' + (user.login || user.name);
+    abrirPainel();
+    await carregarAlbuns();
+  } catch (e) {
+    TOKEN = '';
+    err.textContent = '❌ ' + e.message;
+    err.style.display = 'block';
+  }
+}
+document.getElementById('token').addEventListener('keypress', e => {
+  if (e.key === 'Enter') entrar();
+});
+function sair() {
+  localStorage.removeItem('pds_token');
+  location.reload();
+}
+
+// ---------- Navegação ----------
+document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.side-item').forEach(b => b.classList.remove('ativo'));
+    btn.classList.add('ativo');
+    ['inicio', 'albuns'].forEach(p =>
+      document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
+  });
+});
+function emBreve(nome) {
+  toast(nome + ': disponível na próxima parte do painel 😉');
+}
+
+function abrirPainel() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('painel').classList.remove('hidden');
+}
+
+// ---------- Parser do frontmatter (mesma lógica do render.py) ----------
+function parseMd(texto) {
+  const m = texto.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
+  if (!m) return { meta: {}, corpo: texto };
+  const meta = {}; let lista = null;
+  for (const linha of m[1].split('\n')) {
+    const mi = linha.match(/^\s+-\s+(\S+)\s*$/);
+    if (mi && lista) { meta[lista].push(mi[1]); continue; }
+    const mk = linha.match(/^([\w-]+):\s*(.*)$/);
+    if (mk) {
+      const k = mk[1], v = mk[2].trim(); lista = k;
+      const ms = v.match(/^"(.*)"$/) || v.match(/^'(.*)'$/);
+      if (ms) meta[k] = ms[1];
+      else if (v === '') meta[k] = [];
+      else if (v === 'true') meta[k] = true;
+      else if (v === 'false') meta[k] = false;
+      else if (/^\d+$/.test(v)) meta[k] = parseInt(v);
+      else meta[k] = v;
+    }
+  }
+  return { meta, corpo: m[2].trim() };
+}
+
+// ---------- Carregar álbuns do repo ----------
+async function carregarAlbuns() {
+  const loading = document.getElementById('albuns-loading');
+  const wrap = document.getElementById('albuns-table-wrap');
+  const vazio = document.getElementById('albuns-vazio');
+  try {
+    const lista = await gh(`/repos/${REPO}/contents/content/albuns`);
+    const mds = lista.filter(f => f.name.endsWith('.md'));
+
+    ALBUNS = [];
+    for (const f of mds) {
+      const blob = await gh(`/repos/${REPO}/contents/content/albuns/${f.name}`);
+      const texto = atob(blob.content.replace(/\n/g, ''));
+      // UTF-8 correto (o atob trata como latin1):
+      const textoUtf8 = decodeURIComponent(escape(texto));
+      const { meta, corpo } = parseMd(textoUtf8);
+      meta.corpo = corpo;
+      meta._arquivo = f.name;
+      meta._sha = blob.sha;
+      ALBUNS.push(meta);
+    }
+    ALBUNS.sort((a, b) => (b.ano || 0) - (a.ano || 0));
+
+    // Stats do início
+    document.getElementById('stat-albuns').textContent = ALBUNS.length;
+    document.getElementById('stat-destaques').textContent = ALBUNS.filter(a => a.destaque).length;
+    const generos = new Set(); ALBUNS.forEach(a => (a.generos || []).forEach(g => generos.add(g)));
+    document.getElementById('stat-generos').textContent = generos.size;
+
+    // Tabela
+    const tbody = document.getElementById('albuns-tbody');
+    tbody.innerHTML = ALBUNS.map(a => `
+      <tr>
+        <td>${a.capa && !a.capa.includes('uploads')
+            ? `<img class="capa-mini" src="${a.capa}" alt="">`
+            : `<div class="sem-capa">💿</div>`}</td>
+        <td>
+          <div class="titulo-cell">${a.titulo || a._arquivo}</div>
+          <div class="artista-cell">${a.artista || '—'}</div>
+        </td>
+        <td>${(a.generos || []).map(g => `<span class="tag-genero">${g}</span>`).join('')}</td>
+        <td>${a.ano || '—'}</td>
+        <td>${a.destaque ? '<span class="destaque-star">★</span>' : '—'}</td>
+        <td><span class="status-publicado"><span class="status-dot status-ok"></span>Publicado</span></td>
+        <td><button class="side-item" style="padding:.4rem .7rem" title="Editar álbum" onclick='abrirEditor(ALBUNS[${ALBUNS.indexOf(a)}])'>✏️</button> <button class="side-item" style="padding:.4rem .7rem" title="Excluir álbum" onclick='excluirAlbum(ALBUNS[${ALBUNS.indexOf(a)}])'>🗑️</button></td>
+      </tr>`).join('');
+
+    loading.classList.add('hidden');
+    if (ALBUNS.length) wrap.classList.remove('hidden'); else vazio.classList.remove('hidden');
+    toast('✓ ' + ALBUNS.length + ' álbuns carregados do repositório');
+  } catch (e) {
+    loading.textContent = '❌ ' + e.message;
+    loading.style.color = '#f0b0b0';
+  }
+}
+
+// ==========================================================
+// PARTE 2 - EDITOR DE ALBUM
+// ==========================================================
+const GENEROS_PAINEL = [
+  {id:'samba-de-raiz', nome:'Samba de Raiz'},
+  {id:'instrumental', nome:'Instrumental'},
+  {id:'mpb', nome:'MPB/Nova MPB'},
+  {id:'brasilidades', nome:'Brasilidades'},
+  {id:'cultura-popular', nome:'Cultura Popular'},
+  {id:'afro-brasileira', nome:'Afro-brasileira'},
+  {id:'infantil', nome:'Infantil'}
+];
+let albumAtual = null;
+let capaNova = null;
+
+function abrirEditor(album) {
+  albumAtual = album;
+  capaNova = null;
+  document.getElementById('f-titulo').value = album.titulo || '';
+  document.getElementById('f-artista').value = album.artista || '';
+  document.getElementById('f-ano').value = album.ano || '';
+  document.getElementById('f-faixas').value = album.faixas || '';
+  document.getElementById('f-spotify').value = album.spotify || '';
+  document.getElementById('f-youtube').value = album.youtube || '';
+  document.getElementById('f-apple').value = album.apple || '';
+  document.getElementById('f-deezer').value = album.deezer || '';
+  document.getElementById('f-texto-pt').value = album.corpo || '';
+  document.getElementById('f-texto-en').value = album.texto_en || '';
+  document.getElementById('f-destaque').checked = !!album.destaque;
+
+  const marcados = album.generos || [];
+  document.getElementById('f-generos').innerHTML = GENEROS_PAINEL.map(g => `
+    <label class="f-check ${marcados.includes(g.id) ? 'marcado' : ''}">
+      <input type="checkbox" value="${g.id}" ${marcados.includes(g.id) ? 'checked' : ''}
+             onchange="this.closest('.f-check').classList.toggle('marcado', this.checked)">
+      ${g.nome}
+    </label>`).join('');
+
+  const preview = document.getElementById('capa-preview');
+  if (album.capa && album.capa.includes('uploads')) {
+    preview.innerHTML = `<img src="${album.capa}" alt="">`;
+  } else if (album.capa) {
+    preview.innerHTML = `<img src="${album.capa}" alt="" onerror="this.outerHTML='<span class=\'capa-hint\'>💿<br>Clique para escolher<br>a capa do álbum</span>'">`;
+  } else {
+    preview.innerHTML = '<span class="capa-hint">💿<br>Clique para escolher<br>a capa do álbum</span>';
+  }
+
+  document.getElementById('editor-titulo').textContent = 'Editar: ' + (album.titulo || 'Álbum');
+  document.getElementById('editor-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function fecharEditor() {
+  document.getElementById('editor-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  albumAtual = null; capaNova = null;
+}
+
+function subirCapa() { document.getElementById('capa-input').click(); }
+function capaEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  if (arquivo.size > 500 * 1024) {
+    toast('⚠️ Imagem grande (' + Math.round(arquivo.size/1024) + 'KB). Comprima em tinypng.com e tente de novo.');
+    e.target.value = '';
+    return;
+  }
+  const leitor = new FileReader();
+  leitor.onload = ev => {
+    capaNova = { arquivo, base64: ev.target.result.split(',')[1] };
+    document.getElementById('capa-preview').innerHTML = `<img src="${ev.target.result}" alt="">`;
+    toast('✓ Capa pronta — será enviada ao salvar');
+  };
+  leitor.readAsDataURL(arquivo);
+}
+
+function montarMd() {
+  const val = id => (document.getElementById(id).value || '').trim();
+  const generos = [...document.querySelectorAll('#f-generos input:checked')].map(c => c.value);
+  const gLinhas = generos.length
+    ? 'generos:\n' + generos.map(g => `  - ${g}`).join('\n')
+    : 'generos: []';
+  const q = s => `"${(s || '').replace(/"/g, '\\"')}"`;
+
+  return `---\ntitulo: ${q(val('f-titulo'))}\nartista: ${q(val('f-artista'))}\nano: ${val('f-ano') || '\"\"'}\ncapa: ${q(albumAtual.capa || '')}\n${gLinhas}\ndestaque: ${document.getElementById('f-destaque').checked}\nfaixas: ${val('f-faixas') || '1'}\nspotify: ${q(val('f-spotify'))}\nyoutube: ${q(val('f-youtube'))}\napple: ${q(val('f-apple'))}\ndeezer: ${q(val('f-deezer'))}\ntexto_en: ${q(val('f-texto-en'))}\n---\n\n${val('f-texto-pt')}\n`;
+}
+
+async function salvarAlbum() {
+  if (!albumAtual) return;
+  const btn = document.getElementById('btn-salvar');
+  if (!document.getElementById('f-titulo').value.trim()) {
+    toast('⚠️ O título é obrigatório'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Salvando…';
+  try {
+    if (capaNova) {
+      const nomeArquivo = 'images/uploads/' + albumAtual._arquivo.replace('.md', '') + '.jpg';
+      const caminhoImg = `/repos/${REPO}/contents/${nomeArquivo}`;
+      let shaImg = null;
+      try { const atual = await gh(caminhoImg); shaImg = atual.sha; } catch (e) {}
+      await gh(caminhoImg, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          message: 'Atualiza capa: ' + albumAtual.titulo,
+          content: capaNova.base64,
+          ...(shaImg ? {sha: shaImg} : {})
+        })
+      });
+      albumAtual.capa = '/' + nomeArquivo;
+    }
+    const conteudo = btoa(unescape(encodeURIComponent(montarMd())));
+    await gh(`/repos/${REPO}/contents/content/albuns/${albumAtual._arquivo}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message: 'Edita álbum: ' + document.getElementById('f-titulo').value,
+        content: conteudo,
+        sha: albumAtual._sha
+      })
+    });
+    toast('✓ Álbum salvo! O site atualiza em ~2 minutos.');
+    fecharEditor();
+    await carregarAlbuns();
+  } catch (e) {
+    toast('❌ Erro ao salvar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Salvar e Publicar';
+  }
+}
+
+// ==========================================================
+// PARTE 3 - CRIAR E EXCLUIR ALBUNS
+// ==========================================================
+function slugify(texto) {
+  return (texto || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')   // remove acentos
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')                        // remove pontuacao
+    .trim()
+    .replace(/[\s-]+/g, '-');                             // espacos -> hifen
+}
+
+function abrirNovoAlbum() {
+  // abre o editor em MODO CRIACAO: albumAtual com _arquivo vazio
+  albumAtual = { _arquivo: '', _sha: null, titulo: '', artista: '', ano: '',
+                 generos: [], destaque: false, faixas: '', spotify: '',
+                 youtube: '', apple: '', deezer: '', capa: '', texto_en: '',
+                 corpo: '' };
+  // reaproveita o abrirEditor (preenche tudo vazio)
+  abrirEditor(albumAtual);
+  document.getElementById('editor-titulo').textContent = 'Novo Álbum';
+}
+
+async function excluirAlbum(album) {
+  if (!confirm('Excluir o álbum "' + (album.titulo || album._arquivo) + '"?\n\nIsso apaga a página do site e o arquivo do catálogo. Não dá para desfazer (a menos que a gente recupere no GitHub).'))
+    return;
+  try {
+    await gh(`/repos/${REPO}/contents/content/albuns/${album._arquivo}`, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message: 'Exclui álbum: ' + album.titulo,
+        sha: album._sha
+      })
+    });
+    toast('✓ Álbum excluído. O site atualiza em ~2 minutos.');
+    await carregarAlbuns();
+  } catch (e) {
+    toast('❌ Erro ao excluir: ' + e.message);
+  }
+}
+
+// ---------- Toast ----------
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+// ---------- Auto-login se já tem token ----------
+(async function init() {
+  if (TOKEN) {
+    try {
+      const user = await gh('/user');
+      document.getElementById('side-user').textContent = 'Conectado: ' + (user.login || user.name);
+      abrirPainel();
+      carregarAlbuns();
+    } catch (e) {
+      localStorage.removeItem('pds_token');
+      TOKEN = '';
+    }
+  }
+})();
+</script>
+</body>
+</html>

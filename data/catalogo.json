@@ -72,20 +72,6 @@
       "youtube": "https://www.youtube.com/results?search_query=Marco+Vilane+Zeca+Baleiro+Pelo+Caminho"
     },
     {
-      "slug": "o-urubu-esta-com-raiva-do-boi",
-      "titulo": "O Urubu Esta com Raiva do Boi",
-      "artista": "Marco Vilane e Danilo Moraes",
-      "ano": 2023,
-      "capa": "/images/uploads/urubu-boi.jpg",
-      "generos": [
-        "cultura-popular",
-        "brasilidades"
-      ],
-      "destaque": false,
-      "spotify": "",
-      "youtube": "https://www.youtube.com/results?search_query=Marco+Vilane+Danilo+Moraes+Urubu+Raiva+Boi"
-    },
-    {
       "slug": "navalha",
       "titulo": "Navalha",
       "artista": "Jonathan Silva",
@@ -97,6 +83,31 @@
       "destaque": false,
       "spotify": "",
       "youtube": "https://www.youtube.com/results?search_query=Jonathan+Silva+Navalha"
+    },
+    {
+      "slug": "o-urubu-esta-com-raiva-do-boi",
+      "titulo": "O Urubu Esta com Raiva do Boi",
+      "artista": "Marco Vilane e Danilo Moraes",
+      "ano": 2020,
+      "capa": "/images/uploads/urubu-boi.jpg",
+      "generos": [
+        "brasilidades",
+        "cultura-popular"
+      ],
+      "destaque": false,
+      "spotify": "",
+      "youtube": "https://www.youtube.com/results?search_query=Marco+Vilane+Danilo+Moraes+Urubu+Raiva+Boi"
+    },
+    {
+      "slug": "teste",
+      "titulo": "teste",
+      "artista": "",
+      "ano": "",
+      "capa": "/images/uploads/teste.jpg",
+      "generos": [],
+      "destaque": false,
+      "spotify": "",
+      "youtube": ""
     }
   ]
 }
