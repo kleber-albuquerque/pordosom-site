@@ -3,7 +3,7 @@ titulo: "teste"
 artista: ""
 ano: ""
 capa: "/images/uploads/teste.jpg"
-generos:
+generos: []
 destaque: false
 faixas: 1
 spotify: ""
