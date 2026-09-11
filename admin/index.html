@@ -84,6 +84,48 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg-card);border:1px solid var(--brand-primary-light);color:var(--text-primary);padding:1rem 1.5rem;border-radius:6px;font-size:.82rem;z-index:9999;animation:toastIn .3s ease}
 @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
+/* ===== EDITOR DE ALBUM (Parte 2) ===== */
+.editor-overlay{position:fixed;inset:0;background:rgba(6,3,3,.85);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
+.editor-box{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;max-width:860px;width:100%;padding:2rem;margin-bottom:2rem}
+.editor-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid var(--border-light)}
+.editor-header h2{font-size:1.1rem;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.editor-fechar{background:none;border:none;color:var(--text-muted);font-size:1.4rem;cursor:pointer}
+.editor-fechar:hover{color:var(--text-primary)}
+.editor-grid{display:grid;grid-template-columns:220px 1fr;gap:2rem}
+@media(max-width:700px){.editor-grid{grid-template-columns:1fr}}
+.capa-editor{width:220px;aspect-ratio:1;border-radius:6px;border:2px dashed var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg-darker);cursor:pointer;position:relative}
+.capa-editor img{width:100%;height:100%;object-fit:cover}
+.capa-editor .capa-hint{font-size:.7rem;color:var(--text-muted);text-align:center;padding:1rem;line-height:1.5}
+.capa-editor:hover{border-color:var(--brand-primary-light)}
+.btn-capa{margin-top:.8rem;width:100%;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-secondary);padding:.6rem;border-radius:4px;font-family:inherit;font-size:.68rem;font-weight:600;letter-spacing:1px;cursor:pointer}
+.btn-capa:hover{border-color:var(--brand-primary-light);color:var(--text-primary)}
+.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.f-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+@media(max-width:700px){.f-grid,.f-grid-3{grid-template-columns:1fr}}
+.f-field{display:flex;flex-direction:column;gap:.4rem}
+.f-field.full{grid-column:1/-1}
+.f-field label{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-secondary)}
+.f-field input,.f-field textarea{background:var(--bg-dark);border:1px solid var(--border-light);color:var(--text-primary);padding:.75rem .9rem;border-radius:4px;font-family:inherit;font-size:.88rem;outline:none;transition:border-color .2s}
+.f-field input:focus,.f-field textarea:focus{border-color:var(--brand-primary-light)}
+.f-field textarea{min-height:140px;resize:vertical;line-height:1.7}
+.f-field .hint{font-size:.65rem;color:var(--text-muted)}
+.f-checks{display:flex;flex-wrap:wrap;gap:.5rem}
+.f-check{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .9rem;border:1px solid var(--border-light);border-radius:4px;font-size:.75rem;cursor:pointer;color:var(--text-secondary);transition:.2s;user-select:none}
+.f-check input{display:none}
+.f-check.marcado{background:var(--brand-primary);border-color:var(--brand-primary-light);color:#f5ede0}
+.f-toggle{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;user-select:none}
+.f-toggle input{display:none}
+.f-toggle .trilha{width:44px;height:24px;border-radius:12px;background:var(--bg-darker);border:1px solid var(--border);position:relative;transition:.2s}
+.f-toggle .bolinha{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--text-muted);transition:.2s}
+.f-toggle input:checked + .trilha{background:var(--brand-primary);border-color:var(--brand-primary-light)}
+.f-toggle input:checked + .trilha .bolinha{left:22px;background:#f5ede0}
+.editor-rodape{display:flex;justify-content:flex-end;gap:1rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-light)}
+.btn-cancelar{background:none;border:1px solid var(--border);color:var(--text-secondary);padding:.8rem 1.6rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
+.btn-cancelar:hover{border-color:var(--text-muted);color:var(--text-primary)}
+.btn-salvar{background:var(--brand-primary);border:1px solid var(--brand-primary-light);color:#f5ede0;padding:.8rem 1.8rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.btn-salvar:hover{background:var(--brand-primary-light)}
+.btn-salvar:disabled{opacity:.5;cursor:wait}
+
 @media(max-width:800px){
   .layout{grid-template-columns:1fr}
   .sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:.4rem}
@@ -294,7 +336,8 @@ async function carregarAlbuns() {
       const texto = atob(blob.content.replace(/\n/g, ''));
       // UTF-8 correto (o atob trata como latin1):
       const textoUtf8 = decodeURIComponent(escape(texto));
-      const { meta } = parseMd(textoUtf8);
+      const { meta, corpo } = parseMd(textoUtf8);
+      meta.corpo = corpo;
       meta._arquivo = f.name;
       meta._sha = blob.sha;
       ALBUNS.push(meta);
@@ -322,7 +365,7 @@ async function carregarAlbuns() {
         <td>${a.ano || '—'}</td>
         <td>${a.destaque ? '<span class="destaque-star">★</span>' : '—'}</td>
         <td><span class="status-publicado"><span class="status-dot status-ok"></span>Publicado</span></td>
-        <td><button class="side-item" style="padding:.4rem .7rem" onclick="emBreve('Editor do álbum')">✏️</button></td>
+        <td><button class="side-item" style="padding:.4rem .7rem" title="Editar álbum" onclick='abrirEditor(ALBUNS[${ALBUNS.indexOf(a)}])'>✏️</button></td>
       </tr>`).join('');
 
     loading.classList.add('hidden');
@@ -331,6 +374,136 @@ async function carregarAlbuns() {
   } catch (e) {
     loading.textContent = '❌ ' + e.message;
     loading.style.color = '#f0b0b0';
+  }
+}
+
+// ==========================================================
+// PARTE 2 - EDITOR DE ALBUM
+// ==========================================================
+const GENEROS_PAINEL = [
+  {id:'samba-de-raiz', nome:'Samba de Raiz'},
+  {id:'instrumental', nome:'Instrumental'},
+  {id:'mpb', nome:'MPB/Nova MPB'},
+  {id:'brasilidades', nome:'Brasilidades'},
+  {id:'cultura-popular', nome:'Cultura Popular'},
+  {id:'afro-brasileira', nome:'Afro-brasileira'},
+  {id:'infantil', nome:'Infantil'}
+];
+let albumAtual = null;
+let capaNova = null;
+
+function abrirEditor(album) {
+  albumAtual = album;
+  capaNova = null;
+  document.getElementById('f-titulo').value = album.titulo || '';
+  document.getElementById('f-artista').value = album.artista || '';
+  document.getElementById('f-ano').value = album.ano || '';
+  document.getElementById('f-faixas').value = album.faixas || '';
+  document.getElementById('f-spotify').value = album.spotify || '';
+  document.getElementById('f-youtube').value = album.youtube || '';
+  document.getElementById('f-apple').value = album.apple || '';
+  document.getElementById('f-deezer').value = album.deezer || '';
+  document.getElementById('f-texto-pt').value = album.corpo || '';
+  document.getElementById('f-texto-en').value = album.texto_en || '';
+  document.getElementById('f-destaque').checked = !!album.destaque;
+
+  const marcados = album.generos || [];
+  document.getElementById('f-generos').innerHTML = GENEROS_PAINEL.map(g => `
+    <label class="f-check ${marcados.includes(g.id) ? 'marcado' : ''}">
+      <input type="checkbox" value="${g.id}" ${marcados.includes(g.id) ? 'checked' : ''}
+             onchange="this.closest('.f-check').classList.toggle('marcado', this.checked)">
+      ${g.nome}
+    </label>`).join('');
+
+  const preview = document.getElementById('capa-preview');
+  if (album.capa && album.capa.includes('uploads')) {
+    preview.innerHTML = `<img src="${album.capa}" alt="">`;
+  } else if (album.capa) {
+    preview.innerHTML = `<img src="${album.capa}" alt="" onerror="this.outerHTML='<span class=\'capa-hint\'>💿<br>Clique para escolher<br>a capa do álbum</span>'">`;
+  } else {
+    preview.innerHTML = '<span class="capa-hint">💿<br>Clique para escolher<br>a capa do álbum</span>';
+  }
+
+  document.getElementById('editor-titulo').textContent = 'Editar: ' + (album.titulo || 'Álbum');
+  document.getElementById('editor-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function fecharEditor() {
+  document.getElementById('editor-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  albumAtual = null; capaNova = null;
+}
+
+function subirCapa() { document.getElementById('capa-input').click(); }
+function capaEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  if (arquivo.size > 500 * 1024) {
+    toast('⚠️ Imagem grande (' + Math.round(arquivo.size/1024) + 'KB). Comprima em tinypng.com e tente de novo.');
+    e.target.value = '';
+    return;
+  }
+  const leitor = new FileReader();
+  leitor.onload = ev => {
+    capaNova = { arquivo, base64: ev.target.result.split(',')[1] };
+    document.getElementById('capa-preview').innerHTML = `<img src="${ev.target.result}" alt="">`;
+    toast('✓ Capa pronta — será enviada ao salvar');
+  };
+  leitor.readAsDataURL(arquivo);
+}
+
+function montarMd() {
+  const val = id => (document.getElementById(id).value || '').trim();
+  const generos = [...document.querySelectorAll('#f-generos input:checked')].map(c => c.value);
+  const gLinhas = generos.length
+    ? 'generos:\n' + generos.map(g => `  - ${g}`).join('\n')
+    : 'generos: []';
+  const q = s => `"${(s || '').replace(/"/g, '\\"')}"`;
+
+  return `---\ntitulo: ${q(val('f-titulo'))}\nartista: ${q(val('f-artista'))}\nano: ${val('f-ano') || '\"\"'}\ncapa: ${q(albumAtual.capa || '')}\n${gLinhas}\ndestaque: ${document.getElementById('f-destaque').checked}\nfaixas: ${val('f-faixas') || '1'}\nspotify: ${q(val('f-spotify'))}\nyoutube: ${q(val('f-youtube'))}\napple: ${q(val('f-apple'))}\ndeezer: ${q(val('f-deezer'))}\ntexto_en: ${q(val('f-texto-en'))}\n---\n\n${val('f-texto-pt')}\n`;
+}
+
+async function salvarAlbum() {
+  if (!albumAtual) return;
+  const btn = document.getElementById('btn-salvar');
+  if (!document.getElementById('f-titulo').value.trim()) {
+    toast('⚠️ O título é obrigatório'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Salvando…';
+  try {
+    if (capaNova) {
+      const nomeArquivo = 'images/uploads/' + albumAtual._arquivo.replace('.md', '') + '.jpg';
+      const caminhoImg = `/repos/${REPO}/contents/${nomeArquivo}`;
+      let shaImg = null;
+      try { const atual = await gh(caminhoImg); shaImg = atual.sha; } catch (e) {}
+      await gh(caminhoImg, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          message: 'Atualiza capa: ' + albumAtual.titulo,
+          content: capaNova.base64,
+          ...(shaImg ? {sha: shaImg} : {})
+        })
+      });
+      albumAtual.capa = '/' + nomeArquivo;
+    }
+    const conteudo = btoa(unescape(encodeURIComponent(montarMd())));
+    await gh(`/repos/${REPO}/contents/content/albuns/${albumAtual._arquivo}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message: 'Edita álbum: ' + document.getElementById('f-titulo').value,
+        content: conteudo,
+        sha: albumAtual._sha
+      })
+    });
+    toast('✓ Álbum salvo! O site atualiza em ~2 minutos.');
+    fecharEditor();
+    await carregarAlbuns();
+  } catch (e) {
+    toast('❌ Erro ao salvar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Salvar e Publicar';
   }
 }
 
