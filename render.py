@@ -380,7 +380,7 @@ with open(OUT_SITEMAP, 'w', encoding='utf-8') as f:
 
 # ---------- Relatório ----------
 # ---------- Gera o blog.html ----------
-if posts:
+if True:   # gera sempre
     itens = []
     for i, p in enumerate(posts):
         data_br = str(p.get('date', '')).split('-')[::-1]

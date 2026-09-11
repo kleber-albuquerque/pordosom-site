@@ -4,103 +4,50 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notícias | Por do Som</title>
-<meta name="description" content="Notícias, lançamentos e novidades do Selo Por do Som — música brasileira de raiz.">
-<link rel="icon" type="image/jpeg" href="/pordosom-site/pordosom-profile.jpg">
+<meta name="description" content="Notícias, lançamentos e novidades do Selo Por do Som.">
+<link rel="icon" type="image/jpeg" href="BASE/pordosom-profile.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/pordosom-site/css/style.css">
+<link rel="stylesheet" href="BASE/css/style.css">
 </head>
 <body class="page-interna">
-
 <header class="header" id="header">
-    <a href="/pordosom-site/" class="logo">
-        <span class="logo-mark"><img src="/pordosom-site/pordosom-profile.jpg" alt="Por do Som"></span>
+    <a href="BASE/" class="logo">
+        <span class="logo-mark"><img src="BASE/pordosom-profile.jpg" alt="Por do Som"></span>
         <span class="logo-text">PÔR DO SOM</span>
     </a>
     <nav class="nav" id="nav">
-        <a href="/pordosom-site/gravadora.html" class="nav-link">Gravadora</a>
-        <a href="/pordosom-site/projetos.html" class="nav-link">Projetos</a>
-        <a href="/pordosom-site/audiovisual.html" class="nav-link">Audiovisual</a>
-        <a href="/pordosom-site/blog.html" class="nav-link" style="color:var(--brand-primary-light)">Notícias</a>
-        <a href="/pordosom-site/manifesto.html" class="nav-link">Manifesto</a>
-        <a href="/pordosom-site/quem-somos.html" class="nav-link">Quem Somos</a>
-        <a href="/pordosom-site/contato.html" class="nav-link nav-cta">Fale com o Selo</a>
+        <a href="BASE/gravadora.html" class="nav-link">Gravadora</a>
+        <a href="BASE/projetos.html" class="nav-link">Projetos</a>
+        <a href="BASE/audiovisual.html" class="nav-link">Audiovisual</a>
+        <a href="BASE/blog.html" class="nav-link" style="color:var(--brand-primary-light)">Notícias</a>
+        <a href="BASE/manifesto.html" class="nav-link">Manifesto</a>
+        <a href="BASE/quem-somos.html" class="nav-link">Quem Somos</a>
+        <a href="BASE/contato.html" class="nav-link nav-cta">Fale com o Selo</a>
     </nav>
     <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </header>
-
 <section class="musicas" style="padding-top:calc(var(--spacing-section) + 3rem)">
     <div class="container">
         <span class="section-subtitle">Notícias</span>
         <h1 class="section-title">Novidades <span class="gradient">do selo</span></h1>
-        <p class="section-description">
-            Lançamentos, projetos e histórias do Por do Som — o que está acontecendo agora.
-        </p>
-
+        <p class="section-description">Lançamentos, projetos e histórias do Por do Som.</p>
         <div style="max-width:760px;margin:0 auto;display:grid;gap:1rem">
-            <!-- SUBSTITUIR pelos posts reais (via painel quando estiver no ar) -->
-            <a href="#" class="song-item fade-in">
-                <div class="song-num">01</div>
-                <div class="song-info">
-                    <div class="song-title">[Título do post — SUBSTITUIR]</div>
-                    <div class="song-artist">[Resumo em uma linha do post — o que aconteceu, o que sai, quando...]</div>
-                </div>
-                <span class="song-platform">Set 2026</span>
-                <div class="song-play">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                </div>
-            </a>
-            <a href="#" class="song-item fade-in">
-                <div class="song-num">02</div>
-                <div class="song-info">
-                    <div class="song-title">[Segundo post — SUBSTITUIR]</div>
-                    <div class="song-artist">[Resumo]</div>
-                </div>
-                <span class="song-platform">Ago 2026</span>
-                <div class="song-play">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                </div>
-            </a>
+
         </div>
+
     </div>
 </section>
-
 <footer class="footer">
     <div class="container">
         <span class="footer-logo">PÔR DO SOM</span>
-        <p class="footer-tagline">Selo Independente · Produtora Cultural · Brasilidades</p>
-        <div class="footer-social">
-            <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener">Instagram</a>
-            <a href="https://www.youtube.com/user/pordosomcultural" target="_blank" rel="noopener">YouTube</a>
-            <a href="https://open.spotify.com/user/pordosom?si=386032c6b03644ad" target="_blank" rel="noopener">Spotify</a>
-            <a href="https://www.facebook.com/pordosomcultural" target="_blank" rel="noopener">Facebook</a>
-            <a href="https://tiktok.com/@pordosom" target="_blank" rel="noopener">TikTok</a>
-            <a href="https://linktr.ee/pordosom" target="_blank" rel="noopener">Linktree</a>
-        </div>
-        <p class="footer-text">© 2026 Por do Som Cultural · Todos os direitos reservados</p>
+        <p class="footer-tagline">Selo Independente · Brasilidades</p>
+        <p class="footer-text">© 2026 Por do Som</p>
     </div>
 </footer>
-
 <script>
-const header = document.getElementById('header');
+const menuBtn = document.getElementById('mobileMenuBtn');
 const nav = document.getElementById('nav');
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
-}, { passive: true });
-mobileMenuBtn.addEventListener('click', () => {
-    nav.classList.toggle('active');
-    mobileMenuBtn.textContent = nav.classList.contains('active') ? '✕' : '☰';
-});
-const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            fadeObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+menuBtn.addEventListener('click', () => nav.classList.toggle('active'));
 </script>
 </body>
 </html>
