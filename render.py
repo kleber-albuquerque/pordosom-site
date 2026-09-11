@@ -1,27 +1,36 @@
 #!/usr/bin/env python3
 # ==========================================================
-# POR DO SOM — Render do catálogo (v2 — lê content/albuns/*.md)
+# POR DO SOM — Render do catálogo (v3 — com BASE path)
 #
-# Fonte de dados: arquivos Markdown editáveis pelo painel
-# (Decap CMS). Cada .md tem frontmatter (metadados) + corpo
-# (texto do álbum em português).
-#
+# Fonte de dados: content/albuns/*.md (editáveis pelo painel)
 # Gera:
-#   - albuns/{slug}.html (uma página por álbum)
+#   - albuns/{slug}.html (páginas dos álbuns, com Schema.org)
 #   - data/catalogo.json (para o JS da vitrine/gravadora)
 #   - sitemap.xml
+#
+# ⚠️ REGRA DA BASE (documentada no mapa de ação):
+#   BASE = caminho onde o site está hospedado.
+#   - No GitHub Pages de projeto: '/pordosom-site'
+#   - No dia do domínio próprio (pordosom.com.br na raiz): ''
+#     (trocar AQUI, no js/catalogo.js e rodar o sed inverso nos
+#      HTMLs da raiz — 3 pontos documentados, nada mais muda)
 #
 # Uso:  python3 render.py
 # ==========================================================
 import os, re, json, html
 from datetime import datetime
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-PASTA_MD = os.path.join(BASE, 'content', 'albuns')
-OUT_ALBUNS = os.path.join(BASE, 'albuns')
-OUT_JSON = os.path.join(BASE, 'data', 'catalogo.json')
-OUT_SITEMAP = os.path.join(BASE, 'sitemap.xml')
-DOMINIO = 'https://pordosom.com.br'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PASTA_MD = os.path.join(BASE_DIR, 'content', 'albuns')
+OUT_ALBUNS = os.path.join(BASE_DIR, 'albuns')
+OUT_JSON = os.path.join(BASE_DIR, 'data', 'catalogo.json')
+OUT_SITEMAP = os.path.join(BASE_DIR, 'sitemap.xml')
+
+# ════════════════════════════════════════════════════════
+# A BASE — único ponto de configuração de caminho daqui
+# ════════════════════════════════════════════════════════
+BASE = '/pordosom-site'
+DOMINIO = 'https://kleber-albuquerque.github.io' + BASE   # sitemap aponta para o Pages real
 
 GENEROS = {
     'samba-de-raiz': 'Samba de Raiz',
@@ -45,7 +54,6 @@ def parse_md(caminho):
         bloco, corpo = m.group(1), m.group(2)
         lista_atual = None
         for linha in bloco.split('\n'):
-            # item de lista ("- chave" continua a lista anterior)
             m_item = re.match(r'^\s+-\s+(\S+)\s*$', linha)
             if m_item and lista_atual:
                 meta[lista_atual].append(m_item.group(1))
@@ -54,12 +62,11 @@ def parse_md(caminho):
             if m_kv:
                 chave, valor = m_kv.group(1), m_kv.group(2).strip()
                 lista_atual = chave
-                # valor entre aspas
                 m_str = re.match(r'^"(.*)"$', valor) or re.match(r"^'(.*)'$", valor)
                 if m_str:
                     meta[chave] = m_str.group(1)
                 elif valor == '':
-                    meta[chave] = []          # inicia lista
+                    meta[chave] = []
                 elif re.match(r'^\d+$', valor):
                     meta[chave] = int(valor)
                 elif valor in ('true', 'false'):
@@ -71,20 +78,22 @@ def parse_md(caminho):
 def esc(t):
     return html.escape(str(t or ''))
 
+def caminho(c):
+    """Junta a BASE com um caminho — a função usada em TODO o template."""
+    return f'{BASE}{c}' if c.startswith('/') else c
+
 def embed_spotify(url):
-    """Converte URL do Spotify em URL de embed."""
     if not url:
         return ''
     return url.replace('open.spotify.com/', 'open.spotify.com/embed/')
 
 def embed_youtube(url):
-    """Converte URL do YouTube em URL de embed."""
     if not url:
         return ''
     m = re.search(r'(?:v=|youtu\.be/|embed/)([\w-]{11})', url)
     if m:
         return f'https://www.youtube.com/embed/{m.group(1)}'
-    return ''  # URL de busca — não vira embed
+    return ''
 
 # ---------- Lê todos os álbuns ----------
 albuns = []
@@ -93,7 +102,7 @@ if os.path.isdir(PASTA_MD):
         if not nome.endswith('.md'):
             continue
         meta, corpo = parse_md(os.path.join(PASTA_MD, nome))
-        slug = nome[:-3]  # remove .md
+        slug = nome[:-3]
         meta.setdefault('titulo', slug.replace('-', ' ').title())
         meta.setdefault('artista', '')
         meta.setdefault('ano', '')
@@ -106,7 +115,7 @@ if os.path.isdir(PASTA_MD):
 
 albuns.sort(key=lambda a: (str(a.get('ano', '')), a['titulo']), reverse=True)
 
-# ---------- Template da página de álbum ----------
+# ---------- Template da página de álbum (com BASE) ----------
 def page_album(a, prev, next_):
     generos_str = ' · '.join(GENEROS.get(g, g) for g in a.get('generos', []))
     schema = {
@@ -128,8 +137,6 @@ def page_album(a, prev, next_):
     yt_embed = embed_youtube(a.get('youtube', ''))
     if yt_embed:
         embeds_html += f'\n        <iframe src="{esc(yt_embed)}" style="aspect-ratio:16/9" loading="lazy" allowfullscreen title="Vídeo do álbum"></iframe>'
-    if not embeds_html:
-        embeds_html = ''
 
     plats = []
     if a.get('spotify'): plats.append(('Spotify', a['spotify']))
@@ -144,9 +151,9 @@ def page_album(a, prev, next_):
     if a.get('texto_en'):
         en_html = f'<p class="album-descricao-en">{esc(a["texto_en"])}</p>'
 
-    prev_html = (f'<a class="album-nav-link" href="/albuns/{prev["slug"]}.html">← {esc(prev["titulo"])}</a>'
+        prev_html = (f'<a class="album-nav-link" href="{caminho("/albuns/" + prev["slug"] + ".html")}">← {esc(prev["titulo"])}</a>'
                  if prev else '<span></span>')
-    next_html = (f'<a class="album-nav-link" href="/albuns/{next_["slug"]}.html">{esc(next_["titulo"])} →</a>'
+    next_html = (f'<a class="album-nav-link" href="{caminho("/albuns/" + next_["slug"] + ".html")}">{esc(next_["titulo"])} →</a>'
                  if next_ else '<span></span>')
 
     faixas_txt = f'{a.get("faixas")} faixas · ' if a.get('faixas') else ''
@@ -161,9 +168,9 @@ def page_album(a, prev, next_):
 <meta property="og:title" content="{esc(a['titulo'])}">
 <meta property="og:description" content="{esc((a['texto_pt'] or '')[:110])}">
 <meta property="og:type" content="music.album">
-<link rel="icon" type="image/jpeg" href="/pordosom-profile.jpg">
+<link rel="icon" type="image/jpeg" href="{caminho('/pordosom-profile.jpg')}">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="{caminho('/css/style.css')}">
 <script type="application/ld+json">
 {json.dumps(schema, ensure_ascii=False, indent=2)}
 </script>
@@ -171,18 +178,18 @@ def page_album(a, prev, next_):
 <body class="page-interna">
 
 <header class="header" id="header">
-    <a href="/" class="logo">
-        <span class="logo-mark"><img src="/pordosom-profile.jpg" alt="Por do Som"></span>
+    <a href="{caminho('/')}" class="logo">
+        <span class="logo-mark"><img src="{caminho('/pordosom-profile.jpg')}" alt="Por do Som"></span>
         <span class="logo-text">PÔR DO SOM</span>
     </a>
     <nav class="nav" id="nav">
-        <a href="/gravadora.html" class="nav-link">Gravadora</a>
-        <a href="/projetos.html" class="nav-link">Projetos</a>
-        <a href="/audiovisual.html" class="nav-link">Audiovisual</a>
-        <a href="/blog.html" class="nav-link">Notícias</a>
-        <a href="/manifesto.html" class="nav-link">Manifesto</a>
-        <a href="/quem-somos.html" class="nav-link">Quem Somos</a>
-        <a href="/contato.html" class="nav-link nav-cta">Fale com o Selo</a>
+        <a href="{caminho('/gravadora.html')}" class="nav-link">Gravadora</a>
+        <a href="{caminho('/projetos.html')}" class="nav-link">Projetos</a>
+        <a href="{caminho('/audiovisual.html')}" class="nav-link">Audiovisual</a>
+        <a href="{caminho('/blog.html')}" class="nav-link">Notícias</a>
+        <a href="{caminho('/manifesto.html')}" class="nav-link">Manifesto</a>
+        <a href="{caminho('/quem-somos.html')}" class="nav-link">Quem Somos</a>
+        <a href="{caminho('/contato.html')}" class="nav-link nav-cta">Fale com o Selo</a>
     </nav>
     <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </header>
@@ -191,7 +198,7 @@ def page_album(a, prev, next_):
     <div class="container">
         <div class="album-hero">
             <div class="album-capa-grande">
-                <img src="{esc(a.get('capa', ''))}" alt="Capa do álbum {esc(a['titulo'])}"
+                <img src="{caminho(a.get('capa', ''))}" alt="Capa do álbum {esc(a['titulo'])}"
                      onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 600%22%3E%3Crect fill=%22%231a0e0e%22 width=%22600%22 height=%22600%22/%3E%3Ccircle cx=%22300%22 cy=%22260%22 r=%22100%22 fill=%22%23a83030%22 opacity=%220.75%22/%3E%3C/svg%3E'">
             </div>
             <div>
@@ -211,7 +218,7 @@ def page_album(a, prev, next_):
 
         <div class="album-navegacao">
             {prev_html}
-            <a class="album-nav-link" href="/gravadora.html">Voltar ao catálogo</a>
+            <a class="album-nav-link" href="{caminho('/gravadora.html')}">Voltar ao catálogo</a>
             {next_html}
         </div>
     </div>
@@ -246,8 +253,9 @@ for i, a in enumerate(albuns):
         f.write(page_album(a, prev, next_))
     geradas.append(a['slug'])
 
-# ---------- Gera o data/catalogo.json (para o JS da vitrine/filtros) ----------
+# ---------- Gera o data/catalogo.json (com BASE para o JS) ----------
 catalogo_js = {
+    'base': BASE,
     'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
     'albuns': [{
         'slug': a['slug'],
@@ -279,10 +287,10 @@ with open(OUT_SITEMAP, 'w', encoding='utf-8') as f:
     f.write(sitemap)
 
 # ---------- Relatório ----------
-print(f'✔ {len(geradas)} páginas de álbum geradas (a partir de content/albuns/*.md)')
+print(f'✔ {len(geradas)} páginas de álbum geradas (BASE = {BASE or "(raiz)"})')
 for s in geradas:
     print(f'   albuns/{s}.html')
-print(f'✔ data/catalogo.json regenerado ({len(albuns)} álbuns para vitrine/filtros)')
-print(f'✔ sitemap.xml com {len(urls)} URLs')
+print(f'✔ data/catalogo.json regenerado (com base: {BASE})')
+print(f'✔ sitemap.xml com {len(urls)} URLs → {DOMINIO}')
 if not geradas:
     print('⚠ NENHUM .md encontrado em content/albuns/ — crie os arquivos primeiro!')
