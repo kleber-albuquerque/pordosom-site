@@ -251,6 +251,48 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     </div>
   </main>
 
+    <!-- ===== EDITOR DE NOTÍCIA (overlay) ===== -->
+  <div class="editor-overlay hidden" id="editor-noticia-overlay">
+    <div class="editor-box">
+      <div class="editor-header">
+        <h2 id="editor-noticia-titulo">Nova Notícia</h2>
+        <button class="editor-fechar" onclick="fecharEditorNoticia()">✕</button>
+      </div>
+      <div class="editor-grid">
+        <div>
+          <div class="capa-editor" id="noticia-img-preview" onclick="subirImagemNoticia()">
+            <span class="capa-hint">🖼️<br>Clique para escolher<br>imagem de destaque<br>(opcional)</span>
+          </div>
+          <input type="file" id="noticia-img-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="imagemNoticiaEscolhida(event)">
+          <button class="btn-capa" onclick="subirImagemNoticia()">📷 Imagem de destaque</button>
+          <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
+            Aparece na notícia publicada.<br>Até 500KB — comprima em tinypng.com.
+          </p>
+        </div>
+        <div>
+          <div class="f-grid">
+            <div class="f-field full"><label>Título da notícia</label><input id="fn-titulo" type="text"></div>
+            <div class="f-field"><label>Data de publicação</label><input id="fn-data" type="date"></div>
+            <div class="f-field">
+              <label>Rascunho</label>
+              <label class="f-toggle">
+                <input type="checkbox" id="fn-rascunho">
+                <span class="trilha"><span class="bolinha"></span></span>
+                <span style="font-size:.75rem;color:var(--text-secondary)">Não publicar ainda</span>
+              </label>
+            </div>
+            <div class="f-field full"><label>Resumo (aparece na lista)</label><textarea id="fn-resumo" style="min-height:70px"></textarea></div>
+            <div class="f-field full"><label>Conteúdo da notícia</label><textarea id="fn-corpo" style="min-height:220px"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-rodape">
+        <button class="btn-cancelar" onclick="fecharEditorNoticia()">Cancelar</button>
+        <button class="btn-salvar" id="btn-salvar-noticia" onclick="salvarNoticia()">💾 Salvar Notícia</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== EDITOR DE ALBUM (overlay) ===== -->
   <div class="editor-overlay hidden" id="editor-overlay">
     <div class="editor-box">
