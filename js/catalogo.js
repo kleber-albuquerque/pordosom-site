@@ -177,19 +177,24 @@
       </a>`).join('');
   }
 
-  /* ---------- BANNER DA ULTIMA NOTICIA (home) ---------- */
+
+  /* ---------- BANNER DA NOTICIA EM DESTAQUE (logo apos o hero) ---------- */
   const bannerEl = document.getElementById('banner-noticia');
   if (bannerEl && Array.isArray(CAT.posts) && CAT.posts.length) {
     const p = CAT.posts[0];
     const partes = String(p.date || '').split('-');
     const data = partes.length === 3 ? partes.reverse().join('/') : '';
+    const temImg = p.imagem && p.imagem.startsWith('/');
+    const imgTag = temImg ? '<img src="' + BASE + p.imagem + '" alt="" style="width:200px;height:200px;object-fit:cover;border-radius:4px;flex-shrink:0" loading="lazy">' : '';
     bannerEl.innerHTML =
-      '<a href="' + BASE + '/blog.html" style="display:block;max-width:680px;margin:0 auto;padding:2rem 2.2rem;background:var(--bg-card);border:1px solid var(--border-color-light);border-left:3px solid var(--brand-primary);border-radius:4px;text-decoration:none;transition:border-color .3s" onmouseover="this.style.borderColor=\'var(--brand-primary-light)\'" onmouseout="this.style.borderColor=\'var(--border-color-light)\'">'
-      + '<div style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--brand-accent);margin-bottom:.6rem">' + data + ' · Destaque</div>'
-      + '<h3 style="font-size:1.25rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-primary);margin-bottom:.7rem">' + (p.title || '') + '</h3>'
-      + '<p style="font-size:.88rem;color:var(--text-secondary);line-height:1.7">' + (p.resumo || '') + '</p>'
-      + '<span style="display:inline-block;margin-top:1rem;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand-primary-light)">Ler a notícia →</span>'
-      + '</a>';
+      '<a href="' + BASE + '/blog.html" style="display:flex;gap:1.8rem;max-width:860px;margin:0 auto;padding:' + (temImg ? '1.6rem' : '2.2rem') + ';background:linear-gradient(135deg,var(--bg-card),var(--bg-darker));border:1px solid var(--border-color);border-left:4px solid var(--brand-primary);border-radius:6px;text-decoration:none;align-items:center;box-shadow:0 12px 40px rgba(0,0,0,.35);transition:transform .3s,border-color .3s" onmouseover="this.style.transform=\'translateY(-3px)\';this.style.borderColor=\'var(--brand-primary-light)\'" onmouseout="this.style.transform=\'\';this.style.borderColor=\'var(--border-color)\'">'
+      + imgTag
+      + '<div style="flex:1">'
+      + '<div style="font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--brand-accent);margin-bottom:.7rem">📰 Última notícia · ' + data + '</div>'
+      + '<h3 style="font-size:clamp(1.15rem,3vw,1.6rem);font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--text-primary);line-height:1.25;margin-bottom:.8rem">' + (p.title || '') + '</h3>'
+      + '<p style="font-size:.9rem;color:var(--text-secondary);line-height:1.7">' + (p.resumo || '') + '</p>'
+      + '<span style="display:inline-block;margin-top:1.1rem;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand-primary-light)">Ler a notícia completa →</span>'
+      + '</div></a>';
   }
 
 })();
