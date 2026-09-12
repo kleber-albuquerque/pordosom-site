@@ -477,9 +477,10 @@ async function carregarAlbuns() {
     const tbody = document.getElementById('albuns-tbody');
     tbody.innerHTML = ALBUNS.map(a => `
       <tr>
-        <td>${a.capa && !a.capa.includes('uploads')
-            ? `<img class="capa-mini" src="${a.capa}" alt="">`
-            : `<div class="sem-capa">💿</div>`}</td>
+        <td>${a.capa
+    ? `<img class="capa-mini" src="${a.capa}" alt="" loading="lazy"
+           onerror="this.outerHTML='<div class=\\'sem-capa\\'>💿</div>'">`
+    : `<div class="sem-capa">💿</div>`}</td>
         <td>
           <div class="titulo-cell">${a.titulo || a._arquivo}</div>
           <div class="artista-cell">${a.artista || '—'}</div>
