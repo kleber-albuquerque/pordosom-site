@@ -64,6 +64,9 @@ body{font-family:'Montserrat',system-ui,sans-serif;background:var(--bg-dark);col
 .table-wrap{background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
 table{width:100%;border-collapse:collapse}
 th{font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);text-align:left;padding:.9rem 1.1rem;border-bottom:1px solid var(--border-light)}
+th.ordenavel{cursor:pointer;user-select:none;transition:color .2s}
+th.ordenavel:hover{color:var(--text-secondary)}
+th.ordenavel .seta{font-size:.6rem;margin-left:.3rem;opacity:.7}
 td{padding:.8rem 1.1rem;border-bottom:1px solid var(--border-light);font-size:.82rem;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg-card-hover)}
@@ -239,7 +242,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
       <div class="table-wrap hidden" id="albuns-table-wrap">
         <table>
           <thead>
-            <tr><th>Capa</th><th>Álbum</th><th>Gêneros</th><th>Ano</th><th>Home</th><th>Status</th><th></th></tr>
+            <tr><th>Capa</th><th class="ordenavel" onclick="ordenarPor('titulo')">Álbum <span class="seta" id="seta-titulo"></span></th><th class="ordenavel" onclick="ordenarPor('artista')">Artista</th><th class="ordenavel" onclick="ordenarPor('generos')">Gêneros</th><th class="ordenavel" onclick="ordenarPor('ano')">Ano <span class="seta" id="seta-ano"></span></th><th>Home</th><th>Status</th><th></th></tr>
           </thead>
           <tbody id="albuns-tbody"></tbody>
         </table>
@@ -474,24 +477,8 @@ async function carregarAlbuns() {
     const generos = new Set(); ALBUNS.forEach(a => (a.generos || []).forEach(g => generos.add(g)));
     document.getElementById('stat-generos').textContent = generos.size;
 
-    // Tabela
-    const tbody = document.getElementById('albuns-tbody');
-    tbody.innerHTML = ALBUNS.map(a => `
-      <tr>
-        <td>${a.capa
-    ? `<img class="capa-mini" src="${a.capa.startsWith('/') ? BASE + a.capa : a.capa}" alt="" loading="lazy"
-           onerror="this.outerHTML='<div class=\\'sem-capa\\'>💿</div>'">`
-    : `<div class="sem-capa">💿</div>`}</td>
-        <td>
-          <div class="titulo-cell">${a.titulo || a._arquivo}</div>
-          <div class="artista-cell">${a.artista || '—'}</div>
-        </td>
-        <td>${(a.generos || []).map(g => `<span class="tag-genero">${g}</span>`).join('')}</td>
-        <td>${a.ano || '—'}</td>
-        <td>${a.destaque ? '<span class="destaque-star">★</span>' : '—'}</td>
-        <td><span class="status-publicado"><span class="status-dot status-ok"></span>Publicado</span></td>
-        <td><button class="side-item" style="padding:.4rem .7rem" title="Editar álbum" onclick='abrirEditor(ALBUNS[${ALBUNS.indexOf(a)}])'>✏️</button> <button class="side-item" style="padding:.4rem .7rem" title="Excluir álbum" onclick='excluirAlbum(ALBUNS[${ALBUNS.indexOf(a)}])'>🗑️</button></td>
-      </tr>`).join('');
+    // Tabela (render via ordenador)
+    renderTabelaAlbuns();
 
     loading.classList.add('hidden');
     if (ALBUNS.length) wrap.classList.remove('hidden'); else vazio.classList.remove('hidden');
