@@ -278,6 +278,48 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
   </main>
 </div>
 <!-- ===== EDITOR DE ÁLBUM ===== -->
+  <!-- ===== EDITOR DE PROJETO (overlay) ===== -->
+  <div class="editor-overlay hidden" id="editor-projeto-overlay">
+    <div class="editor-box">
+      <div class="editor-header">
+        <h2 id="editor-projeto-titulo">Novo Projeto</h2>
+        <button class="editor-fechar" onclick="fecharEditorProjeto()">X</button>
+      </div>
+      <div class="editor-grid">
+        <div>
+          <div class="capa-editor" id="projeto-img-preview" onclick="subirImagemProjeto()">
+            <span class="capa-hint">Imagem<br>de destaque<br>(clique)</span>
+          </div>
+          <input type="file" id="projeto-img-input" accept="image/jpeg,image/png" class="hidden" onchange="imagemProjetoEscolhida(event)">
+          <button class="btn-capa" onclick="subirImagemProjeto()">Imagem</button>
+        </div>
+        <div>
+          <div class="f-grid">
+            <div class="f-field full"><label>Titulo</label><input id="fp-titulo" type="text"></div>
+            <div class="f-field">
+              <label>Status</label>
+              <label class="f-toggle">
+                <input type="checkbox" id="fp-captacao">
+                <span class="trilha"><span class="bolinha"></span></span>
+                <span style="font-size:.75rem;color:var(--text-secondary)">Em captacao</span>
+              </label>
+            </div>
+            <div class="f-field"><label>Ano</label><input id="fp-ano" type="number" min="2000" max="2035"></div>
+            <div class="f-field full"><label>Tipo / Badge</label><input id="fp-badge" type="text" placeholder="Festival, Serie..."></div>
+            <div class="f-field full"><label>Link</label><input id="fp-link" type="url" placeholder="https://..."></div>
+            <div class="f-field full"><label>Relatorio (PDF)</label><input id="fp-relatorio" type="url" placeholder="https://..."></div>
+            <div class="f-field full"><label>Tags (virgulas)</label><input id="fp-tags" type="text" placeholder="Festival, Cultura"></div>
+            <div class="f-field full"><label>Descricao</label><textarea id="fp-corpo" style="min-height:140px"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-rodape">
+        <button class="btn-cancelar" onclick="fecharEditorProjeto()">Cancelar</button>
+        <button class="btn-salvar" id="btn-salvar-projeto" onclick="salvarProjeto()">Salvar Projeto</button>
+      </div>
+    </div>
+  </div>
+
 <div class="editor-overlay hidden" id="editor-overlay">
   <div class="editor-box">
     <div class="editor-header">
