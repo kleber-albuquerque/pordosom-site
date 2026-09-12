@@ -226,6 +226,35 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         <div class="f-grid">
           <div class="f-field full"><label>Texto institucional</label><textarea id="cfg-editora_texto" style="min-height:110px"></textarea></div>
         </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🖼️ IMAGENS DO SITE</h2>
+        <div class="f-grid">
+          <div class="f-field">
+            <label>Logo do selo (aparece no menu de todas as páginas)</label>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="capa-editor" id="cfg-logo-preview" onclick="subirLogoSite()" style="width:72px;height:72px;border-radius:50%">
+                <img src="/pordosom-site/pordosom-profile.jpg" alt="Logo" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+              </div>
+              <div>
+                <input type="file" id="cfg-logo-file" accept="image/jpeg,image/png" class="hidden" onchange="logoSiteEscolhida(event)">
+                <button class="btn-capa" style="width:auto" onclick="subirLogoSite()">Trocar logo</button>
+                <p class="hint" style="font-size:.6rem;color:var(--text-muted);margin-top:4px">Quadrada. Comprimida automático.</p>
+              </div>
+            </div>
+          </div>
+          <div class="f-field">
+            <label>Foto de fundo da Home (a primeira imagem do site)</label>
+            <div style="display:flex;gap:12px;align-items:center">
+              <div class="capa-editor" id="cfg-hero-preview" onclick="subirHeroSite()" style="width:110px;height:64px;border-radius:4px">
+                <img src="/pordosom-site/img/hero-bg.jpg" alt="Hero" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
+              </div>
+              <div>
+                <input type="file" id="cfg-hero-file" accept="image/jpeg,image/png" class="hidden" onchange="heroSiteEscolhida(event)">
+                <button class="btn-capa" style="width:auto" onclick="subirHeroSite()">Trocar imagem</button>
+                <p class="hint" style="font-size:.6rem;color:var(--text-muted);margin-top:4px">Horizontal, alta resolução.</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
           <button class="btn-salvar" id="btn-salvar-config" onclick="salvarConfig()">💾 Salvar Textos do Site</button>
         </div>
@@ -1533,6 +1562,14 @@ async function salvarConfig() {
       body: JSON.stringify(bodySalvar)
     });
     cfgSha = resp.content ? resp.content.sha : cfgSha;
+    if (logoSiteNova) {
+      await _subirImagemRepo("pordosom-profile.jpg", logoSiteNova, "Atualiza logo do selo");
+      logoSiteNova = null;
+    }
+    if (heroSiteNova) {
+      await _subirImagemRepo("img/hero-bg.jpg", heroSiteNova, "Atualiza imagem da home");
+      heroSiteNova = null;
+    }
     toast("Configurações salvas! O site atualiza em ~2 min.");
   } catch (e) {
     toast("Erro ao salvar: " + e.message);
@@ -1547,6 +1584,45 @@ document.querySelectorAll('.side-item[data-pagina="config"]').forEach(btn => {
     if (!cfgSha) carregarConfig();
   });
 });
+
+
+// ---------- Upload de imagens institucionais ----------
+let logoSiteNova = null;
+let heroSiteNova = null;
+
+function subirLogoSite() { document.getElementById("cfg-logo-file").click(); }
+function subirHeroSite() { document.getElementById("cfg-hero-file").click(); }
+
+function logoSiteEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 300, 0.85, (b64, kb) => {
+    logoSiteNova = b64;
+    document.getElementById("cfg-logo-preview").innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="Logo" style="width:100%;height:100%;object-fit:cover">';
+    toast("Logo pronta: " + kb + "KB — enviada ao salvar textos");
+  });
+}
+
+function heroSiteEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 1600, 0.78, (b64, kb) => {
+    heroSiteNova = b64;
+    document.getElementById("cfg-hero-preview").innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="Hero" style="width:100%;height:100%;object-fit:cover">';
+    toast("Imagem pronta: " + kb + "KB — enviada ao salvar textos");
+  });
+}
+
+async function _subirImagemRepo(caminho, b64, msg) {
+  const url = "/repos/" + REPO + "/contents/" + caminho;
+  let sha = null;
+  try { const atual = await gh(url); sha = atual.sha; } catch (e) {}
+  await gh(url, {
+    method: "PUT",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ message: msg, content: b64, ...(sha ? {sha: sha} : {}) })
+  });
+}
 
 </script>
 </body>
