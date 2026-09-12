@@ -478,7 +478,7 @@ async function carregarAlbuns() {
     tbody.innerHTML = ALBUNS.map(a => `
       <tr>
         <td>${a.capa
-    ? `<img class="capa-mini" src="${a.capa}" alt="" loading="lazy"
+    ? `<img class="capa-mini" src="${a.capa.startsWith('/') ? BASE + a.capa : a.capa}" alt="" loading="lazy"
            onerror="this.outerHTML='<div class=\\'sem-capa\\'>💿</div>'">`
     : `<div class="sem-capa">💿</div>`}</td>
         <td>
@@ -540,8 +540,9 @@ function abrirEditor(album) {
     </label>`).join('');
 
   const preview = document.getElementById('capa-preview');
-  if (album.capa && album.capa.includes('uploads')) {
-    preview.innerHTML = `<img src="${album.capa}" alt="">`;
+    if (album.capa && album.capa.includes('uploads')) {
+    const srcCapa = album.capa.startsWith('/') ? BASE + album.capa : album.capa;
+    preview.innerHTML = `<img src="${srcCapa}" alt="">`;
   } else if (album.capa) {
     preview.innerHTML = `<img src="${album.capa}" alt="" onerror="this.outerHTML='<span class=\'capa-hint\'>💿<br>Clique para escolher<br>a capa do álbum</span>'">`;
   } else {
