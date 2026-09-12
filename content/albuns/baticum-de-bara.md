@@ -4,7 +4,7 @@ artista: "Luana Bayô"
 ano: 2021
 capa: "/images/uploads/baticum-de-bara.jpg"
 generos:
-  - afro-brasileira
+  - - afro-brasileira
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/track/5CqnX9m7ApGMqJ9nlAgy78"

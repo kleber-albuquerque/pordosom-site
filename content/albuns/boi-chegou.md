@@ -4,7 +4,7 @@ artista: "Ana Maria Carvalho"
 ano: 2024
 capa: ""
 generos:
-  - cultura-popular
+  - - cultura-popular
 destaque: false
 faixas: ""
 spotify: ""

@@ -4,7 +4,7 @@ artista: "Marco Vilane"
 ano: 2024
 capa: "/images/uploads/eu-apenas-queria-que-voce-soubesse.jpg"
 generos:
-  - mpb
+  - - mpb
   - brasilidades
 destaque: true
 faixas: 1

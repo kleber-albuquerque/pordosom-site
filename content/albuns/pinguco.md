@@ -4,7 +4,7 @@ artista: "Luana Bayô"
 ano: ""
 capa: "/images/uploads/pinguco.jpg"
 generos:
-  - afro-brasileira
+  - - afro-brasileira
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/album/7kcfTmgOPjcnhjZQlDIweo"

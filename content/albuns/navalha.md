@@ -4,7 +4,7 @@ artista: "Jonathan Silva"
 ano: 2022
 capa: "/images/uploads/navalha.jpg"
 generos:
-  - mpb
+  - - mpb
 destaque: true
 faixas: 1
 spotify: ""

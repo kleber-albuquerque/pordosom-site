@@ -4,7 +4,7 @@ artista: "Marco Vilane"
 ano: 2012
 capa: "/images/uploads/varal-diverso.jpg"
 generos:
-  - mpb
+  - - mpb
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/album/5yvf8v1iU8JOndEgX4aIt1"

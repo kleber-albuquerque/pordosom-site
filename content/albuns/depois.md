@@ -4,7 +4,7 @@ artista: "Aloysio Letra"
 ano: 2023
 capa: "/images/uploads/depois.jpg"
 generos:
-  - afro-brasileira
+  - - afro-brasileira
 destaque: false
 faixas: 4
 spotify: "https://open.spotify.com/album/6AzDtAWEOWEeFn53aaJSZt"

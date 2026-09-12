@@ -4,7 +4,7 @@ artista: "Marco Vilane"
 ano: 2024
 capa: ""
 generos:
-  - mpb
+  - - mpb
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/artist/2GtaJVqceVA6xEcFcUQAMD"

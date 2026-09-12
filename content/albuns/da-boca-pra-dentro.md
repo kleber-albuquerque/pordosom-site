@@ -4,7 +4,7 @@ artista: "Marco Vilane"
 ano: 2022
 capa: "/images/uploads/da-boca-pra-dentro.jpg"
 generos:
-  - mpb
+  - - mpb
 destaque: true
 faixas: 10
 spotify: "https://open.spotify.com/artist/2GtaJVqceVA6xEcFcUQAMD"

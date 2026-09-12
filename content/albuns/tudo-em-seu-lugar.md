@@ -4,7 +4,7 @@ artista: "Marco Vilane"
 ano: 2020
 capa: ""
 generos:
-  - mpb
+  - - mpb
 destaque: false
 faixas: ""
 spotify: ""

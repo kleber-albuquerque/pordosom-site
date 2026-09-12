@@ -4,7 +4,7 @@ artista: "Tião Carvalho"
 ano: 2026
 capa: "/images/uploads/frevo-da-ilusao.jpg"
 generos:
-  - cultura-popular
+  - - cultura-popular
 destaque: false
 faixas: 1
 spotify: "https://open.spotify.com/artist/0wTtDVcd69RifkABuA9OBb"

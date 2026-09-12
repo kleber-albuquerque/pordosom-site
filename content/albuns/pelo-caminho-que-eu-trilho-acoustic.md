@@ -4,7 +4,7 @@ artista: "Marco Vilane e Zeca Baleiro"
 ano: 2025
 capa: "/images/uploads/pelo-caminho-que-eu-trilho-acoustic.jpg"
 generos:
-  - mpb
+  - - mpb
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/artist/2GtaJVqceVA6xEcFcUQAMD"

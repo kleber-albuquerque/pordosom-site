@@ -4,7 +4,7 @@ artista: "Luana Bayo"
 ano: 2024
 capa: "/images/uploads/abebe.jpg"
 generos:
-  - afro-brasileira
+  - - afro-brasileira
 destaque: true
 faixas: 1
 spotify: "https://open.spotify.com/intl-pt/album/23cWEkvUmwLFkCeHPqb9p4?si=8f0xPpQvRQOdNvdCEYczQA"

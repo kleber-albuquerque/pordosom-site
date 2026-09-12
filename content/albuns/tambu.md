@@ -4,7 +4,7 @@ artista: "Luana Bayô"
 ano: 2022
 capa: "/images/uploads/tambu.jpg"
 generos:
-  - afro-brasileira
+  - - afro-brasileira
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/artist/5OgreO0prRIhQRP3A4S7rm"

@@ -491,6 +491,9 @@ async function carregarAlbuns() {
       const texto = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ''))));
       const { meta, corpo } = parseMd(texto);
       meta.corpo = corpo;
+      if (Array.isArray(meta.capa)) meta.capa = meta.capa[0] || '';
+      if (Array.isArray(meta.ordem)) meta.ordem = meta.ordem[0] || '';
+      if (typeof meta.capa !== 'string') meta.capa = String(meta.capa || '');
       if (typeof meta.generos === 'string') {
         meta.generos = meta.generos.replace(/[\[\]]/g, '').split(',').map(s => s.trim()).filter(Boolean);
       }

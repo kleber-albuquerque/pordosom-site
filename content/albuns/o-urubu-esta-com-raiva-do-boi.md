@@ -4,7 +4,7 @@ artista: "Marco Vilane e Danilo Moraes"
 ano: 2020
 capa: "/images/uploads/o-urubu-esta-com-raiva-do-boi.jpg"
 generos:
-  - brasilidades
+  - - brasilidades
   - cultura-popular
 destaque: false
 faixas: 1
