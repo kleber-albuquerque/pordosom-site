@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gravadora — Catálogo | Por do Som</title>
-<meta name="description" content="Catálogo completo do Por do Som: álbuns de samba de raiz, cultura afro-brasileira, música instrumental, MPB e cultura popular brasileira.">
+<title>Gravadora — Catálogo &amp; Artistas | Por do Som</title>
+<meta name="description" content="Catálogo completo do Por do Som: álbuns de samba de raiz, cultura afro-brasileira, música instrumental, MPB e cultura popular. Conheça também os artistas do selo.">
 <link rel="icon" type="image/jpeg" href="/pordosom-site/pordosom-profile.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/pordosom-site/css/style.css">
 </head>
 <body class="page-interna">
-
 <header class="header" id="header">
     <a href="/pordosom-site/" class="logo">
         <span class="logo-mark"><img src="/pordosom-site/pordosom-profile.jpg" alt="Por do Som"></span>
@@ -27,25 +26,27 @@
     </nav>
     <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </header>
-
 <header class="page-header">
     <div class="container">
         <span class="section-subtitle">Gravadora</span>
         <h1 class="section-title">O catálogo <span class="gradient">completo</span></h1>
-        <p class="section-description">
-            Cada obra com página própria — capa, texto e players.
-            Filtre por gênero e explore as Brasilidades do selo.
-        </p>
+        <p class="section-description">Cada obra com página própria — capa, texto e players. Filtre por gênero e explore as Brasilidades do selo.</p>
     </div>
 </header>
-
 <section style="padding-top:2rem">
     <div class="container">
         <div class="filtros" id="filtros"></div>
         <div class="catalogo-grid" id="catalogo-grid"></div>
     </div>
 </section>
-
+<section class="artistas" style="padding-top:3rem">
+    <div class="container">
+        <span class="section-subtitle">Gravadora</span>
+        <h2 class="section-title">Artistas que <span class="gradient">cantam o Brasil</span></h2>
+        <p class="section-description">Compositores, intérpretes e mestres que carregam a brasilidade nas vozes, nas violas e nos tambores.</p>
+        <div class="artistas-grid" id="artistas-grid"></div>
+    </div>
+</section>
 <footer class="footer">
     <div class="container">
         <span class="footer-logo">PÔR DO SOM</span>
@@ -61,7 +62,6 @@
         <p class="footer-text">© 2026 Por do Som Cultural · Todos os direitos reservados</p>
     </div>
 </footer>
-
 <script src="/pordosom-site/js/catalogo.js"></script>
 <script>
 const header = document.getElementById('header');
@@ -75,6 +75,15 @@ mobileMenuBtn.addEventListener('click', () => {
     nav.classList.toggle('active');
     mobileMenuBtn.textContent = nav.classList.contains('active') ? '✕' : '☰';
 });
+const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            fadeObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
 </script>
 </body>
 </html>
