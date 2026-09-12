@@ -168,7 +168,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <button class="side-item" data-pagina="albuns"><span class="icone">💿</span> Álbuns</button>
     <button class="side-item" data-pagina="noticias"><span class="icone">📰</span> Notícias</button>
     <button class="side-item" data-pagina="projetos"><span class="icone">🎬</span> Projetos</button>
-    <button class="side-item" onclick="emBreve('Audiovisual')"><span class="icone">🎵</span> Audiovisual</button>
+    <button class="side-item" data-pagina="audiovisual"><span class="icone">🎵</span> Audiovisual</button>
     <button class="side-item" onclick="emBreve('Configurações')"><span class="icone">⚙️</span> Configurações</button>
     <div class="side-footer">
       <div class="side-user" id="side-user">—</div>
@@ -193,6 +193,28 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           Após salvar, o site se atualiza sozinho em 1–2 minutos.
           Na barra lateral, clique em <strong>Álbuns</strong> ou <strong>Notícias</strong> para começar.
         </p>
+      </div>
+    </div>
+
+    <!-- AUDIOVISUAL -->
+    <div id="pagina-audiovisual" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Audiovisual</h1>
+          <p class="page-sub" style="margin-bottom:0">Os vídeos do canal — por festival e série</p>
+        </div>
+        <button class="btn-novo" onclick="abrirNovoVideo()">＋ Novo Vídeo</button>
+      </div>
+      <div class="loading" id="av-loading">Carregando vídeos…</div>
+      <div class="table-wrap hidden" id="av-table-wrap">
+        <table>
+          <thead><tr><th>Grupo</th><th>Título</th><th>Artista</th><th>Ano</th><th></th></tr></thead>
+          <tbody id="av-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="av-vazio">
+        <span class="icone">🎵</span>
+        Nenhum vídeo cadastrado.
       </div>
     </div>
 
@@ -278,6 +300,35 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
   </main>
 </div>
 <!-- ===== EDITOR DE ÁLBUM ===== -->
+  <!-- ===== EDITOR DE VIDEO (simplificado) ===== -->
+  <div class="editor-overlay hidden" id="editor-video-overlay">
+    <div class="editor-box" style="max-width:560px">
+      <div class="editor-header">
+        <h2 id="editor-video-titulo">Novo Vídeo</h2>
+        <button class="editor-fechar" onclick="fecharEditorVideo()">X</button>
+      </div>
+      <div class="f-grid">
+        <div class="f-field full"><label>Título do vídeo</label><input id="fv-titulo" type="text"></div>
+        <div class="f-field full"><label>Link do YouTube (cole a URL)</label><input id="fv-link" type="url" placeholder="https://youtube.com/watch?v=..." oninput="previewVideo()"></div>
+        <div class="f-field full" id="fv-preview-wrap" style="display:none"><label>Prévia</label><div style="border-radius:4px;overflow:hidden;border:1px solid var(--border-light)"><iframe id="fv-preview" style="width:100%;aspect-ratio:16/9;border:0" title="Prévia"></iframe></div></div>
+        <div class="f-field">
+          <label>Grupo</label>
+          <select id="fv-grupo" style="background:var(--bg-dark);border:1px solid var(--border-light);color:var(--text-primary);padding:.75rem .9rem;border-radius:4px;font-family:inherit">
+            <option value="sotaques">Série Sotaques do Brasil</option>
+            <option value="malungo">Festival Malungo</option>
+            <option value="mestres">Festival Mestres dos Saberes</option>
+            <option value="outros">Outros vídeos</option>
+          </select>
+        </div>
+        <div class="f-field"><label>Ano</label><input id="fv-ano" type="number" min="2010" max="2035"></div>
+        <div class="f-field full"><label>Artista</label><input id="fv-artista" type="text"></div>
+      </div>
+      <div class="editor-rodape">
+        <button class="btn-cancelar" onclick="fecharEditorVideo()">Cancelar</button>
+        <button class="btn-salvar" id="btn-salvar-video" onclick="salvarVideo()">Salvar Vídeo</button>
+      </div>
+    </div>
+  </div>
   <!-- ===== EDITOR DE PROJETO (overlay) ===== -->
   <div class="editor-overlay hidden" id="editor-projeto-overlay">
     <div class="editor-box">
@@ -494,7 +545,7 @@ document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.side-item').forEach(b => b.classList.remove('ativo'));
     btn.classList.add('ativo');
-    ['inicio', 'albuns', 'noticias', 'projetos'].forEach(p =>
+    ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual'].forEach(p =>
       document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
   });
 });
@@ -1252,6 +1303,150 @@ async function excluirProjeto(x) {
     await carregarProjetos();
   } catch (e) {
     toast('❌ Erro ao excluir: ' + e.message);
+  }
+}
+
+
+// ==========================================================
+// PARTE 6 - AUDIOVISUAL (videos)
+// ==========================================================
+let VIDEOS = [];
+let videoAtual = null;
+
+const GRUPOS_AV = {sotaques:"Sotaques do Brasil", malungo:"Festival Malungo", mestres:"Mestres dos Saberes", outros:"Outros"};
+
+async function carregarVideos() {
+  const loading = document.getElementById("av-loading");
+  const wrap = document.getElementById("av-table-wrap");
+  const vazio = document.getElementById("av-vazio");
+  try {
+    const lista = await gh("/repos/" + REPO + "/contents/content/audiovisual");
+    const mds = Array.isArray(lista) ? lista.filter(f => f.name.endsWith(".md")) : [];
+    VIDEOS = [];
+    for (const f of mds) {
+      const blob = await gh("/repos/" + REPO + "/contents/content/audiovisual/" + f.name);
+      const txt = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ""))));
+      const { meta } = parseMd(txt);
+      meta._arquivo = f.name;
+      meta._sha = blob.sha;
+      VIDEOS.push(meta);
+    }
+    VIDEOS.sort((a,b) => String(b.ano||"").localeCompare(String(a.ano||"")));
+    const tbody = document.getElementById("av-tbody");
+    tbody.innerHTML = VIDEOS.map(x => {
+      const g = GRUPOS_AV[String(x.grupo)] || x.grupo || "—";
+      return "<tr><td><span class=\"tag-genero\">" + g + "</span></td>"
+        + "<td><div class=\"titulo-cell\">" + (x.titulo || x._arquivo) + "</div></td>"
+        + "<td style=\"color:var(--text-muted)\">" + (x.artista || "—") + "</td>"
+        + "<td>" + (x.ano || "—") + "</td>"
+        + "<td><button class=\"side-item\" style=\"padding:.4rem .7rem\" onclick=\"abrirEditorVideo(VIDEOS[" + VIDEOS.indexOf(x) + "])\">✏️</button>"
+        + " <button class=\"side-item\" style=\"padding:.4rem .7rem\" onclick=\"excluirVideo(VIDEOS[" + VIDEOS.indexOf(x) + "])\">🗑️</button></td></tr>";
+    }).join("");
+    loading.classList.add("hidden");
+    if (VIDEOS.length) wrap.classList.remove("hidden"); else vazio.classList.remove("hidden");
+  } catch (e) {
+    loading.classList.add("hidden");
+    vazio.classList.remove("hidden");
+  }
+}
+
+function abrirNovoVideo() {
+  videoAtual = {_arquivo:"", _sha:null, titulo:"", grupo:"outros", ano:new Date().getFullYear(), artista:"", yt_id:""};
+  document.getElementById("fv-titulo").value = "";
+  document.getElementById("fv-link").value = "";
+  document.getElementById("fv-ano").value = new Date().getFullYear();
+  document.getElementById("fv-artista").value = "";
+  document.getElementById("fv-grupo").value = "outros";
+  document.getElementById("fv-preview-wrap").style.display = "none";
+  document.getElementById("editor-video-titulo").textContent = "Novo Video";
+  document.getElementById("editor-video-overlay").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function abrirEditorVideo(x) {
+  videoAtual = x;
+  document.getElementById("fv-titulo").value = x.titulo || "";
+  document.getElementById("fv-link").value = x.yt_id ? "https://www.youtube.com/watch?v=" + x.yt_id : "";
+  document.getElementById("fv-ano").value = x.ano || "";
+  document.getElementById("fv-artista").value = x.artista || "";
+  document.getElementById("fv-grupo").value = String(x.grupo || "outros");
+  previewVideo();
+  document.getElementById("editor-video-titulo").textContent = "Editar: " + (x.titulo || "video");
+  document.getElementById("editor-video-overlay").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function fecharEditorVideo() {
+  document.getElementById("editor-video-overlay").classList.add("hidden");
+  document.body.style.overflow = "";
+  videoAtual = null;
+}
+
+function extrairYtId(url) {
+  const m = String(url||"").match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/);
+  return m ? m[1] : "";
+}
+
+function previewVideo() {
+  const id = extrairYtId(document.getElementById("fv-link").value);
+  const wrap = document.getElementById("fv-preview-wrap");
+  const iframe = document.getElementById("fv-preview");
+  if (id) { iframe.src = "https://www.youtube.com/embed/" + id; wrap.style.display = "block"; }
+  else { iframe.src = ""; wrap.style.display = "none"; }
+}
+
+async function salvarVideo() {
+  if (!videoAtual) return;
+  const btn = document.getElementById("btn-salvar-video");
+  const titulo = document.getElementById("fv-titulo").value.trim();
+  if (!titulo) { toast("O titulo e obrigatorio"); return; }
+  const ytId = extrairYtId(document.getElementById("fv-link").value);
+  if (!ytId) { toast("Cole um link valido do YouTube"); return; }
+  btn.disabled = true; btn.textContent = "Salvando…";
+  try {
+    const q = s => '"' + (s||"").replace(/"/g, '\\"') + '"';
+    const md = "---\n"
+      + "titulo: " + q(titulo) + "\n"
+      + "grupo: \"" + document.getElementById("fv-grupo").value + "\"\n"
+      + "ano: " + (document.getElementById("fv-ano").value || '\"\"') + "\n"
+      + "artista: " + q(document.getElementById("fv-artista").value) + "\n"
+      + "yt_id: \"" + ytId + "\"\n"
+      + "---\n\n[descricao]\n";
+    const conteudo = btoa(unescape(encodeURIComponent(md)));
+    const ehNovo = !videoAtual._sha;
+    const nomeArquivo = ehNovo ? slugify(titulo) + ".md" : videoAtual._arquivo;
+    const bodySalvar = {
+      message: (ehNovo ? "Novo video: " : "Edita video: ") + titulo,
+      content: conteudo
+    };
+    if (!ehNovo) bodySalvar.sha = videoAtual._sha;
+    await gh("/repos/" + REPO + "/contents/content/audiovisual/" + nomeArquivo, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(bodySalvar)
+    });
+    toast("Video salvo! A pagina atualiza em ~2 min.");
+    fecharEditorVideo();
+    await carregarVideos();
+  } catch (e) {
+    toast("Erro ao salvar: " + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "Salvar Video";
+  }
+}
+
+async function excluirVideo(x) {
+  if (!confirm("Excluir o video \"" + (x.titulo || x._arquivo) + "\"?")) return;
+  try {
+    await gh("/repos/" + REPO + "/contents/content/audiovisual/" + x._arquivo, {
+      method: "DELETE",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: "Exclui video: " + x.titulo, sha: x._sha })
+    });
+    toast("Video excluido.");
+    await carregarVideos();
+  } catch (e) {
+    toast("Erro: " + e.message);
   }
 }
 
