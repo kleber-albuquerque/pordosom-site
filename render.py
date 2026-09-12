@@ -172,6 +172,28 @@ if os.path.isdir(PASTA_AV):
         clips.append(meta)
 clips.sort(key=lambda c: str(c.get('ano', '')))
 
+# ---------- Lê os projetos ----------
+PASTA_PROJ = os.path.join(BASE_DIR, 'content', 'projetos')
+projetos = []
+if os.path.isdir(PASTA_PROJ):
+    for nome in sorted(os.listdir(PASTA_PROJ)):
+        if not nome.endswith('.md'):
+            continue
+        meta, corpo = parse_md(os.path.join(PASTA_PROJ, nome))
+        meta.setdefault('titulo', nome[:-3])
+        meta.setdefault('status', 'realizado')
+        meta.setdefault('badge', 'Projeto')
+        meta.setdefault('ano', '')
+        meta.setdefault('imagem', '')
+        meta.setdefault('link', '')
+        meta.setdefault('relatorio', '')
+        meta.setdefault('tags', [])
+        meta['corpo'] = corpo
+        if isinstance(meta.get('tags'), str):
+            meta['tags'] = [t.strip() for t in meta['tags'].split(',') if t.strip()]
+        projetos.append(meta)
+projetos.sort(key=lambda p: str(p.get('ano', '')), reverse=True)
+
 # ---------- Template da página de álbum ----------
 NAV_HTML = (
     '        <a href="' + BASE + '/" class="nav-link">Home</a>\n'
@@ -499,6 +521,60 @@ with open(OUT_SITEMAP, 'w', encoding='utf-8') as f:
     f.write(sitemap)
 
 # ---------- Relatório ----------
+# ---------- Gera a projetos.html ----------
+def card_projeto(p):
+    status_cls = 'status-realizado' if str(p.get('status')) == 'realizado' else 'status-captacao'
+    status_lbl = '✓ Realizado' if str(p.get('status')) == 'realizado' else '★ Em captação'
+    img = p.get('imagem') or ''
+    if isinstance(img, list):
+        img = img[0] if img else ''
+    img_style = 'background-image:url(\'' + BASE + img + '\')' if img else 'background:#1a0e0e'
+    tags_html = ''.join('<span class="project-tag">' + esc(t) + '</span>' for t in (p.get('tags') or []))
+    rel_html = ''
+    if p.get('relatorio'):
+        rel_html = '<a href="' + esc(p['relatorio']) + '" target="_blank" rel="noopener" class="btn btn-ghost" style="margin-top:12px;padding:8px 16px;font-size:.65rem">📄 Relatório completo ↗</a>'
+    link_html = ''
+    if p.get('link'):
+        link_html = '<a href="' + esc(p['link']) + '" target="_blank" rel="noopener" class="teaser-link" style="margin-top:14px">Ver projeto →</a>'
+    return (
+'<div class="projeto-card">'
+'<div class="galeria"><img src="' + BASE + (img or '/pordosom-profile.jpg') + '" alt="' + esc(p['titulo']) + '" loading="lazy" onerror="this.style.display=\'none\'"></div>'
+'<div class="projeto-corpo">'
+'<span class="projeto-badge ' + status_cls + '">' + status_lbl + '</span>'
+'<h3>' + esc(p['titulo']) + '</h3>'
+'<p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">' + esc(p.get('corpo', '')) + '</p>'
+'<div class="project-tags">' + tags_html + '</div>'
++ link_html + rel_html +
+'</div></div>')
+
+if projetos:
+    cards = '\n\n'.join(card_projeto(p) for p in projetos)
+    projetos_html = (
+'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
+'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+'<title>Projetos &amp; Festivais | Por do Som</title>\n'
+'<meta name="description" content="Projetos culturais, festivais e séries realizados pelo Por do Som — celebrando mestres e saberes da cultura popular.">\n'
+'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
+'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
+'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n</head>\n<body class="page-interna">\n'
+'<header class="header" id="header">\n    <a href="' + BASE + '/" class="logo">\n'
+'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+'        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n'
+'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
+'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+'<header class="page-header">\n    <div class="container">\n'
+'        <span class="section-subtitle">Projetos &amp; Festivais</span>\n'
+'        <h1 class="section-title">Boas <span class="gradient">realizações</span></h1>\n'
+'        <p class="section-description">A produção cultural do selo — do YouTube ao edital.</p>\n'
+'    </div>\n</header>\n'
+'<section style="padding-top:2rem">\n    <div class="container">\n'
++ cards + '\n    </div>\n</section>\n\n'
++ FOOTER_HTML +
+'<script>\nconst menuBtn=document.getElementById("mobileMenuBtn");const nav=document.getElementById("nav");menuBtn.addEventListener("click",()=>nav.classList.toggle("active"));\n</script>\n</body>\n</html>\n')
+    with open(os.path.join(BASE_DIR, 'projetos.html'), 'w', encoding='utf-8') as f:
+        f.write(projetos_html)
+    print('✔ projetos.html gerada com', len(projetos), 'projetos')
+
 print('✔ ' + str(len(geradas)) + ' páginas de álbum geradas (BASE = ' + (BASE or '(raiz)') + ')')
 print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
 print('✔ audiovisual.html gerada com ' + str(len(clips)) + ' vídeos em ' + str(len(partes_pagina)) + ' grupos')
