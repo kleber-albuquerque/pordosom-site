@@ -1,4 +1,6 @@
 ---
+generos:
+  - afro-brasileira
 titulo: "Baticum de Bará"
 artista: "Luana Bayô"
 ano: 2021

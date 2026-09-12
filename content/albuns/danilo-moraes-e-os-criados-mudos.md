@@ -4,7 +4,7 @@ artista: "Danilo Moraes e Os Criados Mudos"
 ano: 2011
 capa: ""
 generos:
-  - - mpb
+  - mpb
 destaque: false
 faixas: ""
 spotify: ""

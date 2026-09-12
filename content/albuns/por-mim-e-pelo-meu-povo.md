@@ -4,7 +4,7 @@ artista: "Ana Maria Carvalho"
 ano: 2011
 capa: ""
 generos:
-  - - cultura-popular
+  - cultura-popular
 destaque: false
 faixas: 14
 spotify: ""

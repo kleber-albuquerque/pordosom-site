@@ -4,7 +4,7 @@ artista: "Tião Carvalho"
 ano: 2006
 capa: "/images/uploads/tiao-carvalho-canta-joao-do-vale.jpg"
 generos:
-  - - cultura-popular
+  - cultura-popular
 destaque: false
 faixas: ""
 spotify: ""

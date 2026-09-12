@@ -374,21 +374,38 @@ for i, a in enumerate(albuns):
     geradas.append(a['slug'])
 
 # ---------- Gera o data/catalogo.json (com a BASE para o JS) ----------
+def _norm_json(a):
+    # O JSON nasce LIMPO: capa string, generos lista — qualquer deformidade do .md morre aqui
+    capa = a.get('capa', '')
+    if isinstance(capa, list):
+        capa = capa[0] if capa else ''
+    capa = str(capa) if capa else ''
+    generos = a.get('generos', [])
+    if isinstance(generos, str):
+        generos = [x.strip() for x in generos.replace('[', '').replace(']', '').split(',') if x.strip()]
+    ano = a.get('ano', '')
+    if isinstance(ano, list):
+        ano = ano[0] if ano else ''
+    ordem = a.get('ordem', '')
+    if isinstance(ordem, list):
+        ordem = ordem[0] if ordem else ''
+    return {
+        'slug': a['slug'],
+        'titulo': str(a.get('titulo', '')),
+        'artista': str(a.get('artista', '')),
+        'ano': ano,
+        'capa': capa,
+        'generos': generos,
+        'destaque': bool(a.get('destaque', False)),
+        'ordem': str(ordem) if ordem else '',
+        'spotify': str(a.get('spotify', '') or ''),
+        'youtube': str(a.get('youtube', '') or ''),
+    }
+
 catalogo_js = {
     'base': BASE,
     'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
-    'albuns': [{
-        'slug': a['slug'],
-        'titulo': a['titulo'],
-        'artista': a['artista'],
-        'ano': a.get('ano', ''),
-        'capa': a.get('capa', ''),
-        'generos': a.get('generos', []),
-        'destaque': a.get('destaque', False),
-        'ordem': a.get('ordem', ''),
-        'spotify': a.get('spotify', ''),
-        'youtube': a.get('youtube', ''),
-    } for a in albuns]
+    'albuns': [_norm_json(a) for a in albuns]
 }
 with open(OUT_JSON, 'w', encoding='utf-8') as f:
     json.dump(catalogo_js, f, ensure_ascii=False, indent=2)

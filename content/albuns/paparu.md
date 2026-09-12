@@ -4,7 +4,7 @@ artista: "Ana Maria Carvalho"
 ano: 2022
 capa: "/images/uploads/paparu.jpg"
 generos:
-  - - cultura-popular
+  - cultura-popular
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/artist/0wTtDVcd69RifkABuA9OBb"

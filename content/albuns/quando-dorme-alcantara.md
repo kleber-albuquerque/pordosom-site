@@ -4,7 +4,7 @@ artista: "Tião Carvalho"
 ano: 2002
 capa: "/images/uploads/quando-dorme-alcantara.jpg"
 generos:
-  - - cultura-popular
+  - cultura-popular
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/artist/0wTtDVcd69RifkABuA9OBb"

@@ -4,7 +4,7 @@ artista: "Marco Vilane"
 ano: 2023
 capa: "/images/uploads/cancao-de-enxugar-os-olhos.jpg"
 generos:
-  - - mpb
+  - mpb
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/album/5nGJXo9QwA8RSC5cWOjXH2"

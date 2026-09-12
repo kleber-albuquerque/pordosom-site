@@ -1,4 +1,6 @@
 ---
+generos:
+  - mpb
 titulo: "Eu Apenas Queria que Você Soubesse"
 artista: "Marco Vilane"
 ano: 2024

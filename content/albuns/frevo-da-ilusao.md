@@ -1,4 +1,6 @@
 ---
+generos:
+  - cultura-popular
 titulo: "Frevo da Ilusão"
 artista: "Tião Carvalho"
 ano: 2026

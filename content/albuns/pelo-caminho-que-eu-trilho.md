@@ -4,7 +4,7 @@ artista: "Marco Vilane e Zeca Baleiro"
 ano: 2023
 capa: "/images/uploads/pelo-caminho-que-eu-trilho.jpg"
 generos:
-  - - mpb
+  - mpb
 destaque: true
 faixas: 1
 spotify: ""

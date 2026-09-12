@@ -4,7 +4,7 @@ artista: "Luana Bayô"
 ano: ""
 capa: "/images/uploads/deusa.jpg"
 generos:
-  - - afro-brasileira
+  - afro-brasileira
 destaque: false
 faixas: ""
 spotify: "https://open.spotify.com/album/2DeEUpc820GIpYw7StibDa"
