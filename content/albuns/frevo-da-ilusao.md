@@ -1,7 +1,7 @@
 ---
 titulo: "Frevo da Ilusão"
 artista: "Tião Carvalho"
-ano: 2023
+ano: 2026
 capa: "/images/uploads/frevo-da-ilusao.jpg"
  generos:
 destaque: false
