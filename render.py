@@ -88,6 +88,10 @@ def caminho(c):
     """Junta a BASE com um caminho. Uso em TODO o template."""
     if not c:
         return c
+    if isinstance(c, list):
+        c = c[0] if c else ''    # blindagem: capa em formato de lista
+    if not isinstance(c, str):
+        return str(c)
     return BASE + c if c.startswith('/') else c
 
 def embed_spotify(url):
