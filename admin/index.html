@@ -283,6 +283,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             <div class="f-checks" id="f-generos"></div>
           </div>
           <div class="f-field"><label>Nº de faixas</label><input id="f-faixas" type="number" min="1" max="100"></div>
+            <div class="f-field"><label>⭐ Posição no catálogo (opcional)</label><input id="f-ordem" type="number" min="1" placeholder="vazio = ordem por ano"></div>
           <div class="f-field">
             <label>Destaque na home</label>
             <label class="f-toggle">
@@ -577,6 +578,7 @@ function abrirEditor(album) {
   document.getElementById('f-artista').value = album.artista || '';
   document.getElementById('f-ano').value = album.ano || '';
   document.getElementById('f-faixas').value = album.faixas || '';
+  document.getElementById('f-ordem').value = album.ordem || '';
   document.getElementById('f-spotify').value = album.spotify || '';
   document.getElementById('f-youtube').value = album.youtube || '';
   document.getElementById('f-apple').value = album.apple || '';
@@ -646,7 +648,7 @@ ano: ${val('f-ano') || '""'}
 capa: ${q(albumAtual.capa || '')}
  ${gLinhas}
 destaque: ${document.getElementById('f-destaque').checked}
-faixas: ${val('f-faixas') || '1'}
+faixas: ${val('f-faixas') || '1'}\nordem: ${q(val('f-ordem'))}
 spotify: ${q(val('f-spotify'))}
 youtube: ${q(val('f-youtube'))}
 apple: ${q(val('f-apple'))}

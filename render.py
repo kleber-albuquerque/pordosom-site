@@ -132,7 +132,25 @@ if os.path.isdir(PASTA_MD):
         meta['texto_pt'] = corpo
         albuns.append(meta)
 
-albuns.sort(key=lambda a: (str(a.get('ano', '')), a['titulo']), reverse=True)
+# Ordenacao: albums COM campo ordem: sobem (1, 2, 3...); SEM ordem: por ano desc
+def chave_ordem(a):
+    o = a.get('ordem')
+    if isinstance(o, list):
+        o = o[0] if o else None
+    try:
+        o = int(o) if o is not None and str(o).strip() else None
+    except (ValueError, TypeError):
+        o = None
+    tem_ordem = o is not None
+    if tem_ordem:
+        return (0, o, '')            # com ordem: grupo 0, numero
+    return (1, 0, str(a.get('ano', '')))   # sem ordem: grupo 1, ano (desc depois)
+
+albuns.sort(key=chave_ordem)
+albuns_sem_ordem = [a for a in albuns if (a.get('ordem') in (None, '', []) or not str(a.get('ordem', '')).strip())]
+albuns_sem_ordem.sort(key=lambda a: (str(a.get('ano', '')), a['titulo']), reverse=True)
+albuns_com_ordem = sorted([a for a in albuns if a not in albuns_sem_ordem], key=chave_ordem)
+albuns[:] = albuns_com_ordem + albuns_sem_ordem
 
 # ---------- Le as noticias (content/posts/*.md) ----------
 PASTA_POSTS = os.path.join(BASE_DIR, 'content', 'posts')
@@ -367,6 +385,7 @@ catalogo_js = {
         'capa': a.get('capa', ''),
         'generos': a.get('generos', []),
         'destaque': a.get('destaque', False),
+        'ordem': a.get('ordem', ''),
         'spotify': a.get('spotify', ''),
         'youtube': a.get('youtube', ''),
     } for a in albuns]

@@ -25,6 +25,17 @@
       </a>`).join('');
   }
 
+  // Ordenacao do catalogo: com ordem: primeiro; sem: ano desc
+  if (CAT.albuns && CAT.albuns.length) {
+    CAT.albuns.sort((x, y) => {
+      const ox = parseInt(x.ordem) || 0, oy = parseInt(y.ordem) || 0;
+      if (ox && oy) return ox - oy;
+      if (ox) return -1;
+      if (oy) return 1;
+      return String(y.ano || '').localeCompare(String(x.ano || ''));
+    });
+  }
+
   /* ---------- GRAVADORA ---------- */
   const filtrosEl = document.getElementById('filtros');
   const grid = document.getElementById('catalogo-grid');
