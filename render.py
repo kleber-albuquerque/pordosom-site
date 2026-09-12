@@ -351,7 +351,7 @@ if True:
         partes = str(p.get('date', '')).split('-')
         data_str = '/'.join(reversed(partes)) if len(partes) == 3 else str(p.get('date', ''))
         itens.append(
-            '<a class="song-item fade-in" href="#noticia-' + str(i) + '">'
+            '<a class="song-item fade-in" href="' + BASE + '/posts/' + re.sub(r'[^a-z0-9-]', '', str(p['title']).lower().replace(' ', '-')) + '.html">'
             '<div class="song-num">' + str(i + 1) + '</div>'
             '<div class="song-info">'
             '<div class="song-title">' + esc(p['title']) + '</div>'
