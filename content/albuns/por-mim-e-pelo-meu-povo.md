@@ -6,7 +6,7 @@ capa: ""
 generos:
   - cultura-popular
 destaque: false
-faixas: ""
+faixas: 14
 spotify: ""
 youtube: ""
 apple: ""

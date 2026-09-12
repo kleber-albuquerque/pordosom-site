@@ -5,7 +5,7 @@ ano: 2022
 capa: "/images/uploads/navalha.jpg"
 generos:
   - mpb
-destaque: false
+destaque: true
 faixas: 1
 spotify: ""
 youtube: "https://www.youtube.com/results?search_query=Jonathan+Silva+Navalha"

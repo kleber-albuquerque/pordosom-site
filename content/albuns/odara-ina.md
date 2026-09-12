@@ -6,7 +6,7 @@ capa: "/images/uploads/odara-ina.jpg"
 generos:
   - afro-brasileira
 destaque: false
-faixas: ""
+faixas: 5
 spotify: "https://open.spotify.com/track/1lAQfwQ3DwYhRn9ScUGL1T"
 youtube: ""
 apple: ""

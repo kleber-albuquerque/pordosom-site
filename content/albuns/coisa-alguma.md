@@ -5,8 +5,8 @@ ano: 2005
 capa: "/images/uploads/coisa-alguma.jpg"
 generos:
   - mpb
-destaque: false
-faixas: ""
+destaque: true
+faixas: 13
 spotify: "https://open.spotify.com/artist/2GtaJVqceVA6xEcFcUQAMD"
 youtube: ""
 apple: ""

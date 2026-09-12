@@ -223,7 +223,7 @@
       "generos": [
         "mpb"
       ],
-      "destaque": false,
+      "destaque": true,
       "spotify": "",
       "youtube": "https://www.youtube.com/results?search_query=Jonathan+Silva+Navalha"
     },
@@ -236,7 +236,7 @@
       "generos": [
         "mpb"
       ],
-      "destaque": false,
+      "destaque": true,
       "spotify": "https://open.spotify.com/artist/2GtaJVqceVA6xEcFcUQAMD",
       "youtube": ""
     },
@@ -380,7 +380,7 @@
       "generos": [
         "mpb"
       ],
-      "destaque": false,
+      "destaque": true,
       "spotify": "https://open.spotify.com/artist/2GtaJVqceVA6xEcFcUQAMD",
       "youtube": ""
     },

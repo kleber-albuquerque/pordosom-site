@@ -6,7 +6,7 @@ capa: "/images/uploads/depois.jpg"
 generos:
   - afro-brasileira
 destaque: false
-faixas: ""
+faixas: 4
 spotify: "https://open.spotify.com/album/6AzDtAWEOWEeFn53aaJSZt"
 youtube: ""
 apple: ""
