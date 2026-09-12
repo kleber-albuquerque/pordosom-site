@@ -6,7 +6,7 @@ capa: "/images/uploads/frevo-da-ilusao.jpg"
  generos:
 destaque: false
 faixas: 1
-ordem: "2"
+ordem: "1"
 spotify: "https://open.spotify.com/artist/0wTtDVcd69RifkABuA9OBb"
 youtube: ""
 apple: ""
