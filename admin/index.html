@@ -169,7 +169,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <button class="side-item" data-pagina="noticias"><span class="icone">📰</span> Notícias</button>
     <button class="side-item" data-pagina="projetos"><span class="icone">🎬</span> Projetos</button>
     <button class="side-item" data-pagina="audiovisual"><span class="icone">🎵</span> Audiovisual</button>
-    <button class="side-item" onclick="emBreve('Configurações')"><span class="icone">⚙️</span> Configurações</button>
+    <button class="side-item" data-pagina="config"><span class="icone">⚙️</span> Configurações</button>
     <div class="side-footer">
       <div class="side-user" id="side-user">—</div>
       <button class="side-sair" onclick="sair()">Sair do painel</button>
@@ -193,6 +193,42 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           Após salvar, o site se atualiza sozinho em 1–2 minutos.
           Na barra lateral, clique em <strong>Álbuns</strong> ou <strong>Notícias</strong> para começar.
         </p>
+      </div>
+    </div>
+
+    <!-- CONFIGURACOES -->
+    <div id="pagina-config" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Configurações</h1>
+          <p class="page-sub" style="margin-bottom:0">Os textos e a identidade do site — edite e publique</p>
+        </div>
+      </div>
+      <div class="loading" id="cfg-loading">Carregando configurações…</div>
+      <div class="table-wrap" id="cfg-form-wrap" style="padding:2rem;display:none">
+        <h2 style="font-size:14px;color:var(--brand-primary);margin-bottom:20px">🏠 HOME (primeira tela)</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Slogan (título grande)</label><input id="cfg-hero_slogan" type="text"></div>
+          <div class="f-field full"><label>Texto de apresentação</label><textarea id="cfg-hero_texto" style="min-height:90px"></textarea></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">📜 MANIFESTO</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Parágrafo 1</label><textarea id="cfg-manifesto_texto1" style="min-height:100px"></textarea></div>
+          <div class="f-field full"><label>Parágrafo 2</label><textarea id="cfg-manifesto_texto2" style="min-height:100px"></textarea></div>
+          <div class="f-field full"><label>Parágrafo 3</label><textarea id="cfg-manifesto_texto3" style="min-height:100px"></textarea></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">👥 QUEM SOMOS</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Currículo do selo</label><textarea id="cfg-quemsomos_texto" style="min-height:130px"></textarea></div>
+          <div class="f-field full"><label>Link do Portfolio (opcional)</label><input id="cfg-portfolio_link" type="url" placeholder="https://..."></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">⚖️ EDITORA & DIREITOS</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Texto institucional</label><textarea id="cfg-editora_texto" style="min-height:110px"></textarea></div>
+        </div>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
+          <button class="btn-salvar" id="btn-salvar-config" onclick="salvarConfig()">💾 Salvar Textos do Site</button>
+        </div>
       </div>
     </div>
 
@@ -545,7 +581,7 @@ document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.side-item').forEach(b => b.classList.remove('ativo'));
     btn.classList.add('ativo');
-    ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual'].forEach(p =>
+    ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual', 'config'].forEach(p =>
       document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
     if (btn.dataset.pagina === 'audiovisual' && VIDEOS && !VIDEOS.length) carregarVideos();
   });
@@ -1450,6 +1486,67 @@ async function excluirVideo(x) {
     toast("Erro: " + e.message);
   }
 }
+
+
+// ==========================================================
+// PARTE 7 - CONFIGURACOES DO SITE
+// ==========================================================
+const CFG_CAMPOS = ["hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto"];
+let cfgSha = null;
+
+async function carregarConfig() {
+  const loading = document.getElementById("cfg-loading");
+  const wrap = document.getElementById("cfg-form-wrap");
+  try {
+    const blob = await gh("/repos/" + REPO + "/contents/content/config/site.md");
+    const txt = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ""))));
+    const { meta } = parseMd(txt);
+    cfgSha = blob.sha;
+    CFG_CAMPOS.forEach(c => {
+      const el = document.getElementById("cfg-" + c);
+      if (el) el.value = meta[c] || "";
+    });
+    loading.style.display = "none";
+    wrap.style.display = "block";
+  } catch (e) {
+    loading.textContent = "Erro: " + e.message;
+  }
+}
+
+async function salvarConfig() {
+  const btn = document.getElementById("btn-salvar-config");
+  btn.disabled = true; btn.textContent = "Salvando…";
+  try {
+    const q = s => '"' + (s||"").replace(/"/g, '\\\"').replace(/\n/g, " ") + '"';
+    let md = "---\n";
+    CFG_CAMPOS.forEach(c => {
+      const el = document.getElementById("cfg-" + c);
+      md += c + ": " + q(el ? el.value : "") + "\n";
+    });
+    md += "---\n";
+    const conteudo = btoa(unescape(encodeURIComponent(md)));
+    const bodySalvar = { message: "Edita configurações do site", content: conteudo };
+    if (cfgSha) bodySalvar.sha = cfgSha;
+    const resp = await gh("/repos/" + REPO + "/contents/content/config/site.md", {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(bodySalvar)
+    });
+    cfgSha = resp.content ? resp.content.sha : cfgSha;
+    toast("Configurações salvas! O site atualiza em ~2 min.");
+  } catch (e) {
+    toast("Erro ao salvar: " + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "Salvar Textos do Site";
+  }
+}
+
+// carregamento lazy da aba config
+document.querySelectorAll('.side-item[data-pagina="config"]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!cfgSha) carregarConfig();
+  });
+});
 
 </script>
 </body>
