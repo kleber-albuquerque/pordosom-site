@@ -3,7 +3,7 @@ title: "O Por do Som ganha casa nova"
 date: 2026-09-12
 resumo: "O novo site do selo reúne, pela primeira vez, o catálogo completo, os festivais e toda a produção audiovisual — tudo em um só lugar."
 rascunho: false
-imagem: ""
+imagem: "/images/uploads/2026-09-12-o-por-do-som-ganha-casa-nova.jpg"
 ---
 
 O Por do Som agora tem, pela primeira vez, **um endereço que cabe o selo inteiro**.
