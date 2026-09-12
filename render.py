@@ -194,6 +194,13 @@ if os.path.isdir(PASTA_PROJ):
         projetos.append(meta)
 projetos.sort(key=lambda p: str(p.get('ano', '')), reverse=True)
 
+# ---------- Le o config do site ----------
+SITE_CFG = {}
+cfg_path = os.path.join(BASE_DIR, 'content', 'config', 'site.md')
+if os.path.exists(cfg_path):
+    cfg_meta, _ = parse_md(cfg_path)
+    SITE_CFG = cfg_meta
+
 # ---------- Template da página de álbum ----------
 NAV_HTML = (
     '        <a href="' + BASE + '/" class="nav-link">Home</a>\n'
@@ -574,6 +581,91 @@ if projetos:
     with open(os.path.join(BASE_DIR, 'projetos.html'), 'w', encoding='utf-8') as f:
         f.write(projetos_html)
     print('✔ projetos.html gerada com', len(projetos), 'projetos')
+
+
+# ---------- Injeta textos do config nas paginas estaticas ----------
+def injeta_cfg(arquivo, mapa):
+    caminho = os.path.join(BASE_DIR, arquivo)
+    if not os.path.exists(caminho):
+        return
+    with open(caminho, encoding='utf-8') as f:
+        html = f.read()
+    alterado = False
+    for valor_antigo, chave_cfg in mapa:
+        novo = esc(SITE_CFG.get(chave_cfg, '')) or valor_antigo
+        if valor_antigo in html and novo != valor_antigo:
+            html = html.replace(valor_antigo, novo, 1)
+            alterado = True
+    if alterado:
+        with open(caminho, 'w', encoding='utf-8') as f:
+            f.write(html)
+
+# hero (index)
+injeta_cfg('index.html', [
+    ('Onde a música <span class="gradient">nasce.</span>', 'hero_slogan_placeholder'),
+])
+if SITE_CFG.get('hero_slogan'):
+    # o slogan tem span gradient — injeta por partes
+    ipath = os.path.join(BASE_DIR, 'index.html')
+    with open(ipath, encoding='utf-8') as f:
+        ih = f.read()
+    slog = str(SITE_CFG['hero_slogan'])
+    # divide na ultima palavra para o gradiente
+    partes_s = slog.rsplit(' ', 1)
+    if len(partes_s) == 2 and 'nasce' in ih:
+        ih = ih.replace('Onde a música <span class="gradient">nasce.</span>',
+                        esc(partes_s[0]) + ' <span class="gradient">' + esc(partes_s[1]) + '</span>', 1)
+    if SITE_CFG.get('hero_texto') and 'Um selo dedicado às' in ih:
+        ih = ih.replace(
+            'Um selo dedicado às <strong>Brasilidades</strong> — à cultura afro-brasileira,
+            aos mestres da tradição popular, aos tambores do norte e ao samba de raiz.
+            Onde a ancestralidade encontra o tempo presente.',
+            esc(SITE_CFG['hero_texto']), 1)
+    with open(ipath, 'w', encoding='utf-8') as f:
+        f.write(ih)
+
+# manifesto
+if SITE_CFG.get('manifesto_texto1'):
+    mpath = os.path.join(BASE_DIR, 'manifesto.html')
+    with open(mpath, encoding='utf-8') as f:
+        mh = f.read()
+    for old, key in [
+        ('O <strong>Por do Som</strong> nasceu de uma certeza simples', 'manifesto_texto1'),
+    ]:
+        # injeta o texto completo substituindo o paragrafo antigo (aproximado)
+        pass
+    # abordagem mais segura: substitui o TEXTO entre tags <p class="manifesto-text">...</p> por ordem
+    import re as _re
+    textos = [SITE_CFG.get('manifesto_texto1',''), SITE_CFG.get('manifesto_texto2',''), SITE_CFG.get('manifesto_texto3','')]
+    idx = [0]
+    def _repl(m):
+        if idx[0] < len(textos) and textos[idx[0]]:
+            t = esc(textos[idx[0]])
+            idx[0] += 1
+            return '<p class="manifesto-text">' + t + '</p>'
+        return m.group(0)
+    mh = _re.sub(r'<p class="manifesto-text">[^<]*(?:<(?!/p>)[^<]*)*</p>', _repl, mh, count=3)
+    with open(mpath, 'w', encoding='utf-8') as f:
+        f.write(mh)
+
+# quem somos
+if SITE_CFG.get('quemsomos_texto'):
+    qpath = os.path.join(BASE_DIR, 'quem-somos.html')
+    with open(qpath, encoding='utf-8') as f:
+        qh = f.read()
+    qh = qh.replace('[TEXTO DO CLIENTE — currículo do selo]', esc(SITE_CFG['quemsomos_texto'])[:1] and esc(SITE_CFG['quemsomos_texto']) or qh, 1)
+    with open(qpath, 'w', encoding='utf-8') as f:
+        f.write(qh)
+
+# editora
+if SITE_CFG.get('editora_texto'):
+    epath = os.path.join(BASE_DIR, 'editora.html')
+    with open(epath, encoding='utf-8') as f:
+        eh = f.read()
+    eh = eh.replace('[TEXTO INSTITUCIONAL — a confirmar com o cliente]', esc(SITE_CFG['editora_texto']), 1)
+    with open(epath, 'w', encoding='utf-8') as f:
+        f.write(eh)
+
 
 print('✔ ' + str(len(geradas)) + ' páginas de álbum geradas (BASE = ' + (BASE or '(raiz)') + ')')
 print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
