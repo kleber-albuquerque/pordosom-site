@@ -2,7 +2,7 @@
 titulo: "Baticum de Bará"
 artista: "Luana Bayô"
 ano: 2021
-capa: ""
+capa: "/images/uploads/baticum-de-bara.jpg"
 generos:
   - afro-brasileira
 destaque: false

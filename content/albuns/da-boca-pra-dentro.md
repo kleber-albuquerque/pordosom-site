@@ -2,7 +2,7 @@
 titulo: "Da Boca pra Dentro"
 artista: "Marco Vilane"
 ano: 2022
-capa: ""
+capa: "/images/uploads/da-boca-pra-dentro.jpg"
 generos:
   - mpb
 destaque: false

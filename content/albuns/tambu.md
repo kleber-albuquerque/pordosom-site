@@ -2,7 +2,7 @@
 titulo: "Tambú"
 artista: "Luana Bayô"
 ano: 2022
-capa: ""
+capa: "/images/uploads/tambu.jpg"
 generos:
   - afro-brasileira
 destaque: false

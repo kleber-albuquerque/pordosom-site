@@ -2,7 +2,7 @@
 titulo: "Odara Inã"
 artista: "Aloysio Letra"
 ano: 2024
-capa: ""
+capa: "/images/uploads/odara-ina.jpg"
 generos:
   - afro-brasileira
 destaque: false

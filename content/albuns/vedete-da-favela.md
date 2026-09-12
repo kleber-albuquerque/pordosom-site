@@ -2,7 +2,7 @@
 titulo: "Vedete da Favela"
 artista: "Luana Bayô"
 ano: ""
-capa: ""
+capa: "/images/uploads/vedete-da-favela.jpg"
 generos:
   - afro-brasileira
 destaque: false

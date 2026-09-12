@@ -2,7 +2,7 @@
 titulo: "Pinguço"
 artista: "Luana Bayô"
 ano: ""
-capa: ""
+capa: "/images/uploads/pinguco.jpg"
 generos:
   - afro-brasileira
 destaque: false

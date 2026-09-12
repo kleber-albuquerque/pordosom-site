@@ -2,7 +2,7 @@
 titulo: "Quando Dorme Alcântara"
 artista: "Tião Carvalho"
 ano: 2002
-capa: ""
+capa: "/images/uploads/quando-dorme-alcantara.jpg"
 generos:
   - cultura-popular
 destaque: false

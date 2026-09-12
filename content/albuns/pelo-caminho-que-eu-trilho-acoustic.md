@@ -2,7 +2,7 @@
 titulo: "Pelo Caminho Que Eu Trilho (Acoustic)"
 artista: "Marco Vilane e Zeca Baleiro"
 ano: 2025
-capa: ""
+capa: "/images/uploads/pelo-caminho-que-eu-trilho-acoustic.jpg"
 generos:
   - mpb
 destaque: false

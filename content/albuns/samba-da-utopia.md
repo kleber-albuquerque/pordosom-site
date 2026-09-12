@@ -2,7 +2,7 @@
 titulo: "Samba da Utopia"
 artista: "Jonathan Silva"
 ano: 2018
-capa: ""
+capa: "/images/uploads/samba-da-utopia.jpg"
 generos:
   - samba-de-raiz
 destaque: false

@@ -2,7 +2,7 @@
 titulo: "Coisa Alguma"
 artista: "Marco Vilane"
 ano: 2005
-capa: ""
+capa: "/images/uploads/coisa-alguma.jpg"
 generos:
   - mpb
 destaque: false

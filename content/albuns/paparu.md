@@ -2,7 +2,7 @@
 titulo: "Paparu"
 artista: "Ana Maria Carvalho"
 ano: 2022
-capa: ""
+capa: "/images/uploads/paparu.jpg"
 generos:
   - cultura-popular
 destaque: false

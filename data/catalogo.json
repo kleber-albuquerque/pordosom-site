@@ -36,7 +36,7 @@
       "titulo": "Frevo da Ilusão",
       "artista": "Tião Carvalho",
       "ano": 2026,
-      "capa": "",
+      "capa": "/images/uploads/frevo-da-ilusao.jpg",
       "generos": [
         "cultura-popular"
       ],
@@ -49,7 +49,7 @@
       "titulo": "Pelo Caminho Que Eu Trilho (Acoustic)",
       "artista": "Marco Vilane e Zeca Baleiro",
       "ano": 2025,
-      "capa": "",
+      "capa": "/images/uploads/pelo-caminho-que-eu-trilho-acoustic.jpg",
       "generos": [
         "mpb"
       ],
@@ -62,7 +62,7 @@
       "titulo": "O Amor É Um Ovo",
       "artista": "Marco Vilane",
       "ano": 2025,
-      "capa": "",
+      "capa": "/images/uploads/o-amor-e-um-ovo.jpg",
       "generos": [
         "mpb"
       ],
@@ -101,7 +101,7 @@
       "titulo": "Odara Inã",
       "artista": "Aloysio Letra",
       "ano": 2024,
-      "capa": "",
+      "capa": "/images/uploads/odara-ina.jpg",
       "generos": [
         "afro-brasileira"
       ],
@@ -114,7 +114,7 @@
       "titulo": "Eu Apenas Queria que Você Soubesse",
       "artista": "Marco Vilane",
       "ano": 2024,
-      "capa": "/images/uploads/eu-apenas-queria.jpg",
+      "capa": "/images/uploads/eu-apenas-queria-que-voce-soubesse.jpg",
       "generos": [
         "mpb",
         "brasilidades"
@@ -154,7 +154,7 @@
       "titulo": "Pelo Caminho Que Eu Trilho",
       "artista": "Marco Vilane e Zeca Baleiro",
       "ano": 2023,
-      "capa": "/images/uploads/pelo-caminho.jpg",
+      "capa": "/images/uploads/pelo-caminho-que-eu-trilho.jpg",
       "generos": [
         "mpb"
       ],
@@ -167,7 +167,7 @@
       "titulo": "Depois",
       "artista": "Aloysio Letra",
       "ano": 2023,
-      "capa": "",
+      "capa": "/images/uploads/depois.jpg",
       "generos": [
         "afro-brasileira"
       ],
@@ -180,7 +180,7 @@
       "titulo": "Canção de Enxugar os Olhos",
       "artista": "Marco Vilane",
       "ano": 2023,
-      "capa": "",
+      "capa": "/images/uploads/cancao-de-enxugar-os-olhos.jpg",
       "generos": [
         "mpb"
       ],
@@ -193,7 +193,7 @@
       "titulo": "Tambú",
       "artista": "Luana Bayô",
       "ano": 2022,
-      "capa": "",
+      "capa": "/images/uploads/tambu.jpg",
       "generos": [
         "afro-brasileira"
       ],
@@ -206,7 +206,7 @@
       "titulo": "Paparu",
       "artista": "Ana Maria Carvalho",
       "ano": 2022,
-      "capa": "",
+      "capa": "/images/uploads/paparu.jpg",
       "generos": [
         "cultura-popular"
       ],
@@ -232,7 +232,7 @@
       "titulo": "Da Boca pra Dentro",
       "artista": "Marco Vilane",
       "ano": 2022,
-      "capa": "",
+      "capa": "/images/uploads/da-boca-pra-dentro.jpg",
       "generos": [
         "mpb"
       ],
@@ -258,7 +258,7 @@
       "titulo": "Baticum de Bará",
       "artista": "Luana Bayô",
       "ano": 2021,
-      "capa": "",
+      "capa": "/images/uploads/baticum-de-bara.jpg",
       "generos": [
         "afro-brasileira"
       ],
@@ -284,7 +284,7 @@
       "titulo": "O Urubu Esta com Raiva do Boi",
       "artista": "Marco Vilane e Danilo Moraes",
       "ano": 2020,
-      "capa": "/images/uploads/urubu-boi.jpg",
+      "capa": "/images/uploads/o-urubu-esta-com-raiva-do-boi.jpg",
       "generos": [
         "brasilidades",
         "cultura-popular"
@@ -311,7 +311,7 @@
       "titulo": "Samba da Utopia",
       "artista": "Jonathan Silva",
       "ano": 2018,
-      "capa": "",
+      "capa": "/images/uploads/samba-da-utopia.jpg",
       "generos": [
         "samba-de-raiz"
       ],
@@ -324,7 +324,7 @@
       "titulo": "Varal Diverso",
       "artista": "Marco Vilane",
       "ano": 2012,
-      "capa": "",
+      "capa": "/images/uploads/varal-diverso.jpg",
       "generos": [
         "mpb"
       ],
@@ -376,7 +376,7 @@
       "titulo": "Coisa Alguma",
       "artista": "Marco Vilane",
       "ano": 2005,
-      "capa": "",
+      "capa": "/images/uploads/coisa-alguma.jpg",
       "generos": [
         "mpb"
       ],
@@ -389,7 +389,7 @@
       "titulo": "Quando Dorme Alcântara",
       "artista": "Tião Carvalho",
       "ano": 2002,
-      "capa": "",
+      "capa": "/images/uploads/quando-dorme-alcantara.jpg",
       "generos": [
         "cultura-popular"
       ],
@@ -402,7 +402,7 @@
       "titulo": "Vedete da Favela",
       "artista": "Luana Bayô",
       "ano": "",
-      "capa": "",
+      "capa": "/images/uploads/vedete-da-favela.jpg",
       "generos": [
         "afro-brasileira"
       ],
@@ -415,7 +415,7 @@
       "titulo": "Pinguço",
       "artista": "Luana Bayô",
       "ano": "",
-      "capa": "",
+      "capa": "/images/uploads/pinguco.jpg",
       "generos": [
         "afro-brasileira"
       ],
@@ -428,7 +428,7 @@
       "titulo": "Deusa",
       "artista": "Luana Bayô",
       "ano": "",
-      "capa": "",
+      "capa": "/images/uploads/deusa.jpg",
       "generos": [
         "afro-brasileira"
       ],

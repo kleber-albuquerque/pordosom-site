@@ -2,7 +2,7 @@
 titulo: "Deusa"
 artista: "Luana Bayô"
 ano: ""
-capa: ""
+capa: "/images/uploads/deusa.jpg"
 generos:
   - afro-brasileira
 destaque: false
