@@ -547,6 +547,8 @@ document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
     btn.classList.add('ativo');
     ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual'].forEach(p =>
       document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
+    if (btn.dataset.pagina === 'audiovisual' && !VIDEOS.length) carregarVideos();
+      document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
   });
 });
 function emBreve(nome) {
