@@ -3,7 +3,7 @@ titulo: "Abebe"
 artista: "Luana Bayo"
 ano: 2024
 capa: "/images/uploads/abebe.jpg"
- generos:
+generos:
   - afro-brasileira
 destaque: true
 faixas: 1
