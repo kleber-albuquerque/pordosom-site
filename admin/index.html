@@ -167,7 +167,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <button class="side-item ativo" data-pagina="inicio"><span class="icone">🏠</span> Início</button>
     <button class="side-item" data-pagina="albuns"><span class="icone">💿</span> Álbuns</button>
     <button class="side-item" data-pagina="noticias"><span class="icone">📰</span> Notícias</button>
-    <button class="side-item" onclick="emBreve('Projetos')"><span class="icone">🎬</span> Projetos</button>
+    <button class="side-item" data-pagina="projetos"><span class="icone">🎬</span> Projetos</button>
     <button class="side-item" onclick="emBreve('Audiovisual')"><span class="icone">🎵</span> Audiovisual</button>
     <button class="side-item" onclick="emBreve('Configurações')"><span class="icone">⚙️</span> Configurações</button>
     <div class="side-footer">
@@ -193,6 +193,28 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           Após salvar, o site se atualiza sozinho em 1–2 minutos.
           Na barra lateral, clique em <strong>Álbuns</strong> ou <strong>Notícias</strong> para começar.
         </p>
+      </div>
+    </div>
+
+    <!-- PROJETOS -->
+    <div id="pagina-projetos" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Projetos</h1>
+          <p class="page-sub" style="margin-bottom:0">Realizações e projetos em captação — sua vitrine de autoridade</p>
+        </div>
+        <button class="btn-novo" onclick='abrirNovoProjeto()'>＋ Novo Projeto</button>
+      </div>
+      <div class="loading" id="projetos-loading">Carregando projetos…</div>
+      <div class="table-wrap hidden" id="projetos-table-wrap">
+        <table>
+          <thead><tr><th>Status</th><th>Título</th><th>Tipo</th><th>Ano</th><th></th></tr></thead>
+          <tbody id="projetos-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="projetos-vazio">
+        <span class="icone">🎬</span>
+        Nenhum projeto cadastrado ainda.
       </div>
     </div>
 
@@ -430,7 +452,7 @@ document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.side-item').forEach(b => b.classList.remove('ativo'));
     btn.classList.add('ativo');
-    ['inicio', 'albuns', 'noticias'].forEach(p =>
+    ['inicio', 'albuns', 'noticias', 'projetos'].forEach(p =>
       document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
   });
 });
@@ -964,6 +986,7 @@ function toast(msg) {
       abrirPainel();
       carregarAlbuns();
       carregarNoticias();
+      carregarProjetos();
     } catch (e) {
       localStorage.removeItem('pds_token');
       TOKEN = '';
@@ -998,10 +1021,207 @@ function mdLink(id) {
   ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(fim);
   ta.focus();
 }
+
+// ==========================================================
+// PARTE 5 - PROJETOS
+// ==========================================================
+let PROJETOS = [];
+let projetoAtual = null;
+let imagemProjetoNova = null;
+
+async function carregarProjetos() {
+  const loading = document.getElementById('projetos-loading');
+  const wrap = document.getElementById('projetos-table-wrap');
+  const vazio = document.getElementById('projetos-vazio');
+  try {
+    const lista = await gh('/repos/' + REPO + '/contents/content/projetos');
+    const mds = Array.isArray(lista) ? lista.filter(f => f.name.endsWith('.md')) : [];
+    PROJETOS = [];
+    for (const f of mds) {
+      const blob = await gh('/repos/' + REPO + '/contents/content/projetos/' + f.name);
+      const textoUtf8 = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ''))));
+      const { meta, corpo } = parseMd(textoUtf8);
+      meta.corpo = corpo;
+      if (typeof meta.tags === 'string') {
+        meta.tags = meta.tags.split(',').map(s => s.trim()).filter(Boolean);
+      }
+      if (!Array.isArray(meta.tags)) meta.tags = [];
+      meta._arquivo = f.name;
+      meta._sha = blob.sha;
+      PROJETOS.push(meta);
+    }
+    PROJETOS.sort((a, b) => String(b.ano || '').localeCompare(String(a.ano || '')));
+
+    const tbody = document.getElementById('projetos-tbody');
+    tbody.innerHTML = PROJETOS.map(x => {
+      const realizado = String(x.status) !== 'captacao';
+      const stCls = realizado ? 'badge-realizado' : 'badge-captacao';
+      const stLbl = realizado ? '✓ Realizado' : '★ Captação';
+      return '<tr><td><span class="badge-st ' + stCls + '">' + stLbl + '</span></td>'
+        + '<td><div class="titulo-cell">' + (x.titulo || x._arquivo) + '</div></td>'
+        + '<td style="color:var(--text-muted)">' + (x.badge || '—') + '</td>'
+        + '<td>' + (x.ano || '—') + '</td>'
+        + '<td><button class="side-item" style="padding:.4rem .7rem" title="Editar" onclick="abrirEditorProjeto(PROJETOS[' + PROJETOS.indexOf(x) + '])">✏️</button>'
+        + ' <button class="side-item" style="padding:.4rem .7rem" title="Excluir" onclick="excluirProjeto(PROJETOS[' + PROJETOS.indexOf(x) + '])">🗑️</button></td></tr>';
+    }).join('');
+    loading.classList.add('hidden');
+    if (PROJETOS.length) wrap.classList.remove('hidden'); else vazio.classList.remove('hidden');
+  } catch (e) {
+    loading.classList.add('hidden');
+    vazio.classList.remove('hidden');
+  }
+}
+
+function preencherEditorProjeto() {
+  document.getElementById('fp-titulo').value = projetoAtual.titulo || '';
+  document.getElementById('fp-ano').value = projetoAtual.ano || '';
+  document.getElementById('fp-badge').value = projetoAtual.badge || '';
+  document.getElementById('fp-link').value = projetoAtual.link || '';
+  document.getElementById('fp-relatorio').value = projetoAtual.relatorio || '';
+  document.getElementById('fp-tags').value = (projetoAtual.tags || []).join(', ');
+  document.getElementById('fp-corpo').value = projetoAtual.corpo || '';
+  document.getElementById('fp-captacao').checked = String(projetoAtual.status) === 'captacao';
+  const prev = document.getElementById('projeto-img-preview');
+  if (projetoAtual.imagem && String(projetoAtual.imagem).startsWith('/')) {
+    const srcImg = BASE + projetoAtual.imagem;
+    prev.innerHTML = '<img src="' + srcImg + '" alt="" onerror="this.outerHTML=\'<span class=\'capa-hint\'>🖼️<br>Clique para escolher<br>imagem de destaque</span>\'">';
+  } else {
+    prev.innerHTML = '<span class="capa-hint">🖼️<br>Clique para escolher<br>imagem de destaque</span>';
+  }
+}
+
+function abrirNovoProjeto() {
+  projetoAtual = { _arquivo: '', _sha: null, titulo: '', status: 'realizado', badge: '',
+                   ano: new Date().getFullYear(), imagem: '', link: '', relatorio: '',
+                   tags: [], corpo: '' };
+  imagemProjetoNova = null;
+  preencherEditorProjeto();
+  document.getElementById('editor-projeto-titulo').textContent = 'Novo Projeto';
+  document.getElementById('editor-projeto-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function abrirEditorProjeto(x) {
+  projetoAtual = x;
+  imagemProjetoNova = null;
+  preencherEditorProjeto();
+  document.getElementById('editor-projeto-titulo').textContent = 'Editar: ' + (x.titulo || 'projeto');
+  document.getElementById('editor-projeto-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharEditorProjeto() {
+  document.getElementById('editor-projeto-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  projetoAtual = null; imagemProjetoNova = null;
+}
+
+function subirImagemProjeto() { document.getElementById('projeto-img-input').click(); }
+function imagemProjetoEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 900, 0.82, (b64, kb) => {
+    imagemProjetoNova = b64;
+    document.getElementById('projeto-img-preview').innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="">';
+    toast('Imagem otimizada: ' + kb + 'KB');
+  });
+}
+
+function montarMdProjeto() {
+  const val = id => (document.getElementById(id).value || '').trim();
+  const q = s => '"' + (s || '').replace(/"/g, '\\"') + '"';
+  const tags = val('fp-tags').split(',').map(s => s.trim()).filter(Boolean);
+  const status = document.getElementById('fp-captacao').checked ? 'captacao' : 'realizado';
+  const tagsLinhas = tags.length ? 'tags:\n' + tags.map(t => '  - ' + t).join('\n') : 'tags:';
+  return '---\n'
+    + 'titulo: ' + q(val('fp-titulo')) + '\n'
+    + 'status: "' + status + '"\n'
+    + 'badge: ' + q(val('fp-badge')) + '\n'
+    + 'ano: ' + (val('fp-ano') || '""') + '\n'
+    + 'imagem: ' + q(projetoAtual.imagem || '') + '\n'
+    + 'link: ' + q(val('fp-link')) + '\n'
+    + 'relatorio: ' + q(val('fp-relatorio')) + '\n'
+    + tagsLinhas + '\n'
+    + '---\n\n'
+    + val('fp-corpo') + '\n';
+}
+
+async function salvarProjeto() {
+  if (!projetoAtual) return;
+  const btn = document.getElementById('btn-salvar-projeto');
+  if (!document.getElementById('fp-titulo').value.trim()) {
+    toast('O título é obrigatório'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Salvando…';
+  try {
+    if (imagemProjetoNova) {
+      const baseNome = projetoAtual._arquivo
+        ? projetoAtual._arquivo.replace('.md', '')
+        : slugify(document.getElementById('fp-titulo').value);
+      const nomeImg = 'images/uploads/projeto-' + baseNome + '.jpg';
+      const caminhoImg = '/repos/' + REPO + '/contents/' + nomeImg;
+      let shaImg = null;
+      try { const atual = await gh(caminhoImg); shaImg = atual.sha; } catch (e) {}
+      await gh(caminhoImg, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          message: 'Imagem do projeto: ' + document.getElementById('fp-titulo').value,
+          content: imagemProjetoNova,
+          ...(shaImg ? {sha: shaImg} : {})
+        })
+      });
+      projetoAtual.imagem = '/' + nomeImg;
+    }
+    const conteudo = btoa(unescape(encodeURIComponent(montarMdProjeto())));
+    const ehNovo = !projetoAtual._sha;
+    const nomeArquivo = ehNovo
+      ? slugify(document.getElementById('fp-titulo').value) + '.md'
+      : projetoAtual._arquivo;
+    const bodySalvar = {
+      message: (ehNovo ? 'Novo projeto: ' : 'Edita projeto: ') + document.getElementById('fp-titulo').value,
+      content: conteudo
+    };
+    if (!ehNovo) bodySalvar.sha = projetoAtual._sha;
+    await gh('/repos/' + REPO + '/contents/content/projetos/' + nomeArquivo, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(bodySalvar)
+    });
+    toast('✓ Projeto salvo! O site atualiza em ~2 min.');
+    fecharEditorProjeto();
+    await carregarProjetos();
+  } catch (e) {
+    toast('❌ Erro ao salvar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Salvar Projeto';
+  }
+}
+
+async function excluirProjeto(x) {
+  if (!confirm('Excluir o projeto "' + (x.titulo || x._arquivo) + '"?')) return;
+  try {
+    await gh('/repos/' + REPO + '/contents/content/projetos/' + x._arquivo, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ message: 'Exclui projeto: ' + x.titulo, sha: x._sha })
+    });
+    toast('✓ Projeto excluído.');
+    await carregarProjetos();
+  } catch (e) {
+    toast('❌ Erro ao excluir: ' + e.message);
+  }
+}
+
 </script>
 </body>
 </html>
 <style>
 .btn-md{background:var(--bg-dark);border:1px solid var(--border);color:var(--text-secondary);padding:.45rem .8rem;border-radius:4px;font-family:inherit;font-size:.78rem;cursor:pointer;transition:.2s;width:auto}
 .btn-md:hover{border-color:var(--brand-primary-light);color:var(--text-primary)}
+</style>
+<style>
+.badge-st{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.3rem .7rem;border-radius:3px}
+.badge-realizado{background:rgba(93,152,113,.18);color:#8dbf9f;border:1px solid rgba(93,152,113,.4)}
+.badge-captacao{background:rgba(232,160,74,.15);color:var(--brand-accent);border:1px solid rgba(232,160,74,.4)}
 </style>
