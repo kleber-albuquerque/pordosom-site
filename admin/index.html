@@ -448,7 +448,18 @@ function parseMd(texto) {
   const meta = {}; let lista = null;
   for (const linha of m[1].split('\n')) {
     const mi = linha.match(/^\s+-\s+(\S+)\s*$/);
-    if (mi && lista) { meta[lista].push(mi[1]); continue; }
+    if (mi && lista) {
+      if (!Array.isArray(meta[lista])) {
+        // blindagem: item orfao nao quebra o painel
+        if (meta[lista] !== undefined) {
+          meta[lista] = [meta[lista]];
+        } else {
+          meta[lista] = [];
+        }
+      }
+      meta[lista].push(mi[1]);
+      continue;
+    }
     const mk = linha.match(/^([\w-]+):\s*(.*)$/);
     if (mk) {
       const k = mk[1], v = mk[2].trim(); lista = k;

@@ -56,6 +56,12 @@ def parse_md(caminho):
         for linha in bloco.split('\n'):
             m_item = re.match(r'^\s+-\s+(\S+)\s*$', linha)
             if m_item and lista_atual:
+                if not isinstance(meta.get(lista_atual), list):
+                    # blindagem: item orfao nao quebra mais o parser
+                    if lista_atual in meta:
+                        meta[lista_atual] = [meta[lista_atual]]
+                    else:
+                        meta[lista_atual] = []
                 meta[lista_atual].append(m_item.group(1))
                 continue
             m_kv = re.match(r'^(\w[\w_-]*):\s*(.*)$', linha)
