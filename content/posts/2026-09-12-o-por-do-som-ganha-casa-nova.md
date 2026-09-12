@@ -6,7 +6,7 @@ rascunho: false
 imagem: "/images/uploads/2026-09-12-o-por-do-som-ganha-casa-nova.jpg"
 ---
 
-O Por do Som agora tem, pela primeira vez, **um endereço que cabe o selo inteiro**.
+O Por do Som agora tem, pela primeira vez, um endereço que cabe o selo inteiro.
 
 São mais de vinte anos de música brasileira de raiz — e até hoje, essa história vivia espalhada: discos no Spotify, vídeos no YouTube, memórias no Instagram. O novo site reúne tudo sob o mesmo teto.
 
