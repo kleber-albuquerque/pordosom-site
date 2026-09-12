@@ -341,7 +341,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             </label>
           </div>
           <div class="f-field full"><label>Resumo (aparece na lista)</label><textarea id="fn-resumo" style="min-height:70px"></textarea></div>
-          <div class="f-field full"><label>Conteúdo da notícia</label><textarea id="fn-corpo" style="min-height:220px"></textarea></div>
+          <div class="f-field full"><label>Conteúdo da notícia</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fn-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdLink('fn-corpo')" title="Link">🔗</button></div><textarea id="fn-corpo" style="min-height:220px"></textarea></div>
         </div>
       </div>
     </div>
@@ -624,16 +624,26 @@ function subirCapa() { document.getElementById('capa-input').click(); }
 function capaEscolhida(e) {
   const arquivo = e.target.files[0];
   if (!arquivo) return;
-  if (arquivo.size > 500 * 1024) {
-    toast('⚠️ Imagem grande (' + Math.round(arquivo.size/1024) + 'KB). Comprima em tinypng.com e tente de novo.');
-    e.target.value = '';
-    return;
-  }
+  comprimirImagem(arquivo, 600, 0.82, (b64, kb) => {
+    capaNova = { arquivo, base64: b64 };
+    document.getElementById('capa-preview').innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="">';
+    toast('Capa otimizada: ' + kb + 'KB');
+  });
+}
+function comprimirImagem(arquivo, maxLado, qualidade, callback) {
   const leitor = new FileReader();
   leitor.onload = ev => {
-    capaNova = { arquivo, base64: ev.target.result.split(',')[1] };
-    document.getElementById('capa-preview').innerHTML = `<img src="${ev.target.result}" alt="">`;
-    toast('✓ Capa pronta — será enviada ao salvar');
+    const img = new Image();
+    img.onload = () => {
+      const escala = Math.min(1, maxLado / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * escala);
+      canvas.height = Math.round(img.height * escala);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      const b64 = canvas.toDataURL('image/jpeg', qualidade).split(',')[1];
+      callback(b64, Math.round((b64.length * 3) / 4 / 1024));
+    };
+    img.src = ev.target.result;
   };
   leitor.readAsDataURL(arquivo);
 }
@@ -851,17 +861,11 @@ function subirImagemNoticia() { document.getElementById('noticia-img-input').cli
 function imagemNoticiaEscolhida(e) {
   const arquivo = e.target.files[0];
   if (!arquivo) return;
-  if (arquivo.size > 500 * 1024) {
-    toast('⚠️ Imagem grande (' + Math.round(arquivo.size/1024) + 'KB). Comprima em tinypng.com.');
-    e.target.value = ''; return;
-  }
-  const leitor = new FileReader();
-  leitor.onload = ev => {
-    imagemNoticiaNova = ev.target.result.split(',')[1];
-    document.getElementById('noticia-img-preview').innerHTML = '<img src="' + ev.target.result + '" alt="">';
-    toast('✓ Imagem pronta — enviada ao salvar');
-  };
-  leitor.readAsDataURL(arquivo);
+  comprimirImagem(arquivo, 1000, 0.82, (b64, kb) => {
+    imagemNoticiaNova = b64;
+    document.getElementById('noticia-img-preview').innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="">';
+    toast('Imagem otimizada: ' + kb + 'KB');
+  });
 }
 
 function montarMdNoticia() {
@@ -969,3 +973,7 @@ function toast(msg) {
 </script>
 </body>
 </html>
+<style>
+.btn-md{background:var(--bg-dark);border:1px solid var(--border);color:var(--text-secondary);padding:.45rem .8rem;border-radius:4px;font-family:inherit;font-size:.78rem;cursor:pointer;transition:.2s;width:auto}
+.btn-md:hover{border-color:var(--brand-primary-light);color:var(--text-primary)}
+</style>
