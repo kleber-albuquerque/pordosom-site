@@ -62,4 +62,118 @@
   if (vitrine) {
     const destaques = CAT.albuns.filter(a => a.destaque).slice(0, 6);
     vitrine.innerHTML = destaques.map(a => `
-      <a href="${BASE}/al
+      <a href="${BASE}/albuns/${a.slug}.html" title="${a.titulo} — ${a.artista}">
+        <img src="${capaSrc(a.capa)}" alt="Capa: ${a.titulo}" loading="lazy" onerror="this.src='${fallback()}'">
+        <span class="vitrine-titulo">${a.titulo}</span>
+      </a>`).join('');
+  }
+
+  /* ==========================================================
+     GRAVADORA — filtros + grid
+     ========================================================== */
+  const filtrosEl = document.getElementById('filtros');
+  const grid = document.getElementById('catalogo-grid');
+  if (filtrosEl && grid) {
+    const contagem = { todos: CAT.albuns.length };
+    CAT.generos.forEach(g => {
+      contagem[g.id] = CAT.albuns.filter(a => a.generos.includes(g.id)).length;
+    });
+    filtrosEl.innerHTML =
+      `<button class="filtro ativo" data-g="todos">Todos <span class="count">${contagem.todos}</span></button>` +
+      CAT.generos.filter(g => contagem[g.id] > 0).map(g =>
+        `<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]}</span></button>`
+      ).join('');
+
+    const nomeG = id => (CAT.generos.find(g => g.id === id) || {}).nome || id;
+
+    function renderGrid(g){
+      const lista = (g === 'todos')
+        ? CAT.albuns
+        : CAT.albuns.filter(a => a.generos.includes(g));
+      grid.innerHTML = lista.map(a => `
+        <a class="album-card" href="${BASE}/albuns/${a.slug}.html">
+          <div class="album-capa">
+            <img src="${capaSrc(a.capa)}" alt="Capa: ${a.titulo}" loading="lazy" onerror="this.src='${fallback()}'">
+          </div>
+          <div class="album-info">
+            <div class="album-titulo">${a.titulo}</div>
+            <div class="album-artista">${a.artista}${a.ano ? ' · ' + a.ano : ''}</div>
+            <div class="album-tags">${a.generos.map(g => `<span class="album-tag">${nomeG(g)}</span>`).join('')}</div>
+          </div>
+        </a>`).join('') ||
+        '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted)">Nenhum álbum neste gênero ainda.</p>';
+    }
+    function ativar(g, url=true){
+      filtrosEl.querySelectorAll('.filtro').forEach(b => b.classList.toggle('ativo', b.dataset.g === g));
+      renderGrid(g);
+      if (url) history.replaceState(null, '', g === 'todos' ? '?' : '?g=' + g);
+    }
+    filtrosEl.addEventListener('click', e => {
+      const b = e.target.closest('.filtro'); if (b) ativar(b.dataset.g);
+    });
+    const gURL = new URLSearchParams(location.search).get('g');
+    ativar(gURL && contagem[gURL] !== undefined ? gURL : 'todos', false);
+  }
+
+  /* ==========================================================
+     AUDIOVISUAL — playlists
+     ========================================================== */
+  const pls = document.getElementById('playlists-grid');
+  if (pls && Array.isArray(CAT.playlists)) {
+    pls.innerHTML = CAT.playlists.map(p => `
+      <iframe src="${p.embed}" height="380" loading="lazy"
+              title="Playlist: ${p.nome || ''}"></iframe>`).join('');
+  }
+
+  /* ==========================================================
+     QUEM SOMOS — artistas
+     ========================================================== */
+  const artGrid = document.getElementById('artistas-grid');
+  if (artGrid && Array.isArray(CAT.artistas)) {
+    artGrid.innerHTML = CAT.artistas.map(a => {
+      const inicial = (a.nome || '?').trim()[0].toUpperCase();
+      return `
+      <div class="artist-card fade-in">
+        <div class="artist-card-img" style="background-image: url('${a.img || ''}')"></div>
+        <div class="artist-card-overlay"></div>
+        <div class="artist-card-content">
+          <div class="artist-initial">${inicial}</div>
+          <div class="artist-name">${a.nome}</div>
+          <div class="artist-role">${a.role || ''}</div>
+        </div>
+      </div>`;
+    }).join('');
+    const obs = new IntersectionObserver(es => {
+      es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    artGrid.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  }
+
+  /* ==========================================================
+     CONTATO — redes sociais
+     ========================================================== */
+  const socialGrid = document.getElementById('social-grid-dinamico');
+  if (socialGrid && CAT.contato) {
+    const icones = {
+      instagram: '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>',
+      youtube: '<path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>',
+      spotify: '<path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"></path>'
+    };
+    const redes = [
+      ['instagram', 'Instagram', CAT.contato.instagram_handle || '@pordosomcultural'],
+      ['youtube', 'YouTube', '/pordosomcultural'],
+      ['spotify', 'Spotify', '/pordosom'],
+    ];
+    socialGrid.innerHTML = redes.map(([k, label, handle]) => `
+      <a href="${CAT.contato[k] || '#'}" target="_blank" rel="noopener" class="social-card">
+        <div class="social-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">${icones[k]}</svg>
+        </div>
+        <div class="social-card-text">
+          <div class="social-card-label">${label}</div>
+          <div class="social-card-handle">${handle}</div>
+        </div>
+      </a>`).join('');
+  }
+})();
