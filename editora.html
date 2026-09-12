@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Editora & Direitos | Por do Som</title>
-<meta name="description" content="Administração de obras musicais e gestão de direitos autorais no ambiente digital — a editora do Selo Por do Som.">
+<meta name="description" content="A editora do Por do Som administra obras musicais e gerencia direitos autorais no ambiente digital: registro, captação, fiscalização e repasse — para que c">
 <link rel="icon" type="image/jpeg" href="/pordosom-site/pordosom-profile.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/pordosom-site/css/style.css">
 </head>
 <body class="page-interna">
-
 <header class="header" id="header">
     <a href="/pordosom-site/" class="logo">
         <span class="logo-mark"><img src="/pordosom-site/pordosom-profile.jpg" alt="Por do Som"></span>
@@ -28,63 +27,25 @@
     </nav>
     <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </header>
-
 <section class="manifesto" style="padding-top:calc(var(--spacing-section) + 3rem)">
     <div class="container">
         <div class="manifesto-content">
             <span class="section-subtitle">Editora & Direitos</span>
             <h1 class="section-title">Administração de <span class="gradient">obras musicais</span></h1>
-
-            <p class="manifesto-text">
-                [TEXTO INSTITUCIONAL — a confirmar com o cliente]
-                A editora do Por do Som administra obras musicais e gerencia
-                <strong>direitos autorais no ambiente digital</strong>: registro, captação,
-                fiscalização e repasse — para que compositores e parceiros do catálogo
-                recebam o que a música deles gera, em qualquer plataforma.
-            </p>
-            <p class="manifesto-text">
-                [TEXTO — como funciona / para quem é]
-                Atendemos compositores do catálogo, parceiros de edição e projetos culturais
-                que precisam de gestão profissional de obras no ambiente digital.
-            </p>
-            <p class="manifesto-signature">
-                Consultoria de direitos:
-                <a href="/pordosom-site/contato.html" style="color:var(--brand-primary-light);text-transform:none;letter-spacing:normal;font-size:0.85rem">
-                    fale com o selo →
-                </a>
-            </p>
-        </div>
+            <p class="manifesto-text">A editora do Por do Som administra obras musicais e gerencia direitos autorais no ambiente digital: registro, captação, fiscalização e repasse — para que compositores e parceiros do catálogo recebam o que a música deles gera, em qualquer plataforma.</p>
+<p class="manifesto-signature">Consultoria: <a href="/pordosom-site/contato.html" style="color:var(--brand-primary-light);text-decoration:none">fale com o selo</a></p>        </div>
     </div>
 </section>
 
 <footer class="footer">
     <div class="container">
         <span class="footer-logo">PÔR DO SOM</span>
-        <p class="footer-tagline">Selo Independente · Produtora Cultural · Brasilidades</p>
-        <div class="footer-social">
-            <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener">Instagram</a>
-            <a href="https://www.youtube.com/user/pordosomcultural" target="_blank" rel="noopener">YouTube</a>
-            <a href="https://open.spotify.com/user/pordosom?si=386032c6b03644ad" target="_blank" rel="noopener">Spotify</a>
-            <a href="https://www.facebook.com/pordosomcultural" target="_blank" rel="noopener">Facebook</a>
-            <a href="https://tiktok.com/@pordosom" target="_blank" rel="noopener">TikTok</a>
-            <a href="https://linktr.ee/pordosom" target="_blank" rel="noopener">Linktree</a>
-        </div>
-        <p class="footer-text">© 2026 Por do Som Cultural · Todos os direitos reservados</p>
+        <p class="footer-tagline">Selo Independente · Brasilidades</p>
+        <p class="footer-text">© 2026 Por do Som</p>
     </div>
 </footer>
-
 <script>
-const header = document.getElementById('header');
-const nav = document.getElementById('nav');
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
-}, { passive: true });
-mobileMenuBtn.addEventListener('click', () => {
-    nav.classList.toggle('active');
-    mobileMenuBtn.textContent = nav.classList.contains('active') ? '✕' : '☰';
-});
+const menuBtn=document.getElementById("mobileMenuBtn");const nav=document.getElementById("nav");menuBtn.addEventListener("click",()=>nav.classList.toggle("active"));
 </script>
 </body>
 </html>

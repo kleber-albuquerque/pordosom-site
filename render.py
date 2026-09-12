@@ -667,6 +667,96 @@ if projetos:
 #     with open(epath, 'w', encoding='utf-8') as f:
 #         f.write(eh)
 
+# ---------- Gera paginas estaticas (manifesto, quem-somos, editora) do config ----------
+def _gera_pagina_estatica(arquivo, kicker, titulo_grad, textos, extra_html=''):
+    """textos: lista de paragrafos (strings)"""
+    paragrafos = '\n            '.join(
+        '<p class="manifesto-text">' + esc(t) + '</p>' for t in textos if t)
+    slog = str(SITE_CFG.get('hero_slogan', ''))
+    return (
+'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
+'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+'<title>' + kicker + ' | Por do Som</title>\n'
+'<meta name="description" content="' + esc((textos[0] if textos else '')[:155]) + '">\n'
+'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
+'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
+'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n</head>\n<body class="page-interna">\n'
+'<header class="header" id="header">\n    <a href="' + BASE + '/" class="logo">\n'
+'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+'        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n'
+'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
+'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+'<section class="manifesto" style="padding-top:calc(var(--spacing-section) + 3rem)">\n'
+'    <div class="container">\n'
+'        <div class="manifesto-content">\n'
+'            <span class="section-subtitle">' + kicker + '</span>\n'
+'            <h1 class="section-title">' + titulo_grad + '</h1>\n'
+'            ' + paragrafos + '\n'
++ extra_html +
+'        </div>\n    </div>\n</section>\n\n'
++ FOOTER_HTML +
+'<script>\nconst menuBtn=document.getElementById("mobileMenuBtn");const nav=document.getElementById("nav");menuBtn.addEventListener("click",()=>nav.classList.toggle("active"));\n</script>\n'
+'</body>\n</html>\n')
+
+def _stats_html():
+    stats = [('31','Obras no catálogo'),('10+','Artistas'),('3','Festivais próprios'),('42','Vídeos produzidos')]
+    linhas = '\n'.join(
+        '<div class="stat-item fade-in"><div class="stat-num">' + n + '</div><div class="stat-label">' + l + '</div></div>'
+        for n, l in stats)
+    return '<div class="manifesto-stats">' + linhas + '</div>'
+
+# manifesto
+_textos_m = [SITE_CFG.get('manifesto_texto1',''), SITE_CFG.get('manifesto_texto2',''), SITE_CFG.get('manifesto_texto3','')]
+if any(_textos_m):
+    with open(os.path.join(BASE_DIR, 'manifesto.html'), 'w', encoding='utf-8') as f:
+        f.write(_gera_pagina_estatica('manifesto.html', 'Manifesto',
+            'Som que <span class="gradient">pulsa Brasil</span>', _textos_m,
+            '<p class="manifesto-signature">— Por do Som Cultural</p>' + _stats_html()))
+    print('✔ manifesto.html regenerada do config')
+
+# quem somos
+_textos_q = [SITE_CFG.get('quemsomos_texto','')]
+if any(_textos_q):
+    portfolio = str(SITE_CFG.get('portfolio_link','') or '')
+    port_html = ''
+    if portfolio:
+        port_html = ('<div style="margin-top:3rem" class="fade-in">'
+                     '<a href="' + esc(portfolio) + '" target="_blank" rel="noopener" class="btn btn-outline" style="text-decoration:none">'
+                     'Currículo completo &amp; Portfolio ↗</a></div>')
+    with open(os.path.join(BASE_DIR, 'quem-somos.html'), 'w', encoding='utf-8') as f:
+        f.write(_gera_pagina_estatica('quem-somos.html', 'Quem Somos',
+            'Mais de 20 anos <span class="gradient">cantando o Brasil</span>', _textos_q,
+            port_html + _stats_html()))
+    print('✔ quem-somos.html regenerada do config')
+
+# editora
+_textos_e = [SITE_CFG.get('editora_texto','')]
+if any(_textos_e):
+    with open(os.path.join(BASE_DIR, 'editora.html'), 'w', encoding='utf-8') as f:
+        f.write(_gera_pagina_estatica('editora.html', 'Editora & Direitos',
+            'Administração de <span class="gradient">obras musicais</span>', _textos_e,
+            '<p class="manifesto-signature">Consultoria: <a href="' + BASE + '/contato.html" style="color:var(--brand-primary-light);text-decoration:none">fale com o selo</a></p>'))
+    print('✔ editora.html regenerada do config')
+
+# hero do index (slogan + texto)
+if SITE_CFG.get('hero_slogan') or SITE_CFG.get('hero_texto'):
+    ipath = os.path.join(BASE_DIR, 'index.html')
+    with open(ipath, encoding='utf-8') as f:
+        ih = f.read()
+    slog = str(SITE_CFG.get('hero_slogan', ''))
+    if slog and 'Onde a música' in ih:
+        partes = slog.rsplit(' ', 1)
+        if len(partes) == 2:
+            ih = ih.replace('Onde a música <span class="gradient">nasce.</span>',
+                            esc(partes[0]) + ' <span class="gradient">' + esc(partes[1]) + '</span>', 1)
+    htxt = str(SITE_CFG.get('hero_texto', ''))
+    if htxt and 'Um selo dedicado às' in ih:
+        import re as _r2
+        ih = _r2.sub(r'Um selo dedicado às[\s\S]*?tempo presente\.', esc(htxt), ih, count=1)
+    with open(ipath, 'w', encoding='utf-8') as f:
+        f.write(ih)
+    print('✔ hero do index atualizado do config')
+
 print('✔ ' + str(len(geradas)) + ' páginas de álbum geradas (BASE = ' + (BASE or '(raiz)') + ')')
 print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
 print('✔ audiovisual.html gerada com ' + str(len(clips)) + ' vídeos em ' + str(len(partes_pagina)) + ' grupos')
