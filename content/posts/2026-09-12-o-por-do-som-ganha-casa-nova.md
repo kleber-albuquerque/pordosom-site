@@ -25,5 +25,4 @@ São mais de vinte anos de música brasileira de raiz — e até hoje, essa hist
 Nada de layout genérico: as cores, a tipografia e o clima das páginas nascem da identidade do Por do Som — o vermelho-terracota da nossa terra, o mesmo que colore as festas e os instrumentos.
 
 O site também nasce com um compromisso: estar sempre vivo. Notícias, lançamentos e projetos novos entram por aqui primeiro. Como esta casa é nossa, a porta fica aberta: **passe, explore o catálogo, assista aos vídeos — e volte sempre**.
-
-*— Por do Som, setembro de 2026*
+Por do Som, setembro de 2026*
