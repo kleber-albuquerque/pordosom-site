@@ -517,6 +517,9 @@ function renderTabelaAlbuns() {
   const tbody = document.getElementById('albuns-tbody');
   if (!tbody || !ALBUNS.length) return;
 
+  // normaliza acentos so para comparacao (dados intactos)
+  const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
   const lista = [...ALBUNS];
   lista.sort((x, y) => {
     let a, b;
@@ -527,8 +530,8 @@ function renderTabelaAlbuns() {
       a = Number(x.ano) || 0;
       b = Number(y.ano) || 0;
     } else {
-      a = String(x[ordemCol] || '').toLowerCase();
-      b = String(y[ordemCol] || '').toLowerCase();
+      a = norm(x[ordemCol]);
+      b = norm(y[ordemCol]);
     }
     const cmp = a < b ? -1 : a > b ? 1 : 0;
     return ordemDir === 'asc' ? cmp : -cmp;
@@ -546,8 +549,8 @@ function renderTabelaAlbuns() {
           : `<div class="sem-capa">💿</div>`}</td>
       <td>
         <div class="titulo-cell">${a.titulo || a._arquivo}</div>
-        <div class="artista-cell">${a.artista || '—'}</div>
       </td>
+      <td>${a.artista || '—'}</td>
       <td>${(a.generos || []).map(g => `<span class="tag-genero">${g}</span>`).join('')}</td>
       <td>${a.ano || '—'}</td>
       <td>${a.destaque ? '<span class="destaque-star">★</span>' : '—'}</td>
@@ -555,7 +558,6 @@ function renderTabelaAlbuns() {
       <td><button class="side-item" style="padding:.4rem .7rem" title="Editar álbum" onclick='abrirEditor(ALBUNS[${ALBUNS.indexOf(a)}])'>✏️</button> <button class="side-item" style="padding:.4rem .7rem" title="Excluir álbum" onclick='excluirAlbum(ALBUNS[${ALBUNS.indexOf(a)}])'>🗑️</button></td>
     </tr>`).join('');
 }
-
 // ---------- Editor de álbum ----------
 function abrirEditor(album) {
   albumAtual = album;
