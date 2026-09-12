@@ -970,6 +970,34 @@ function toast(msg) {
     }
   }
 })();
+
+function mdWrap(id, antes, depois) {
+  const ta = document.getElementById(id);
+  const ini = ta.selectionStart, fim = ta.selectionEnd;
+  const sel = ta.value.substring(ini, fim);
+  const novo = antes + (sel || "texto") + depois;
+  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(fim);
+  ta.focus();
+  ta.setSelectionRange(ini + antes.length, ini + antes.length + (sel || "texto").length);
+}
+function mdTitulo(id) {
+  const ta = document.getElementById(id);
+  const ini = ta.selectionStart;
+  const linhaIni = ta.value.lastIndexOf("\n", ini - 1) + 1;
+  ta.value = ta.value.substring(0, linhaIni) + "## " + ta.value.substring(linhaIni);
+  ta.focus();
+  ta.setSelectionRange(ini + 3, ini + 3);
+}
+function mdLink(id) {
+  const ta = document.getElementById(id);
+  const ini = ta.selectionStart, fim = ta.selectionEnd;
+  const sel = ta.value.substring(ini, fim) || "texto do link";
+  const url = prompt("URL do link:", "https://");
+  if (!url || url === "https://") return;
+  const novo = "[" + sel + "](" + url + ")";
+  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(fim);
+  ta.focus();
+}
 </script>
 </body>
 </html>
