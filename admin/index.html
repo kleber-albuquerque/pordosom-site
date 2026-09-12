@@ -352,7 +352,8 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 // ==========================================================
 // PAINEL PDS — Parte 1: login + listagem real dos álbuns
 // ==========================================================
-const REPO = 'kleber-albuquerque/pordosom-site';  // ⚠️ na entrega: repo do cliente
+const REPO = 'kleber-albuquerque/pordosom-site';
+const BASE = '/pordosom-site';   // caminho do site no Pages — '' no domínio próprio
 const API = 'https://api.github.com';
 
 let TOKEN = localStorage.getItem('pds_token') || '';
