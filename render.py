@@ -352,6 +352,19 @@ catalogo_js = {
 with open(OUT_JSON, 'w', encoding='utf-8') as f:
     json.dump(catalogo_js, f, ensure_ascii=False, indent=2)
 
+
+def md_para_html(texto):
+    c = esc(texto)
+    c = re.sub(r'^## (.+)$', r'<h2 style="font-size:1.3rem;text-transform:uppercase;letter-spacing:.5px;color:#f5ede0;margin:2.5rem 0 1rem">\1</h2>', c, flags=re.M)
+    c = re.sub(r'\*\*(.+?)\*\*', r'<strong style="color:#f5ede0">\1</strong>', c)
+    c = re.sub(r'(?m)^\*(.+)\*$', r'<p style="font-style:italic;color:#7a6a5e">\1</p>', c)
+    c = re.sub(r'\[(.+?)\]\((https?://[^)]+)\)', r'<a href="\2" target="_blank" rel="noopener" style="color:#c84545">\1</a>', c)
+    paragrafos = '\n<p>'.join(par for par in c.split('\n\n') if par.strip())
+    c = '<p>' + paragrafos + '</p>'
+    c = c.replace('<p><h2', '<h2').replace('</h2></p>', '</h2>')
+    c = c.replace('<p><p style', '<p style').replace('</p></p>', '</p>')
+    return c
+
 # ---------- Gera o blog.html ----------
 if True:
     itens = []
@@ -380,7 +393,7 @@ if True:
             '<div style="font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:#e8a04a;margin-bottom:.8rem">' + data_str + '</div>'
             '<h2 style="font-size:1.3rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;color:#f5ede0">' + esc(p['title']) + '</h2>'
             + img_html +
-            '<div style="font-size:.95rem;line-height:1.9;color:#b8a89a;white-space:pre-line">' + esc(p.get('corpo', '')) + '</div>'
+            '<div style="font-size:.95rem;line-height:1.9;color:#b8a89a;">' + md_para_html(p.get('corpo', '')) + '</div>'
             '</article>')
     lista_final = '\n'.join(itens) if itens else '<p style="text-align:center;color:var(--text-muted);padding:2rem">Em breve, as primeiras notícias do selo.</p>'
     blog_html = (
