@@ -1623,3 +1623,17 @@ section {
     .filtros { gap: 0.4rem; }
     .filtro { padding: 0.5rem 0.9rem; font-size: 0.62rem; }
 }
+
+/* ===== HOME EM VITRINES (teasers das seções) ===== */
+.teaser { padding: clamp(3rem, 6vw, 5rem) 0; position: relative; }
+.teaser-alt { background: var(--bg-darker); }
+.teaser-head { text-align: center; margin-bottom: 2.5rem; }
+.teaser-head h2 { margin-bottom: .6rem; }
+.teaser-head .section-description { margin-bottom: 0; }
+.teaser-link { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.5rem; font-size: .7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--brand-primary-light); text-decoration: none; transition: gap .3s ease; }
+.teaser-link:hover { gap: 1rem; }
+.teaser-videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+.teaser-videos iframe { width: 100%; aspect-ratio: 16/9; border-radius: 2px; border: 1px solid var(--border-color-light); }
+.teaser-playlists { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 700px; margin: 0 auto; }
+.teaser-posts { display: grid; gap: 1rem; max-width: 640px; margin: 0 auto; }
+.teaser-contato { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }

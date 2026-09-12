@@ -8,7 +8,7 @@
 <meta property="og:title" content="Por do Som | Selo Independente & Produtora Cultural">
 <meta property="og:description" content="Selo independente dedicado às Brasilidades — música popular brasileira de raiz.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="/pordosom-profile.jpg">
+<meta property="og:image" content="/pordosom-site/pordosom-profile.jpg">
 <link rel="icon" type="image/jpeg" href="/pordosom-site/pordosom-profile.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,13 +16,13 @@
 <link rel="stylesheet" href="/pordosom-site/css/style.css">
 </head>
 <body>
-
 <header class="header" id="header">
     <a href="/pordosom-site/" class="logo">
         <span class="logo-mark"><img src="/pordosom-site/pordosom-profile.jpg" alt="Por do Som"></span>
         <span class="logo-text">PÔR DO SOM</span>
     </a>
     <nav class="nav" id="nav">
+        <a href="/pordosom-site/" class="nav-link">Home</a>
         <a href="/pordosom-site/gravadora.html" class="nav-link">Gravadora</a>
         <a href="/pordosom-site/projetos.html" class="nav-link">Projetos</a>
         <a href="/pordosom-site/audiovisual.html" class="nav-link">Audiovisual</a>
@@ -33,28 +33,24 @@
     </nav>
     <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </header>
-
 <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-bg-overlay"></div>
     <div class="hero-noise"></div>
     <div class="hero-content">
         <p class="hero-subtitle">Selo Independente · Produtora Cultural</p>
-        <h1 class="hero-title">
-            Onde a música
-            <span class="gradient">nasce.</span>
-        </h1>
+        <h1 class="hero-title">Onde a música <span class="gradient">nasce.</span></h1>
         <p class="hero-description">
             Um selo dedicado às <strong>Brasilidades</strong> — à cultura afro-brasileira,
             aos mestres da tradição popular, aos tambores do norte e ao samba de raiz.
             Onde a ancestralidade encontra o tempo presente.
         </p>
         <div class="hero-actions">
-            <a href="/pordosom-site/gravadora.html" class="btn btn-primary">
+            <a href="#lancamentos" class="btn btn-primary">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                Ouça o catálogo
+                Explore o selo
             </a>
-            <a href="/pordosom-site/manifesto.html" class="btn btn-outline">Conheça o selo</a>
+            <a href="/pordosom-site/manifesto.html" class="btn btn-outline">Conheça o manifesto</a>
         </div>
     </div>
     <div class="hero-scroll">
@@ -62,68 +58,157 @@
         <div class="hero-scroll-line"></div>
     </div>
 </section>
-
-<section class="services" id="vitrine-secao">
+<section class="teaser" id="lancamentos">
     <div class="container">
-        <span class="section-subtitle">Do Catálogo</span>
-        <h2 class="section-title">Lançamentos & <span class="gradient">clássicos do selo</span></h2>
-        <p class="section-description">
-            Uma seleção do que o Por do Som já gravou. O catálogo completo,
-            com filtros por gênero, está a um clique.
-        </p>
+        <div class="teaser-head">
+            <span class="section-subtitle">Gravadora</span>
+            <h2 class="section-title">Lançamentos & <span class="gradient">clássicos do selo</span></h2>
+            <p class="section-description">Uma seleção do catálogo — 31 obras de samba de raiz a afro-brasileira.</p>
+        </div>
         <div class="vitrine-grid" id="vitrine"></div>
-        <div style="text-align:center;margin-top:3rem">
-            <a href="/pordosom-site/gravadora.html" class="btn btn-outline">Catálogo completo →</a>
+        <div style="text-align:center">
+            <a href="/pordosom-site/gravadora.html" class="teaser-link">Catálogo completo e artistas →</a>
         </div>
     </div>
 </section>
-
-<section class="manifesto" id="manifesto">
+<section class="teaser teaser-alt">
+    <div class="container">
+        <div class="teaser-head">
+            <span class="section-subtitle">Projetos & Festivais</span>
+            <h2 class="section-title">Onde a tradição <span class="gradient">encontra palco</span></h2>
+            <p class="section-description">Séries audiovisuais e festivais que o Por do Som realiza pelo Brasil afora.</p>
+        </div>
+        <div class="projetos-grid">
+            <a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVRhtZUUYrhVvTT6IEBlzUFI" target="_blank" rel="noopener" class="project-card fade-in">
+                <div class="project-card-visual">
+                    <div class="project-card-img" style="background-image: url('/pordosom-site/img/project-sotaques.jpg');"></div>
+                    <span class="project-badge">Série Audiovisual</span>
+                </div>
+                <div class="project-body">
+                    <h3 class="project-title">Série Sotaques do Brasil</h3>
+                    <p class="project-desc">Um mapa sonoro do Brasil — os sotaques musicais das regiões, revelando vozes e tradições.</p>
+                    <span class="project-link">Assistir</span>
+                </div>
+            </a>
+            <a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVRQgAaXO4DdD2zO5LEt5mAK" target="_blank" rel="noopener" class="project-card fade-in">
+                <div class="project-card-visual">
+                    <div class="project-card-img" style="background-image: url('/pordosom-site/img/project-malungo.jpg');"></div>
+                    <span class="project-badge">Festival Cultural</span>
+                </div>
+                <div class="project-body">
+                    <h3 class="project-title">Festival Malungo</h3>
+                    <p class="project-desc">Diversidade e fraternidade musical brasileira — artistas de várias gerações num mesmo palco.</p>
+                    <span class="project-link">Assistir</span>
+                </div>
+            </a>
+            <a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVQFSZ6UnrFhRwZ0YBkoajMD" target="_blank" rel="noopener" class="project-card fade-in">
+                <div class="project-card-visual">
+                    <div class="project-card-img" style="background-image: url('/pordosom-site/img/project-mestres.jpg');"></div>
+                    <span class="project-badge">Festival Cultural</span>
+                </div>
+                <div class="project-body">
+                    <h3 class="project-title">Festival Mestres dos Saberes</h3>
+                    <p class="project-desc">Homenagem aos mestres da cultura popular e seus saberes tradicionais.</p>
+                    <span class="project-link">Assistir</span>
+                </div>
+            </a>
+        </div>
+        <div style="text-align:center">
+            <a href="/pordosom-site/projetos.html" class="teaser-link">Todos os projetos →</a>
+        </div>
+    </div>
+</section>
+<section class="teaser">
+    <div class="container">
+        <div class="teaser-head">
+            <span class="section-subtitle">Audiovisual</span>
+            <h2 class="section-title">Veja e <span class="gradient">ouça agora</span></h2>
+        </div>
+        <div class="teaser-videos">
+            <iframe src="https://www.youtube.com/embed/lmVf87iV_0g" loading="lazy" allowfullscreen title="Luana Bayô — Abebé (Festival Malungo)"></iframe>
+            <iframe src="https://www.youtube.com/embed/2QJKf1SatqUhbpm5WcYeXZ" loading="lazy" allowfullscreen title="Marco Vilane — Eu Apenas Queria que Você Soubesse"></iframe>
+        </div>
+        <div style="text-align:center">
+            <a href="/pordosom-site/audiovisual.html" class="teaser-link">Canal completo →</a>
+        </div>
+    </div>
+</section>
+<section class="teaser teaser-alt">
+    <div class="container">
+        <div class="teaser-head">
+            <span class="section-subtitle">Playlists</span>
+            <h2 class="section-title">Curadoria do <span class="gradient">selo</span></h2>
+        </div>
+        <div class="teaser-playlists">
+            <iframe src="https://open.spotify.com/embed/playlist/2lgoPMSE9e7lxEumGbBaGn" height="380" loading="lazy" title="Samba Raiz e Partido Alto"></iframe>
+            <iframe src="https://open.spotify.com/embed/playlist/2cyXUj8Qhe3nZ0rbng87nR" height="380" loading="lazy" title="Tambores do Brasil"></iframe>
+        </div>
+    </div>
+</section>
+<section class="teaser">
     <div class="container">
         <div class="manifesto-content">
             <span class="section-subtitle">Manifesto</span>
             <h2 class="section-title">Som que <span class="gradient">pulsa Brasil</span></h2>
             <p class="manifesto-text">
-                O <strong>Por do Som</strong> nasceu de uma certeza simples: a música brasileira
-                de raiz merece ser ouvida, registrada e celebrada. Somos um selo independente
-                e produtora cultural que se debruça sobre as <span class="highlight">Brasilidades</span> —
-                esse turbilhão de sons, cores e saberes que pulsa do Maranhão a São Paulo,
-                dos terreiros aos quintais, dos mestres aos jovens que os escutam.
+                O Por do Som nasceu de uma certeza simples: a música brasileira de raiz merece ser
+                ouvida, registrada e celebrada. Cada lançamento é um <span class="highlight">ato de resistência cultural</span>.
             </p>
-            <p class="manifesto-text">
-                Cada lançamento é um <span class="highlight">ato de resistência cultural</span>.
-            </p>
-            <p class="manifesto-signature">— Por do Som Cultural</p>
-
-            <div class="manifesto-stats">
-                <div class="stat-item fade-in">
-                    <div class="stat-num">791</div>
-                    <div class="stat-label">Posts no Instagram</div>
-                </div>
-                <div class="stat-item fade-in">
-                    <div class="stat-num">21K</div>
-                    <div class="stat-label">Seguidores</div>
-                </div>
-                <div class="stat-item fade-in">
-                    <div class="stat-num">3</div>
-                    <div class="stat-label">Festivais Próprios</div>
-                </div>
-                <div class="stat-item fade-in">
-                    <div class="stat-num">10+</div>
-                    <div class="stat-label">Artistas no Catálogo</div>
-                </div>
+            <div style="text-align:center">
+                <a href="/pordosom-site/manifesto.html" class="teaser-link">Leia o manifesto →</a>
+            </div>
+            <div class="manifesto-stats" style="margin-top:3rem">
+                <div class="stat-item fade-in"><div class="stat-num">31</div><div class="stat-label">Obras no catálogo</div></div>
+                <div class="stat-item fade-in"><div class="stat-num">10+</div><div class="stat-label">Artistas</div></div>
+                <div class="stat-item fade-in"><div class="stat-num">3</div><div class="stat-label">Festivais próprios</div></div>
+                <div class="stat-item fade-in"><div class="stat-num">42</div><div class="stat-label">Vídeos produzidos</div></div>
             </div>
         </div>
     </div>
-    <div class="manifesto-banner fade-in">
-        <img src="/pordosom-site/img/manifesto-afro.jpg" alt="Cultura afro-brasileira — dança e tradição" loading="lazy">
-        <div class="manifesto-banner-overlay"></div>
-        <div class="manifesto-banner-text">
-            <p>"Do Maranhão a São Paulo, dos terreiros aos quintais — a cultura brasileira de raiz pulsa em cada lançamento."</p>
+</section>
+<section class="teaser teaser-alt">
+    <div class="container">
+        <div class="teaser-head">
+            <span class="section-subtitle">Notícias</span>
+            <h2 class="section-title">Novidades <span class="gradient">do selo</span></h2>
+        </div>
+        <div class="teaser-posts">
+            <a class="song-item" href="/pordosom-site/blog.html">
+                <div class="song-num">01</div>
+                <div class="song-info">
+                    <div class="song-title">[Última notícia — render automático]</div>
+                    <div class="song-artist">Os lançamentos e projetos do selo, sempre atualizados</div>
+                </div>
+                <div class="song-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>
+            </a>
+        </div>
+        <div style="text-align:center">
+            <a href="/pordosom-site/blog.html" class="teaser-link">Todas as notícias →</a>
         </div>
     </div>
 </section>
-
+<section class="teaser">
+    <div class="container">
+        <div class="teaser-head">
+            <span class="section-subtitle">Contato</span>
+            <h2 class="section-title">Vamos <span class="gradient">fazer música</span> juntos?</h2>
+            <p class="section-description">Parcerias, projetos e lançamentos — o selo está aberto.</p>
+            <div class="teaser-contato" style="margin-top:1.5rem">
+                <a href="mailto:contato@pordosom.com.br" class="social-card" style="text-decoration:none">
+                    <div class="social-card-icon">✉</div>
+                    <div class="social-card-text"><div class="social-card-label">E-mail</div><div class="social-card-handle">contato@pordosom.com.br</div></div>
+                </a>
+                <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener" class="social-card" style="text-decoration:none">
+                    <div class="social-card-icon">📷</div>
+                    <div class="social-card-text"><div class="social-card-label">Instagram</div><div class="social-card-handle">@pordosomcultural</div></div>
+                </a>
+            </div>
+            <div style="margin-top:2rem">
+                <a href="/pordosom-site/contato.html" class="teaser-link">Todos os contatos →</a>
+            </div>
+        </div>
+    </div>
+</section>
 <footer class="footer">
     <div class="container">
         <span class="footer-logo">PÔR DO SOM</span>
@@ -139,7 +224,6 @@
         <p class="footer-text">© 2026 Por do Som Cultural · Todos os direitos reservados</p>
     </div>
 </footer>
-
 <script src="/pordosom-site/js/catalogo.js"></script>
 <script>
 const header = document.getElementById('header');
