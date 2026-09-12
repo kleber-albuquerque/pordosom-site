@@ -2,7 +2,7 @@
 titulo: "Tem Dendê"
 artista: "Luana Bayô"
 ano: 2024
-capa: ""
+capa: "/images/uploads/tem-dende.jpg"
 generos:
   - - afro-brasileira
 destaque: false

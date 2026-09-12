@@ -2,7 +2,7 @@
 titulo: "Tião Carvalho Canta João do Vale"
 artista: "Tião Carvalho"
 ano: 2006
-capa: ""
+capa: "/images/uploads/tiao-carvalho-canta-joao-do-vale.jpg"
 generos:
   - - cultura-popular
 destaque: false

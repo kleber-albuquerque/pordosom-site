@@ -575,6 +575,9 @@ function renderTabelaAlbuns() {
 }
 // ---------- Editor de álbum ----------
 function abrirEditor(album) {
+  // normalizacao na ENTRADA: capa sempre string (imune a lista vinda da API)
+  if (Array.isArray(album.capa)) album.capa = album.capa[0] || '';
+  if (typeof album.capa !== 'string') album.capa = String(album.capa || '');
   albumAtual = album;
   capaNova = null;
   document.getElementById('f-titulo').value = album.titulo || '';

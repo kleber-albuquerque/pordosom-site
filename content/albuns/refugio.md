@@ -2,7 +2,7 @@
 titulo: "Refúgio"
 artista: "Luana Bayô"
 ano: 2021
-capa: ""
+capa: "/images/uploads/refugio.jpg"
 generos:
   - - afro-brasileira
 destaque: false
