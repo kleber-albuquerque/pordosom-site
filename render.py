@@ -1,34 +1,26 @@
 #!/usr/bin/env python3
 # ==========================================================
-# POR DO SOM — Render do catálogo (v3.1 — com BASE path)
+# POR DO SOM — render.py v4 (consolidado)
 #
-# Fonte: content/albuns/*.md (editáveis pelo painel)
-# Gera:
-#   - albuns/{slug}.html (páginas dos álbuns, com Schema.org)
-#   - data/catalogo.json (para o JS da vitrine/gravadora)
-#   - sitemap.xml
+# Lê:  content/albuns/*.md      (catálogo)
+#      content/posts/*.md       (notícias)
+#      content/audiovisual/*.md (clips)
+# Gera: albuns/*.html, data/catalogo.json,
+#       blog.html, audiovisual.html, sitemap.xml
 #
-# ⚠️ REGRA DA BASE (documentada no mapa de ação):
-#   BASE = caminho onde o site está hospedado.
-#   - No GitHub Pages de projeto: '/pordosom-site'
-#   - No dia do domínio próprio (pordosom.com.br na raiz): ''
-#     (trocar AQUI e no js/catalogo.js + sed inverso nos HTMLs)
-#
-# Uso:  python3 render.py
+# ⚠️ REGRA DA BASE: '/pordosom-site' no Pages | '' no domínio
 # ==========================================================
 import os, re, json, html
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PASTA_MD = os.path.join(BASE_DIR, 'content', 'albuns')
+PASTA_POSTS = os.path.join(BASE_DIR, 'content', 'posts')
+PASTA_AV = os.path.join(BASE_DIR, 'content', 'audiovisual')
 OUT_ALBUNS = os.path.join(BASE_DIR, 'albuns')
 OUT_JSON = os.path.join(BASE_DIR, 'data', 'catalogo.json')
 OUT_SITEMAP = os.path.join(BASE_DIR, 'sitemap.xml')
 
-# ════════════════════════════════════════════════════════
-# A BASE — único ponto de configuração (com render.py e
-# js/catalogo.js — os 2 lugares para trocar no domínio próprio)
-# ════════════════════════════════════════════════════════
 BASE = '/pordosom-site'
 DOMINIO = 'https://kleber-albuquerque.github.io' + BASE
 
@@ -42,12 +34,17 @@ GENEROS = {
     'infantil': 'Infantil',
 }
 
-# ---------- Parser de frontmatter (YAML simples) ----------
+GRUPOS_AV = {
+    'sotaques': 'Série Sotaques do Brasil',
+    'malungo': 'Festival Malungo',
+    'mestres': 'Festival Mestres dos Saberes',
+    'outros': 'Outros vídeos do canal',
+}
+
+# ---------- Parser de frontmatter ----------
 def parse_md(caminho):
-    """Lê um .md e retorna (meta: dict, corpo: str)."""
     with open(caminho, encoding='utf-8') as f:
         texto = f.read()
-
     meta, corpo = {}, texto
     m = re.match(r'^---\s*\n(.*?)\n---\s*\n?(.*)$', texto, re.DOTALL)
     if m:
@@ -57,7 +54,6 @@ def parse_md(caminho):
             m_item = re.match(r'^\s+-\s+(\S+)\s*$', linha)
             if m_item and lista_atual:
                 if not isinstance(meta.get(lista_atual), list):
-                    # blindagem: item orfao nao quebra mais o parser
                     if lista_atual in meta:
                         meta[lista_atual] = [meta[lista_atual]]
                     else:
@@ -85,13 +81,12 @@ def esc(t):
     return html.escape(str(t or ''))
 
 def caminho(c):
-    """Junta a BASE com um caminho. Uso em TODO o template."""
     if not c:
         return c
     if isinstance(c, list):
-        c = c[0] if c else ''    # blindagem: capa em formato de lista
+        c = c[0] if c else ''
     if not isinstance(c, str):
-        return str(c)
+        c = str(c)
     return BASE + c if c.startswith('/') else c
 
 def embed_spotify(url):
@@ -107,14 +102,7 @@ def embed_youtube(url):
         return 'https://www.youtube.com/embed/' + m.group(1)
     return ''
 
-def link_nav(slug, titulo, seta):
-    """Gera o link de navegação anterior/próximo — construído por
-    concatenação (sem f-string aninhada: imune a erro de aspas)."""
-    href = caminho('/albuns/' + slug + '.html')
-    return ('<a class="album-nav-link" href="' + href + '">'
-            + seta + ' ' + esc(titulo) + '</a>')
-
-# ---------- Lê todos os álbuns ----------
+# ---------- Lê os álbuns ----------
 albuns = []
 if os.path.isdir(PASTA_MD):
     for nome in sorted(os.listdir(PASTA_MD)):
@@ -130,30 +118,29 @@ if os.path.isdir(PASTA_MD):
         meta.setdefault('faixas', '')
         meta['slug'] = slug
         meta['texto_pt'] = corpo
+        if isinstance(meta.get('generos'), str):
+            meta['generos'] = [x.strip() for x in meta['generos'].replace('[','').replace(']','').split(',') if x.strip()]
+        if isinstance(meta.get('capa'), list):
+            meta['capa'] = meta['capa'][0] if meta['capa'] else ''
         albuns.append(meta)
 
-# Ordenacao: albums COM campo ordem: sobem (1, 2, 3...); SEM ordem: por ano desc
-def chave_ordem(a):
+# Ordenação: com ordem: primeiro; sem: ano desc
+def _tem_ordem(a):
     o = a.get('ordem')
     if isinstance(o, list):
         o = o[0] if o else None
     try:
-        o = int(o) if o is not None and str(o).strip() else None
-    except (ValueError, TypeError):
-        o = None
-    tem_ordem = o is not None
-    if tem_ordem:
-        return (0, o, '')            # com ordem: grupo 0, numero
-    return (1, 0, str(a.get('ano', '')))   # sem ordem: grupo 1, ano (desc depois)
+        return o is not None and str(o).strip() != ''
+    except Exception:
+        return False
 
-albuns.sort(key=chave_ordem)
-albuns_sem_ordem = [a for a in albuns if (a.get('ordem') in (None, '', []) or not str(a.get('ordem', '')).strip())]
-albuns_sem_ordem.sort(key=lambda a: (str(a.get('ano', '')), a['titulo']), reverse=True)
-albuns_com_ordem = sorted([a for a in albuns if a not in albuns_sem_ordem], key=chave_ordem)
-albuns[:] = albuns_com_ordem + albuns_sem_ordem
+_com = [a for a in albuns if _tem_ordem(a)]
+_sem = [a for a in albuns if not _tem_ordem(a)]
+_com.sort(key=lambda a: int(str(a.get('ordem')).strip()))
+_sem.sort(key=lambda a: (str(a.get('ano', '')), a['titulo']), reverse=True)
+albuns[:] = _com + _sem
 
-# ---------- Le as noticias (content/posts/*.md) ----------
-PASTA_POSTS = os.path.join(BASE_DIR, 'content', 'posts')
+# ---------- Lê as notícias ----------
 posts = []
 if os.path.isdir(PASTA_POSTS):
     for nome in sorted(os.listdir(PASTA_POSTS)):
@@ -170,10 +157,45 @@ if os.path.isdir(PASTA_POSTS):
 posts = [p for p in posts if not p.get('rascunho')]
 posts.sort(key=lambda p: str(p.get('date', '')), reverse=True)
 
-# ---------- Template da página de álbum ----------
-def page_album(a, prev, next_):
-    generos_str = ' · '.join(GENEROS.get(g, g) for g in a.get('generos', []))
+# ---------- Lê os clips ----------
+clips = []
+if os.path.isdir(PASTA_AV):
+    for nome in sorted(os.listdir(PASTA_AV)):
+        if not nome.endswith('.md'):
+            continue
+        meta, corpo = parse_md(os.path.join(PASTA_AV, nome))
+        meta.setdefault('titulo', nome[:-3])
+        meta.setdefault('grupo', 'outros')
+        meta.setdefault('ano', '')
+        meta.setdefault('artista', '')
+        meta.setdefault('yt_id', '')
+        clips.append(meta)
+clips.sort(key=lambda c: str(c.get('ano', '')))
 
+# ---------- Template da página de álbum ----------
+NAV_HTML = (
+    '        <a href="' + BASE + '/" class="nav-link">Home</a>\n'
+    '        <a href="' + BASE + '/gravadora.html" class="nav-link">Gravadora</a>\n'
+    '        <a href="' + BASE + '/projetos.html" class="nav-link">Projetos</a>\n'
+    '        <a href="' + BASE + '/audiovisual.html" class="nav-link">Audiovisual</a>\n'
+    '        <a href="' + BASE + '/blog.html" class="nav-link">Notícias</a>\n'
+    '        <a href="' + BASE + '/manifesto.html" class="nav-link">Manifesto</a>\n'
+    '        <a href="' + BASE + '/quem-somos.html" class="nav-link">Quem Somos</a>\n'
+    '        <a href="' + BASE + '/contato.html" class="nav-link nav-cta">Fale com o Selo</a>\n'
+)
+
+FOOTER_HTML = (
+'<footer class="footer">\n'
+'    <div class="container">\n'
+'        <span class="footer-logo">PÔR DO SOM</span>\n'
+'        <p class="footer-tagline">Selo Independente · Brasilidades</p>\n'
+'        <p class="footer-text">© ' + str(datetime.now().year) + ' Por do Som</p>\n'
+'    </div>\n'
+'</footer>\n'
+)
+
+def page_album(a, prev, next_):
+    generos_str = ' · '.join(GENEROS.get(g, g) for g in (a.get('generos') or []))
     schema = {
         "@context": "https://schema.org",
         "@type": "MusicAlbum",
@@ -183,18 +205,13 @@ def page_album(a, prev, next_):
         "datePublished": str(a.get('ano', '')),
         "publisher": {"@type": "Organization", "name": "Por do Som"},
     }
-    if a.get('faixas'):
-        schema["numTracks"] = a['faixas']
-
     embeds_html = ''
     sp = embed_spotify(a.get('spotify', ''))
     if sp:
-        embeds_html += ('\n        <iframe src="' + esc(sp) + '" height="152"'
-                        ' loading="lazy" title="Ouvir no Spotify"></iframe>')
+        embeds_html += '\n        <iframe src="' + esc(sp) + '" height="152" loading="lazy" title="Ouvir no Spotify"></iframe>'
     yt = embed_youtube(a.get('youtube', ''))
     if yt:
-        embeds_html += ('\n        <iframe src="' + esc(yt) + '" style="aspect-ratio:16/9"'
-                        ' loading="lazy" allowfullscreen title="Vídeo do álbum"></iframe>')
+        embeds_html += '\n        <iframe src="' + esc(yt) + '" style="aspect-ratio:16/9" loading="lazy" allowfullscreen title="Vídeo do álbum"></iframe>'
 
     plats = []
     if a.get('spotify'):  plats.append(('Spotify', a['spotify']))
@@ -209,158 +226,76 @@ def page_album(a, prev, next_):
     if a.get('texto_en'):
         en_html = '<p class="album-descricao-en">' + esc(a['texto_en']) + '</p>'
 
-    # Navegação anterior/próximo (função link_nav — sem f-string aninhada)
-    prev_html = link_nav(prev['slug'], prev['titulo'], '&#8592;') if prev else '<span></span>'
-    next_html = link_nav(next_['slug'], next_['titulo'], '&#8594;') if next_ else '<span></span>'
+    prev_html = '<span></span>'
+    if prev:
+        href_p = caminho('/albuns/' + prev['slug'] + '.html')
+        prev_html = '<a class="album-nav-link" href="' + href_p + '">&#8592; ' + esc(prev['titulo']) + '</a>'
+    next_html = '<span></span>'
+    if next_:
+        href_n = caminho('/albuns/' + next_['slug'] + '.html')
+        next_html = '<a class="album-nav-link" href="' + href_n + '">' + esc(next_['titulo']) + ' &#8594;</a>'
 
     faixas_txt = ''
     if a.get('faixas'):
         faixas_txt = str(a['faixas']) + ' faixas · '
 
-    # Links do menu (com BASE)
-    menu = (
-        '        <a href="' + caminho('/gravadora.html') + '" class="nav-link">Gravadora</a>\n'
-        '        <a href="' + caminho('/projetos.html') + '" class="nav-link">Projetos</a>\n'
-        '        <a href="' + caminho('/audiovisual.html') + '" class="nav-link">Audiovisual</a>\n'
-        '        <a href="' + caminho('/blog.html') + '" class="nav-link">Notícias</a>\n'
-        '        <a href="' + caminho('/manifesto.html') + '" class="nav-link">Manifesto</a>\n'
-        '        <a href="' + caminho('/quem-somos.html') + '" class="nav-link">Quem Somos</a>\n'
-        '        <a href="' + caminho('/contato.html') + '" class="nav-link nav-cta">Fale com o Selo</a>\n'
-    )
+    capa_val = a.get('capa', '')
+    if isinstance(capa_val, list):
+        capa_val = capa_val[0] if capa_val else ''
+    capa_attr = esc(capa_val) if capa_val else ''
 
-    pagina = (
-'<!DOCTYPE html>\n'
-'<html lang="pt-BR">\n'
-'<head>\n'
-'<meta charset="UTF-8">\n'
-'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+    return (
+'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n'
+'<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
 '<title>' + esc(a['titulo']) + ' — ' + esc(a['artista']) + ' | Por do Som</title>\n'
 '<meta name="description" content="' + esc((a['texto_pt'] or a['titulo'])[:155]) + '">\n'
-'<meta property="og:title" content="' + esc(a['titulo']) + '">\n'
-'<meta property="og:description" content="' + esc((a['texto_pt'] or '')[:110]) + '">\n'
-'<meta property="og:type" content="music.album">\n'
-'<link rel="icon" type="image/jpeg" href="' + caminho('/pordosom-profile.jpg') + '">\n'
+'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
 '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
-'<link rel="stylesheet" href="' + caminho('/css/style.css') + '">\n'
-'<script type="application/ld+json">\n'
-+ json.dumps(schema, ensure_ascii=False, indent=2) + '\n'
-'</script>\n'
-'</head>\n'
-'<body class="page-interna">\n'
-'\n'
+'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n'
+'<script type="application/ld+json">\n' + json.dumps(schema, ensure_ascii=False, indent=2) + '\n</script>\n'
+'</head>\n<body class="page-interna">\n\n'
 '<header class="header" id="header">\n'
-'    <a href="' + caminho('/') + '" class="logo">\n'
-'        <span class="logo-mark"><img src="' + caminho('/pordosom-profile.jpg') + '" alt="Por do Som"></span>\n'
+'    <a href="' + BASE + '/" class="logo">\n'
+'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
 '        <span class="logo-text">PÔR DO SOM</span>\n'
 '    </a>\n'
-'    <nav class="nav" id="nav">\n'
-+ menu +
-'    </nav>\n'
+'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
 '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n'
-'</header>\n'
-'\n'
+'</header>\n\n'
 '<main class="album-page">\n'
 '    <div class="container">\n'
 '        <div class="album-hero">\n'
 '            <div class="album-capa-grande">\n'
-'                <img src="' + caminho(a.get('capa', '')) + '" alt="Capa do álbum ' + esc(a['titulo']) + '"\n'
+'                <img src="' + esc(caminho(capa_val)) + '" alt="Capa do álbum ' + esc(a['titulo']) + '"\n'
 '                     onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 600%22%3E%3Crect fill=%22%231a0e0e%22 width=%22600%22 height=%22600%22/%3E%3Ccircle cx=%22300%22 cy=%22260%22 r=%22100%22 fill=%22%23a83030%22 opacity=%220.75%22/%3E%3C/svg%3E\'">\n'
 '            </div>\n'
 '            <div>\n'
 '                <span class="album-kicker">Álbum · ' + esc(a.get('ano', '')) + ' · ' + esc(generos_str) + '</span>\n'
 '                <h1 class="album-titulo-grande">' + esc(a['titulo']) + '</h1>\n'
 '                <div class="album-artista-grande">' + esc(a['artista']) + '</div>\n'
-'                <div class="album-meta-info">' + faixas_txt + 'Por do Som</div>\n'
-'\n'
+'                <div class="album-meta-info">' + faixas_txt + 'Por do Som</div>\n\n'
 '                <p class="album-descricao">' + esc(a['texto_pt']) + '</p>\n'
-'                ' + en_html + '\n'
-'\n'
-'                <div class="album-embeds">' + embeds_html + '\n'
-'                </div>\n'
++ en_html + '\n'
+'                <div class="album-embeds">' + embeds_html + '\n                </div>\n'
 '                <div class="album-plataformas">' + plats_html + '</div>\n'
 '            </div>\n'
-'        </div>\n'
-'\n'
+'        </div>\n\n'
 '        <div class="album-navegacao">\n'
 '            ' + prev_html + '\n'
-'            <a class="album-nav-link" href="' + caminho('/gravadora.html') + '">Voltar ao catálogo</a>\n'
+'            <a class="album-nav-link" href="' + BASE + '/gravadora.html">Voltar ao catálogo</a>\n'
 '            ' + next_html + '\n'
 '        </div>\n'
 '    </div>\n'
-'</main>\n'
-'\n'
-'<footer class="footer">\n'
-'    <div class="container">\n'
-'        <span class="footer-logo">PÔR DO SOM</span>\n'
-'        <p class="footer-tagline">Selo Independente · Brasilidades</p>\n'
-'        <p class="footer-text">© ' + str(datetime.now().year) + ' Por do Som</p>\n'
-'    </div>\n'
-'</footer>\n'
-'\n'
+'</main>\n\n'
++ FOOTER_HTML +
 '<script>\n'
 'const menuBtn = document.getElementById(\'mobileMenuBtn\');\n'
 'const nav = document.getElementById(\'nav\');\n'
 'menuBtn.addEventListener(\'click\', () => nav.classList.toggle(\'active\'));\n'
 '</script>\n'
-'</body>\n'
-'</html>\n')
-    return pagina
+'</body>\n</html>\n')
 
-
-BLOG_TEMPLATE = """<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notícias | Por do Som</title>
-<meta name="description" content="Notícias, lançamentos e novidades do Selo Por do Som.">
-<link rel="icon" type="image/jpeg" href="BASE/pordosom-profile.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="BASE/css/style.css">
-</head>
-<body class="page-interna">
-<header class="header" id="header">
-    <a href="BASE/" class="logo">
-        <span class="logo-mark"><img src="BASE/pordosom-profile.jpg" alt="Por do Som"></span>
-        <span class="logo-text">PÔR DO SOM</span>
-    </a>
-    <nav class="nav" id="nav">
-        <a href="BASE/gravadora.html" class="nav-link">Gravadora</a>
-        <a href="BASE/projetos.html" class="nav-link">Projetos</a>
-        <a href="BASE/audiovisual.html" class="nav-link">Audiovisual</a>
-        <a href="BASE/blog.html" class="nav-link" style="color:var(--brand-primary-light)">Notícias</a>
-        <a href="BASE/manifesto.html" class="nav-link">Manifesto</a>
-        <a href="BASE/quem-somos.html" class="nav-link">Quem Somos</a>
-        <a href="BASE/contato.html" class="nav-link nav-cta">Fale com o Selo</a>
-    </nav>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-</header>
-<section class="musicas" style="padding-top:calc(var(--spacing-section) + 3rem)">
-    <div class="container">
-        <span class="section-subtitle">Notícias</span>
-        <h1 class="section-title">Novidades <span class="gradient">do selo</span></h1>
-        <p class="section-description">Lançamentos, projetos e histórias do Por do Som.</p>
-        <div style="max-width:760px;margin:0 auto;display:grid;gap:1rem">
-<!-- POSTS LISTA -->
-        </div>
-<!-- POSTS CORPO -->
-    </div>
-</section>
-<footer class="footer">
-    <div class="container">
-        <span class="footer-logo">PÔR DO SOM</span>
-        <p class="footer-tagline">Selo Independente · Brasilidades</p>
-        <p class="footer-text">© 2026 Por do Som</p>
-    </div>
-</footer>
-<script>
-const menuBtn = document.getElementById('mobileMenuBtn');
-const nav = document.getElementById('nav');
-menuBtn.addEventListener('click', () => nav.classList.toggle('active'));
-</script>
-</body>
-</html>"""
-
+# ---------- Gera as páginas de álbum ----------
 os.makedirs(OUT_ALBUNS, exist_ok=True)
 os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
 
@@ -373,9 +308,8 @@ for i, a in enumerate(albuns):
         f.write(page_album(a, prev, next_))
     geradas.append(a['slug'])
 
-# ---------- Gera o data/catalogo.json (com a BASE para o JS) ----------
+# ---------- Gera o catalogo.json (nasce limpo) ----------
 def _norm_json(a):
-    # O JSON nasce LIMPO: capa string, generos lista — qualquer deformidade do .md morre aqui
     capa = a.get('capa', '')
     if isinstance(capa, list):
         capa = capa[0] if capa else ''
@@ -410,6 +344,125 @@ catalogo_js = {
 with open(OUT_JSON, 'w', encoding='utf-8') as f:
     json.dump(catalogo_js, f, ensure_ascii=False, indent=2)
 
+# ---------- Gera o blog.html ----------
+if True:
+    itens = []
+    for i, p in enumerate(posts):
+        partes = str(p.get('date', '')).split('-')
+        data_str = '/'.join(reversed(partes)) if len(partes) == 3 else str(p.get('date', ''))
+        itens.append(
+            '<a class="song-item fade-in" href="#noticia-' + str(i) + '">'
+            '<div class="song-num">' + str(i + 1) + '</div>'
+            '<div class="song-info">'
+            '<div class="song-title">' + esc(p['title']) + '</div>'
+            '<div class="song-artist">' + esc(p.get('resumo', '')) + '</div>'
+            '</div>'
+            '<span class="song-platform">' + data_str + '</span>'
+            '<div class="song-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>'
+            '</a>')
+    corpo_posts = []
+    for i, p in enumerate(posts):
+        partes = str(p.get('date', '')).split('-')
+        data_str = '/'.join(reversed(partes)) if len(partes) == 3 else str(p.get('date', ''))
+        img_html = ''
+        if p.get('imagem'):
+            img_html = ('<img src="' + caminho(p['imagem']) + '" alt="" style="width:100%;border-radius:4px;margin-bottom:1.5rem" loading="lazy">')
+        corpo_posts.append(
+            '<article id="noticia-' + str(i) + '" style="max-width:760px;margin:3.5rem auto 0;padding:2rem;background:#1a0e0e;border:1px solid rgba(168,48,48,.12);border-radius:4px">'
+            '<div style="font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:#e8a04a;margin-bottom:.8rem">' + data_str + '</div>'
+            '<h2 style="font-size:1.3rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;color:#f5ede0">' + esc(p['title']) + '</h2>'
+            + img_html +
+            '<div style="font-size:.95rem;line-height:1.9;color:#b8a89a;white-space:pre-line">' + esc(p.get('corpo', '')) + '</div>'
+            '</article>')
+    lista_final = '\n'.join(itens) if itens else '<p style="text-align:center;color:var(--text-muted);padding:2rem">Em breve, as primeiras notícias do selo.</p>'
+    blog_html = (
+'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
+'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+'<title>Notícias | Por do Som</title>\n'
+'<meta name="description" content="Notícias, lançamentos e novidades do Selo Por do Som.">\n'
+'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
+'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
+'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n</head>\n<body class="page-interna">\n'
+'<header class="header" id="header">\n    <a href="' + BASE + '/" class="logo">\n'
+'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+'        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n'
+'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
+'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+'<section class="musicas" style="padding-top:calc(var(--spacing-section) + 3rem)">\n'
+'    <div class="container">\n'
+'        <span class="section-subtitle">Notícias</span>\n'
+'        <h1 class="section-title">Novidades <span class="gradient">do selo</span></h1>\n'
+'        <p class="section-description">Lançamentos, projetos e histórias do Por do Som.</p>\n'
+'        <div style="max-width:760px;margin:0 auto;display:grid;gap:1rem">\n'
++ lista_final + '\n        </div>\n'
++ '\n\n'.join(corpo_posts) + '\n    </div>\n</section>\n\n'
++ FOOTER_HTML +
+'<script>\nconst menuBtn = document.getElementById(\'mobileMenuBtn\');\nconst nav = document.getElementById(\'nav\');\nmenuBtn.addEventListener(\'click\', () => nav.classList.toggle(\'active\'));\n</script>\n</body>\n</html>\n')
+    with open(os.path.join(BASE_DIR, 'blog.html'), 'w', encoding='utf-8') as f:
+        f.write(blog_html)
+
+# ---------- Gera a audiovisual.html ----------
+sec_template = (
+'<section class="{bg}">\n'
+'    <div class="container">\n'
+'        <span class="section-subtitle">{sub}</span>\n'
+'        <h2 class="section-title">{titulo}</h2>\n'
+'        <div class="teaser-videos">\n{videos}\n        </div>\n'
+'    </div>\n'
+'</section>\n')
+
+partes_pagina = []
+for gid, gnome in GRUPOS_AV.items():
+    do_grupo = [c for c in clips if str(c.get('grupo', '')) == gid]
+    if not do_grupo:
+        continue
+    videos_html = []
+    for c in do_grupo:
+        videos_html.append(
+            '            <iframe src="https://www.youtube.com/embed/' + str(c.get('yt_id', '')) + '" '
+            'loading="lazy" allowfullscreen title="' + esc(c.get('titulo', '')) + '"></iframe>')
+    bg = 'teaser' if len(partes_pagina) % 2 == 0 else 'teaser teaser-alt'
+    partes_pagina.append(sec_template.format(bg=bg, sub='Audiovisual', titulo=esc(gnome), videos='\n'.join(videos_html)))
+
+playlists_html = (
+'<section class="teaser teaser-alt">\n'
+'    <div class="container">\n'
+'        <div class="teaser-head">\n'
+'            <span class="section-subtitle">Playlists</span>\n'
+'            <h2 class="section-title">Curadoria do <span class="gradient">selo</span></h2>\n'
+'        </div>\n'
+'        <div class="teaser-playlists">\n'
+'            <iframe src="https://open.spotify.com/embed/playlist/2lgoPMSE9e7lxEumGbBaGn" height="380" loading="lazy" title="Samba Raiz e Partido Alto"></iframe>\n'
+'            <iframe src="https://open.spotify.com/embed/playlist/2cyXUj8Qhe3nZ0rbng87nR" height="380" loading="lazy" title="Tambores do Brasil"></iframe>\n'
+'        </div>\n'
+'    </div>\n'
+'</section>\n')
+
+if partes_pagina:
+    av_html = (
+'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
+'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+'<title>Audiovisual &amp; Playlists | Por do Som</title>\n'
+'<meta name="description" content="Vídeos e playlists curadas do Selo Por do Som — séries, festivais e o canal completo no YouTube.">\n'
+'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
+'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
+'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n</head>\n<body class="page-interna">\n'
+'<header class="header" id="header">\n    <a href="' + BASE + '/" class="logo">\n'
+'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+'        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n'
+'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
+'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+'<header class="page-header">\n    <div class="container">\n'
+'        <span class="section-subtitle">Audiovisual</span>\n'
+'        <h1 class="section-title">Veja e <span class="gradient">ouça</span></h1>\n'
+'        <p class="section-description">A produção audiovisual do selo — séries, festivais e o canal no YouTube.</p>\n'
+'    </div>\n</header>\n'
++ '\n'.join(partes_pagina) + '\n' + playlists_html + '\n'
++ FOOTER_HTML +
+'<script>\nconst menuBtn = document.getElementById(\'mobileMenuBtn\');\nconst nav = document.getElementById(\'nav\');\nmenuBtn.addEventListener(\'click\', () => nav.classList.toggle(\'active\'));\n</script>\n</body>\n</html>\n')
+    with open(os.path.join(BASE_DIR, 'audiovisual.html'), 'w', encoding='utf-8') as f:
+        f.write(av_html)
+
 # ---------- Gera o sitemap.xml ----------
 paginas_estaticas = ['', 'gravadora.html', 'manifesto.html', 'quem-somos.html',
                      'editora.html', 'audiovisual.html', 'projetos.html',
@@ -425,47 +478,10 @@ with open(OUT_SITEMAP, 'w', encoding='utf-8') as f:
     f.write(sitemap)
 
 # ---------- Relatório ----------
-# ---------- Gera o blog.html ----------
-if True:   # gera sempre
-    itens = []
-    for i, p in enumerate(posts):
-        data_br = str(p.get('date', '')).split('-')[::-1]
-        data_str = '/'.join(data_br[:3]) if len(data_br) == 3 else str(p.get('date', ''))
-        img_html = ''
-        if p.get('imagem'):
-            img_html = ('<img src="' + caminho(p['imagem']) + '" alt="" style="width:110px;height:74px;'
-                        'object-fit:cover;border-radius:2px;flex-shrink:0" loading="lazy">')
-        itens.append(
-            '<a class="song-item fade-in" href="#noticia-' + str(i) + '">'
-            '<div class="song-num">' + str(i + 1) + '</div>'
-            '<div class="song-info">'
-            '<div class="song-title">' + esc(p['title']) + '</div>'
-            '<div class="song-artist">' + esc(p['resumo']) + '</div>'
-            '</div>'
-            '<span class="song-platform">' + data_str + '</span>'
-            '<div class="song-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>'
-            '</a>'
-        )
-    corpo_posts = '\n\n'.join(
-        '<article id="noticia-' + str(i) + '" style="max-width:760px;margin:3.5rem auto 0;padding:2rem;'
-        'background:var(--bg-card);border:1px solid var(--border-color-light);border-radius:4px">'
-        '<div style="font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--brand-accent);margin-bottom:.8rem">'
-        + '/'.join(str(p.get('date', '')).split('-')[::-1]) + '</div>'
-        '<h2 style="font-size:1.3rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem">' + esc(p['title']) + '</h2>'
-        + ('<img src="' + caminho(p['imagem']) + '" alt="" style="width:100%;border-radius:4px;margin-bottom:1.5rem" loading="lazy">' if p.get('imagem') else '')
-        + '<div style="font-size:.95rem;line-height:1.9;color:var(--text-secondary);white-space:pre-line">' + esc(p['corpo']) + '</div>'
-        '</article>'
-        for i, p in enumerate(posts)
-    )
-    blog_html = BLOG_TEMPLATE.replace('BASE', BASE).replace('<!-- POSTS LISTA -->', '\n'.join(itens)).replace('<!-- POSTS CORPO -->', corpo_posts)
-    with open(os.path.join(BASE_DIR, 'blog.html'), 'w', encoding='utf-8') as f:
-        f.write(blog_html)
-    print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
-
 print('✔ ' + str(len(geradas)) + ' páginas de álbum geradas (BASE = ' + (BASE or '(raiz)') + ')')
-for s in geradas:
-    print('   albuns/' + s + '.html')
+print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
+print('✔ audiovisual.html gerada com ' + str(len(clips)) + ' vídeos em ' + str(len(partes_pagina)) + ' grupos')
 print('✔ data/catalogo.json regenerado (base: ' + BASE + ')')
 print('✔ sitemap.xml com ' + str(len(urls)) + ' URLs → ' + DOMINIO)
 if not geradas:
-    print('⚠ NENHUM .md encontrado em content/albuns/ — crie os arquivos primeiro!')
+    print('⚠ NENHUM .md em content/albuns/!')
