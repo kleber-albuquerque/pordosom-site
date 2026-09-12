@@ -336,7 +336,15 @@ def _norm_json(a):
         'youtube': str(a.get('youtube', '') or ''),
     }
 
+posts_js = [{
+    'title': str(p.get('title', '')),
+    'resumo': str(p.get('resumo', '')),
+    'date': str(p.get('date', '')),
+    'imagem': str(p.get('imagem', '') or ''),
+} for p in posts[:3]]   # as 3 ultimas
+
 catalogo_js = {
+    'posts': posts_js,
     'base': BASE,
     'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
     'albuns': [_norm_json(a) for a in albuns]

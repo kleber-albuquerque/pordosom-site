@@ -1,4 +1,18 @@
 {
+  "posts": [
+    {
+      "title": "O Por do Som ganha casa nova",
+      "resumo": "O novo site do selo reúne, pela primeira vez, o catálogo completo, os festivais e toda a produção audiovisual — tudo em um só lugar.",
+      "date": "2026-09-12",
+      "imagem": ""
+    },
+    {
+      "title": "O Por do Som ganha casa nova",
+      "resumo": "O novo site do selo reúne, pela primeira vez, o catálogo completo, os festivais e toda a produção audiovisual — tudo em um só lugar.",
+      "date": "2026-09-12",
+      "imagem": ""
+    }
+  ],
   "base": "/pordosom-site",
   "generos": [
     {
@@ -177,9 +191,7 @@
       "artista": "Marco Vilane e Zeca Baleiro",
       "ano": 2023,
       "capa": "/images/uploads/pelo-caminho-que-eu-trilho.jpg",
-      "generos": [
-        "mpb"
-      ],
+      "generos": [],
       "destaque": true,
       "ordem": "",
       "spotify": "",
