@@ -27,12 +27,11 @@ body{font-family:'Montserrat',system-ui,sans-serif;background:var(--bg-dark);col
 .login-box input:focus{border-color:var(--brand-primary-light)}
 .login-help{margin-top:1rem;font-size:.75rem;color:var(--text-muted);line-height:1.6}
 .login-help a{color:var(--brand-accent);text-decoration:none}
-.login-help a:hover{text-decoration:underline}
-.btn-primary{width:100%;margin-top:1.5rem;background:var(--brand-primary);color:var(--brand-cream,#f5ede0);border:1px solid var(--brand-primary-light);padding:.95rem;border-radius:4px;font-family:inherit;font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.btn-primary{width:100%;margin-top:1.5rem;background:var(--brand-primary);color:#f5ede0;border:1px solid var(--brand-primary-light);padding:.95rem;border-radius:4px;font-family:inherit;font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.3s}
 .btn-primary:hover{background:var(--brand-primary-light)}
 .login-error{margin-top:1rem;padding:.8rem;background:rgba(168,48,48,.15);border:1px solid var(--border);color:#f0b0b0;font-size:.8rem;border-radius:4px;display:none}
 
-/* ===== LAYOUT PRINCIPAL ===== */
+/* ===== LAYOUT ===== */
 .layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
 .sidebar{background:var(--bg-darker);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:.4rem;position:sticky;top:0;height:100vh}
 .sidebar-brand{display:flex;align-items:center;gap:.6rem;padding:.5rem;margin-bottom:1.5rem}
@@ -46,18 +45,17 @@ body{font-family:'Montserrat',system-ui,sans-serif;background:var(--bg-dark);col
 .side-user{font-size:.7rem;color:var(--text-muted)}
 .side-sair{margin-top:.5rem;background:none;border:none;color:#c08080;font-size:.7rem;cursor:pointer;font-family:inherit;padding:0}
 .side-sair:hover{color:var(--brand-primary-light);text-decoration:underline}
-
 .main{padding:2rem;max-width:1100px}
 .page-title{font-size:1.3rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:.4rem}
 .page-sub{font-size:.8rem;color:var(--text-muted);margin-bottom:2rem}
 
-/* ===== CARDS DE RESUMO ===== */
+/* ===== STATS ===== */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2.5rem}
 .stat-card{background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;padding:1.2rem 1.4rem}
 .stat-num{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--brand-primary-light),var(--brand-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
 .stat-label{font-size:.62rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:.3rem}
 
-/* ===== TABELA DE ÁLBUNS ===== */
+/* ===== TABELA ===== */
 .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:1rem;flex-wrap:wrap}
 .btn-novo{background:var(--brand-primary);color:#f5ede0;border:1px solid var(--brand-primary-light);padding:.7rem 1.3rem;border-radius:4px;font-family:inherit;font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:.3s}
 .btn-novo:hover{background:var(--brand-primary-light)}
@@ -80,14 +78,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 .status-ok{background:#5d9871}
 .status-publicado{color:#8dbf9f;font-size:.68rem}
 
-/* ===== ESTADOS ===== */
-.loading{text-align:center;padding:3rem;color:var(--text-muted);font-size:.85rem}
-.vazio{text-align:center;padding:3rem;color:var(--text-muted)}
-.vazio .icone{font-size:2.5rem;display:block;margin-bottom:1rem;opacity:.5}
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg-card);border:1px solid var(--brand-primary-light);color:var(--text-primary);padding:1rem 1.5rem;border-radius:6px;font-size:.82rem;z-index:9999;animation:toastIn .3s ease}
-@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-/* ===== EDITOR DE ALBUM (Parte 2) ===== */
+/* ===== EDITORES ===== */
 .editor-overlay{position:fixed;inset:0;background:rgba(6,3,3,.85);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
 .editor-box{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;max-width:860px;width:100%;padding:2rem;margin-bottom:2rem}
 .editor-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid var(--border-light)}
@@ -101,7 +92,6 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 .capa-editor .capa-hint{font-size:.7rem;color:var(--text-muted);text-align:center;padding:1rem;line-height:1.5}
 .capa-editor:hover{border-color:var(--brand-primary-light)}
 .btn-capa{margin-top:.8rem;width:100%;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-secondary);padding:.6rem;border-radius:4px;font-family:inherit;font-size:.68rem;font-weight:600;letter-spacing:1px;cursor:pointer}
-.btn-capa:hover{border-color:var(--brand-primary-light);color:var(--text-primary)}
 .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
 .f-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
 @media(max-width:700px){.f-grid,.f-grid-3{grid-template-columns:1fr}}
@@ -124,15 +114,21 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 .f-toggle input:checked + .trilha .bolinha{left:22px;background:#f5ede0}
 .editor-rodape{display:flex;justify-content:flex-end;gap:1rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-light)}
 .btn-cancelar{background:none;border:1px solid var(--border);color:var(--text-secondary);padding:.8rem 1.6rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
-.btn-cancelar:hover{border-color:var(--text-muted);color:var(--text-primary)}
 .btn-salvar{background:var(--brand-primary);border:1px solid var(--brand-primary-light);color:#f5ede0;padding:.8rem 1.8rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:.3s}
 .btn-salvar:hover{background:var(--brand-primary-light)}
 .btn-salvar:disabled{opacity:.5;cursor:wait}
 
+/* ===== ESTADOS ===== */
+.loading{text-align:center;padding:3rem;color:var(--text-muted);font-size:.85rem}
+.vazio{text-align:center;padding:3rem;color:var(--text-muted)}
+.vazio .icone{font-size:2.5rem;display:block;margin-bottom:1rem;opacity:.5}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg-card);border:1px solid var(--brand-primary-light);color:var(--text-primary);padding:1rem 1.5rem;border-radius:6px;font-size:.82rem;z-index:9999;animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
 @media(max-width:800px){
   .layout{grid-template-columns:1fr}
   .sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:.4rem}
-  .sidebar-brand{width:100%;}
+  .sidebar-brand{width:100%}
   .side-footer{display:none}
   .main{padding:1.2rem}
 }
@@ -140,44 +136,40 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 </head>
 <body>
 
-<!-- ===== TELA DE LOGIN ===== -->
+<!-- ===== LOGIN ===== -->
 <div class="login-screen" id="login-screen">
   <div class="login-box">
     <div class="login-logo">
-      <img src="/pordosom-profile.jpg" alt="Por do Som">
+      <img src="/pordosom-site/pordosom-profile.jpg" alt="Por do Som">
       <span>PÔR DO SOM</span>
     </div>
     <p class="login-sub">Painel de Edição</p>
-
     <label for="token">Token do GitHub</label>
     <input type="password" id="token" placeholder="ghp_... ou github_pat_..." autocomplete="off">
     <div class="login-error" id="login-error"></div>
-
     <button class="btn-primary" onclick="entrar()">Entrar no Painel</button>
-
     <p class="login-help">
       Como gerar seu token (2 minutos):
       <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a>
-      → "Generate new token" → dê o nome "painel-pordosom" → em Repository access, escolha
-      <strong>"Only select repositories"</strong> e marque o repositório do site → em Permissions,
-      dê permissão de <strong>Contents: Read and write</strong> → Generate → copie o código.
+      → "Generate new token" → nome "painel-pordosom" → Repository access: "Only select repositories",
+      marque o repositório do site → Permissions: Contents → Read and write → Generate → copie.
     </p>
   </div>
 </div>
 
-<!-- ===== PAINEL PRINCIPAL ===== -->
+<!-- ===== PAINEL ===== -->
 <div class="layout hidden" id="painel">
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <img src="/pordosom-profile.jpg" alt="">
+      <img src="/pordosom-site/pordosom-profile.jpg" alt="">
       <span>PÔR DO SOM</span>
     </div>
     <button class="side-item ativo" data-pagina="inicio"><span class="icone">🏠</span> Início</button>
     <button class="side-item" data-pagina="albuns"><span class="icone">💿</span> Álbuns</button>
     <button class="side-item" data-pagina="noticias"><span class="icone">📰</span> Notícias</button>
-    <button class="side-item" data-pagina="projetos" onclick="emBreve('Projetos')"><span class="icone">🎬</span> Projetos</button>
-    <button class="side-item" data-pagina="audiovisual" onclick="emBreve('Audiovisual')"><span class="icone">🎵</span> Audiovisual</button>
-    <button class="side-item" data-pagina="config" onclick="emBreve('Configurações')"><span class="icone">⚙️</span> Configurações</button>
+    <button class="side-item" onclick="emBreve('Projetos')"><span class="icone">🎬</span> Projetos</button>
+    <button class="side-item" onclick="emBreve('Audiovisual')"><span class="icone">🎵</span> Audiovisual</button>
+    <button class="side-item" onclick="emBreve('Configurações')"><span class="icone">⚙️</span> Configurações</button>
     <div class="side-footer">
       <div class="side-user" id="side-user">—</div>
       <button class="side-sair" onclick="sair()">Sair do painel</button>
@@ -185,7 +177,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
   </aside>
 
   <main class="main">
-    <!-- PÁGINA INÍCIO -->
+    <!-- INÍCIO -->
     <div id="pagina-inicio">
       <h1 class="page-title">Início</h1>
       <p class="page-sub">Resumo do seu site — conectado ao repositório</p>
@@ -199,12 +191,45 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         <p style="font-size:.85rem;color:var(--text-secondary);line-height:1.8">
           💡 <strong>Como funciona:</strong> tudo o que você edita aqui é salvo direto no repositório do seu site.
           Após salvar, o site se atualiza sozinho em 1–2 minutos.
-          Na barra lateral, clique em <strong>Álbuns</strong> para começar.
+          Na barra lateral, clique em <strong>Álbuns</strong> ou <strong>Notícias</strong> para começar.
         </p>
       </div>
     </div>
 
-    <!-- PÁGINA NOTÍCIAS -->
+    <!-- ÁLBUNS -->
+    <div id="pagina-albuns" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Álbuns</h1>
+          <p class="page-sub" style="margin-bottom:0">O catálogo completo — clique nas colunas para ordenar</p>
+        </div>
+        <button class="btn-novo" onclick='abrirNovoAlbum()'>＋ Novo Álbum</button>
+      </div>
+      <div class="loading" id="albuns-loading">Carregando álbuns do repositório…</div>
+      <div class="table-wrap hidden" id="albuns-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Capa</th>
+              <th class="ordenavel" onclick="ordenarPor('titulo')">Álbum <span class="seta" id="seta-titulo"></span></th>
+              <th class="ordenavel" onclick="ordenarPor('artista')">Artista</th>
+              <th class="ordenavel" onclick="ordenarPor('generos')">Gêneros</th>
+              <th class="ordenavel" onclick="ordenarPor('ano')">Ano <span class="seta" id="seta-ano"></span></th>
+              <th>Home</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="albuns-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="albuns-vazio">
+        <span class="icone">💿</span>
+        Nenhum álbum cadastrado ainda.
+      </div>
+    </div>
+
+    <!-- NOTÍCIAS -->
     <div id="pagina-noticias" class="hidden">
       <div class="toolbar">
         <div>
@@ -228,139 +253,131 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         <small>Clique em "＋ Nova Notícia" para o primeiro lançamento.</small>
       </div>
     </div>
-
-    <!-- PÁGINA ÁLBUNS -->
-    <div id="pagina-albuns" class="hidden">
-      <div class="toolbar">
-        <div>
-          <h1 class="page-title">Álbuns</h1>
-          <p class="page-sub" style="margin-bottom:0">O catálogo completo — edite, destaque, publique</p>
-        </div>
-        <button class="btn-novo" onclick='abrirNovoAlbum()'>＋ Novo Álbum</button>
-      </div>
-      <div class="loading" id="albuns-loading">Carregando álbuns do repositório…</div>
-      <div class="table-wrap hidden" id="albuns-table-wrap">
-        <table>
-          <thead>
-            <tr><th>Capa</th><th class="ordenavel" onclick="ordenarPor('titulo')">Álbum <span class="seta" id="seta-titulo"></span></th><th class="ordenavel" onclick="ordenarPor('artista')">Artista</th><th class="ordenavel" onclick="ordenarPor('generos')">Gêneros</th><th class="ordenavel" onclick="ordenarPor('ano')">Ano <span class="seta" id="seta-ano"></span></th><th>Home</th><th>Status</th><th></th></tr>
-          </thead>
-          <tbody id="albuns-tbody"></tbody>
-        </table>
-      </div>
-      <div class="vazio hidden" id="albuns-vazio">
-        <span class="icone">💿</span>
-        Nenhum álbum cadastrado ainda.
-      </div>
-    </div>
   </main>
-
-    <!-- ===== EDITOR DE NOTÍCIA (overlay) ===== -->
-  <div class="editor-overlay hidden" id="editor-noticia-overlay">
-    <div class="editor-box">
-      <div class="editor-header">
-        <h2 id="editor-noticia-titulo">Nova Notícia</h2>
-        <button class="editor-fechar" onclick="fecharEditorNoticia()">✕</button>
-      </div>
-      <div class="editor-grid">
-        <div>
-          <div class="capa-editor" id="noticia-img-preview" onclick="subirImagemNoticia()">
-            <span class="capa-hint">🖼️<br>Clique para escolher<br>imagem de destaque<br>(opcional)</span>
-          </div>
-          <input type="file" id="noticia-img-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="imagemNoticiaEscolhida(event)">
-          <button class="btn-capa" onclick="subirImagemNoticia()">📷 Imagem de destaque</button>
-          <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
-            Aparece na notícia publicada.<br>Até 500KB — comprima em tinypng.com.
-          </p>
+</div>
+<!-- ===== EDITOR DE ÁLBUM ===== -->
+<div class="editor-overlay hidden" id="editor-overlay">
+  <div class="editor-box">
+    <div class="editor-header">
+      <h2 id="editor-titulo">Editar Álbum</h2>
+      <button class="editor-fechar" onclick="fecharEditor()">✕</button>
+    </div>
+    <div class="editor-grid">
+      <div>
+        <div class="capa-editor" id="capa-preview" onclick="subirCapa()">
+          <span class="capa-hint">💿<br>Clique para escolher<br>a capa do álbum</span>
         </div>
-        <div>
-          <div class="f-grid">
-            <div class="f-field full"><label>Título da notícia</label><input id="fn-titulo" type="text"></div>
-            <div class="f-field"><label>Data de publicação</label><input id="fn-data" type="date"></div>
-            <div class="f-field">
-              <label>Rascunho</label>
-              <label class="f-toggle">
-                <input type="checkbox" id="fn-rascunho">
-                <span class="trilha"><span class="bolinha"></span></span>
-                <span style="font-size:.75rem;color:var(--text-secondary)">Não publicar ainda</span>
-              </label>
-            </div>
-            <div class="f-field full"><label>Resumo (aparece na lista)</label><textarea id="fn-resumo" style="min-height:70px"></textarea></div>
-            <div class="f-field full"><label>Conteúdo da notícia</label><textarea id="fn-corpo" style="min-height:220px"></textarea></div>
-          </div>
-        </div>
+        <input type="file" id="capa-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="capaEscolhida(event)">
+        <button class="btn-capa" onclick="subirCapa()">📷 Subir nova capa</button>
+        <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
+          Dica: imagem quadrada, até 500KB.<br>Comprimida em tinypng.com fica perfeita.
+        </p>
       </div>
-      <div class="editor-rodape">
-        <button class="btn-cancelar" onclick="fecharEditorNoticia()">Cancelar</button>
-        <button class="btn-salvar" id="btn-salvar-noticia" onclick="salvarNoticia()">💾 Salvar Notícia</button>
+      <div>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título do Álbum</label><input id="f-titulo" type="text"></div>
+          <div class="f-field"><label>Artista</label><input id="f-artista" type="text"></div>
+          <div class="f-field"><label>Ano</label><input id="f-ano" type="number" min="1990" max="2030"></div>
+          <div class="f-field full">
+            <label>Gêneros</label>
+            <div class="f-checks" id="f-generos"></div>
+          </div>
+          <div class="f-field"><label>Nº de faixas</label><input id="f-faixas" type="number" min="1" max="100"></div>
+          <div class="f-field">
+            <label>Destaque na home</label>
+            <label class="f-toggle">
+              <input type="checkbox" id="f-destaque">
+              <span class="trilha"><span class="bolinha"></span></span>
+              <span style="font-size:.75rem;color:var(--text-secondary)">Mostrar na vitrine</span>
+            </label>
+          </div>
+          <div class="f-field full"><label>Link do Spotify</label><input id="f-spotify" type="url" placeholder="https://open.spotify.com/album/..."></div>
+          <div class="f-field full"><label>Link do YouTube</label><input id="f-youtube" type="url" placeholder="https://youtube.com/watch?v=..."></div>
+          <div class="f-grid-3" style="grid-column:1/-1">
+            <div class="f-field"><label>Apple Music</label><input id="f-apple" type="url"></div>
+            <div class="f-field"><label>Deezer</label><input id="f-deezer" type="url"></div>
+          </div>
+          <div class="f-field full"><label>Texto do álbum (português)</label><textarea id="f-texto-pt"></textarea></div>
+          <div class="f-field full"><label>Texto em inglês (para busca internacional)</label><textarea id="f-texto-en" style="min-height:90px"></textarea></div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <!-- ===== EDITOR DE ALBUM (overlay) ===== -->
-  <div class="editor-overlay hidden" id="editor-overlay">
-    <div class="editor-box">
-      <div class="editor-header">
-        <h2 id="editor-titulo">Editar Álbum</h2>
-        <button class="editor-fechar" onclick="fecharEditor()">✕</button>
-      </div>
-      <div class="editor-grid">
-        <div>
-          <div class="capa-editor" id="capa-preview" onclick="subirCapa()">
-            <span class="capa-hint">Clique para escolher<br>a capa do álbum</span>
-          </div>
-          <input type="file" id="capa-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="capaEscolhida(event)">
-          <button class="btn-capa" onclick="subirCapa()">📷 Subir nova capa</button>
-          <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
-            Dica: imagem quadrada, ate 500KB.<br>Comprimida em tinypng.com fica perfeita.
-          </p>
-        </div>
-        <div>
-          <div class="f-grid">
-            <div class="f-field full"><label>Titulo do Album</label><input id="f-titulo" type="text"></div>
-            <div class="f-field"><label>Artista</label><input id="f-artista" type="text"></div>
-            <div class="f-field"><label>Ano</label><input id="f-ano" type="number" min="1990" max="2030"></div>
-            <div class="f-field full">
-              <label>Generos</label>
-              <div class="f-checks" id="f-generos"></div>
-            </div>
-            <div class="f-field"><label>N de faixas</label><input id="f-faixas" type="number" min="1" max="100"></div>
-            <div class="f-field">
-              <label>Destaque na home</label>
-              <label class="f-toggle">
-                <input type="checkbox" id="f-destaque">
-                <span class="trilha"><span class="bolinha"></span></span>
-                <span style="font-size:.75rem;color:var(--text-secondary)">Mostrar na vitrine</span>
-              </label>
-            </div>
-            <div class="f-field full"><label>Link do Spotify</label><input id="f-spotify" type="url" placeholder="https://open.spotify.com/album/..."></div>
-            <div class="f-field full"><label>Link do YouTube</label><input id="f-youtube" type="url" placeholder="https://youtube.com/watch?v=..."></div>
-            <div class="f-grid-3" style="grid-column:1/-1">
-              <div class="f-field"><label>Apple Music</label><input id="f-apple" type="url"></div>
-              <div class="f-field"><label>Deezer</label><input id="f-deezer" type="url"></div>
-            </div>
-            <div class="f-field full"><label>Texto do album (portugues)</label><textarea id="f-texto-pt"></textarea></div>
-            <div class="f-field full"><label>Texto em ingles (para busca internacional)</label><textarea id="f-texto-en" style="min-height:90px"></textarea></div>
-          </div>
-        </div>
-      </div>
-      <div class="editor-rodape">
-        <button class="btn-cancelar" onclick="fecharEditor()">Cancelar</button>
-        <button class="btn-salvar" id="btn-salvar" onclick="salvarAlbum()">💾 Salvar e Publicar</button>
-      </div>
+    <div class="editor-rodape">
+      <button class="btn-cancelar" onclick="fecharEditor()">Cancelar</button>
+      <button class="btn-salvar" id="btn-salvar" onclick="salvarAlbum()">💾 Salvar e Publicar</button>
     </div>
   </div>
 </div>
 
+<!-- ===== EDITOR DE NOTÍCIA ===== -->
+<div class="editor-overlay hidden" id="editor-noticia-overlay">
+  <div class="editor-box">
+    <div class="editor-header">
+      <h2 id="editor-noticia-titulo">Nova Notícia</h2>
+      <button class="editor-fechar" onclick="fecharEditorNoticia()">✕</button>
+    </div>
+    <div class="editor-grid">
+      <div>
+        <div class="capa-editor" id="noticia-img-preview" onclick="subirImagemNoticia()">
+          <span class="capa-hint">🖼️<br>Clique para escolher<br>imagem de destaque<br>(opcional)</span>
+        </div>
+        <input type="file" id="noticia-img-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="imagemNoticiaEscolhida(event)">
+        <button class="btn-capa" onclick="subirImagemNoticia()">📷 Imagem de destaque</button>
+        <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
+          Aparece na notícia publicada.<br>Até 500KB — comprima em tinypng.com.
+        </p>
+      </div>
+      <div>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título da notícia</label><input id="fn-titulo" type="text"></div>
+          <div class="f-field"><label>Data de publicação</label><input id="fn-data" type="date"></div>
+          <div class="f-field">
+            <label>Rascunho</label>
+            <label class="f-toggle">
+              <input type="checkbox" id="fn-rascunho">
+              <span class="trilha"><span class="bolinha"></span></span>
+              <span style="font-size:.75rem;color:var(--text-secondary)">Não publicar ainda</span>
+            </label>
+          </div>
+          <div class="f-field full"><label>Resumo (aparece na lista)</label><textarea id="fn-resumo" style="min-height:70px"></textarea></div>
+          <div class="f-field full"><label>Conteúdo da notícia</label><textarea id="fn-corpo" style="min-height:220px"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="editor-rodape">
+      <button class="btn-cancelar" onclick="fecharEditorNoticia()">Cancelar</button>
+      <button class="btn-salvar" id="btn-salvar-noticia" onclick="salvarNoticia()">💾 Salvar Notícia</button>
+    </div>
+  </div>
+</div>
 <script>
 // ==========================================================
-// PAINEL PDS — Parte 1: login + listagem real dos álbuns
+// PAINEL PDS — consolidado v2
+// Login + Álbuns (listar/editar/criar/excluir/ordenar) + Notícias
 // ==========================================================
 const REPO = 'kleber-albuquerque/pordosom-site';
-const BASE = '/pordosom-site';   // caminho do site no Pages — '' no domínio próprio
+const BASE = '/pordosom-site';   // '' no dia do domínio próprio
 const API = 'https://api.github.com';
 
 let TOKEN = localStorage.getItem('pds_token') || '';
 let ALBUNS = [];
+let NOTICIAS = [];
+let albumAtual = null;
+let capaNova = null;
+let noticiaAtual = null;
+let imagemNoticiaNova = null;
+let ordemCol = 'ano';
+let ordemDir = 'desc';
+
+const GENEROS_PAINEL = [
+  {id:'samba-de-raiz', nome:'Samba de Raiz'},
+  {id:'instrumental', nome:'Instrumental'},
+  {id:'mpb', nome:'MPB/Nova MPB'},
+  {id:'brasilidades', nome:'Brasilidades'},
+  {id:'cultura-popular', nome:'Cultura Popular'},
+  {id:'afro-brasileira', nome:'Afro-brasileira'},
+  {id:'infantil', nome:'Infantil'}
+];
 
 // ---------- API GitHub ----------
 async function gh(caminho, opts = {}) {
@@ -387,7 +404,7 @@ async function entrar() {
   if (!t) { err.textContent = 'Cole o token para entrar.'; err.style.display = 'block'; return; }
   TOKEN = t;
   try {
-    const user = await gh('/user');           // valida o token
+    const user = await gh('/user');
     localStorage.setItem('pds_token', TOKEN);
     document.getElementById('side-user').textContent = 'Conectado: ' + (user.login || user.name);
     abrirPainel();
@@ -419,13 +436,12 @@ document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
 function emBreve(nome) {
   toast(nome + ': disponível na próxima parte do painel 😉');
 }
-
 function abrirPainel() {
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('painel').classList.remove('hidden');
 }
 
-// ---------- Parser do frontmatter (mesma lógica do render.py) ----------
+// ---------- Parser do frontmatter ----------
 function parseMd(texto) {
   const m = texto.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
   if (!m) return { meta: {}, corpo: texto };
@@ -448,62 +464,99 @@ function parseMd(texto) {
   return { meta, corpo: m[2].trim() };
 }
 
-// ---------- Carregar álbuns do repo ----------
+// ---------- Carregar álbuns ----------
 async function carregarAlbuns() {
   const loading = document.getElementById('albuns-loading');
   const wrap = document.getElementById('albuns-table-wrap');
   const vazio = document.getElementById('albuns-vazio');
   try {
-    const lista = await gh(`/repos/${REPO}/contents/content/albuns`);
+    const lista = await gh('/repos/' + REPO + '/contents/content/albuns');
     const mds = lista.filter(f => f.name.endsWith('.md'));
 
     ALBUNS = [];
     for (const f of mds) {
-      const blob = await gh(`/repos/${REPO}/contents/content/albuns/${f.name}`);
-      const texto = atob(blob.content.replace(/\n/g, ''));
-      // UTF-8 correto (o atob trata como latin1):
-      const textoUtf8 = decodeURIComponent(escape(texto));
-      const { meta, corpo } = parseMd(textoUtf8);
+      const blob = await gh('/repos/' + REPO + '/contents/content/albuns/' + f.name);
+      const texto = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ''))));
+      const { meta, corpo } = parseMd(texto);
       meta.corpo = corpo;
+      if (typeof meta.generos === 'string') {
+        meta.generos = meta.generos.replace(/[\[\]]/g, '').split(',').map(s => s.trim()).filter(Boolean);
+      }
       meta._arquivo = f.name;
       meta._sha = blob.sha;
       ALBUNS.push(meta);
     }
     ALBUNS.sort((a, b) => (b.ano || 0) - (a.ano || 0));
 
-    // Stats do início
     document.getElementById('stat-albuns').textContent = ALBUNS.length;
     document.getElementById('stat-destaques').textContent = ALBUNS.filter(a => a.destaque).length;
     const generos = new Set(); ALBUNS.forEach(a => (a.generos || []).forEach(g => generos.add(g)));
     document.getElementById('stat-generos').textContent = generos.size;
 
-    // Tabela (render via ordenador)
     renderTabelaAlbuns();
-
     loading.classList.add('hidden');
     if (ALBUNS.length) wrap.classList.remove('hidden'); else vazio.classList.remove('hidden');
-    toast('✓ ' + ALBUNS.length + ' álbuns carregados do repositório');
   } catch (e) {
     loading.textContent = '❌ ' + e.message;
     loading.style.color = '#f0b0b0';
   }
 }
 
-// ==========================================================
-// PARTE 2 - EDITOR DE ALBUM
-// ==========================================================
-const GENEROS_PAINEL = [
-  {id:'samba-de-raiz', nome:'Samba de Raiz'},
-  {id:'instrumental', nome:'Instrumental'},
-  {id:'mpb', nome:'MPB/Nova MPB'},
-  {id:'brasilidades', nome:'Brasilidades'},
-  {id:'cultura-popular', nome:'Cultura Popular'},
-  {id:'afro-brasileira', nome:'Afro-brasileira'},
-  {id:'infantil', nome:'Infantil'}
-];
-let albumAtual = null;
-let capaNova = null;
+// ---------- Ordenação ----------
+function ordenarPor(col) {
+  if (ordemCol === col) {
+    ordemDir = ordemDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    ordemCol = col;
+    ordemDir = col === 'ano' ? 'desc' : 'asc';
+  }
+  renderTabelaAlbuns();
+}
 
+function renderTabelaAlbuns() {
+  const tbody = document.getElementById('albuns-tbody');
+  if (!tbody || !ALBUNS.length) return;
+
+  const lista = [...ALBUNS];
+  lista.sort((x, y) => {
+    let a, b;
+    if (ordemCol === 'generos') {
+      a = (x.generos || []).join(', ');
+      b = (y.generos || []).join(', ');
+    } else if (ordemCol === 'ano') {
+      a = Number(x.ano) || 0;
+      b = Number(y.ano) || 0;
+    } else {
+      a = String(x[ordemCol] || '').toLowerCase();
+      b = String(y[ordemCol] || '').toLowerCase();
+    }
+    const cmp = a < b ? -1 : a > b ? 1 : 0;
+    return ordemDir === 'asc' ? cmp : -cmp;
+  });
+
+  document.querySelectorAll('th.ordenavel .seta').forEach(s => s.textContent = '');
+  const seta = document.getElementById('seta-' + ordemCol);
+  if (seta) seta.textContent = ordemDir === 'asc' ? '▲' : '▼';
+
+  tbody.innerHTML = lista.map(a => `
+    <tr>
+      <td>${a.capa
+          ? `<img class="capa-mini" src="${a.capa.startsWith('/') ? BASE + a.capa : a.capa}" alt="" loading="lazy"
+                 onerror="this.outerHTML='<div class=\\'sem-capa\\'>💿</div>'">`
+          : `<div class="sem-capa">💿</div>`}</td>
+      <td>
+        <div class="titulo-cell">${a.titulo || a._arquivo}</div>
+        <div class="artista-cell">${a.artista || '—'}</div>
+      </td>
+      <td>${(a.generos || []).map(g => `<span class="tag-genero">${g}</span>`).join('')}</td>
+      <td>${a.ano || '—'}</td>
+      <td>${a.destaque ? '<span class="destaque-star">★</span>' : '—'}</td>
+      <td><span class="status-publicado"><span class="status-dot status-ok"></span>Publicado</span></td>
+      <td><button class="side-item" style="padding:.4rem .7rem" title="Editar álbum" onclick='abrirEditor(ALBUNS[${ALBUNS.indexOf(a)}])'>✏️</button> <button class="side-item" style="padding:.4rem .7rem" title="Excluir álbum" onclick='excluirAlbum(ALBUNS[${ALBUNS.indexOf(a)}])'>🗑️</button></td>
+    </tr>`).join('');
+}
+
+// ---------- Editor de álbum ----------
 function abrirEditor(album) {
   albumAtual = album;
   capaNova = null;
@@ -528,11 +581,9 @@ function abrirEditor(album) {
     </label>`).join('');
 
   const preview = document.getElementById('capa-preview');
-    if (album.capa && album.capa.includes('uploads')) {
-    const srcCapa = album.capa.startsWith('/') ? BASE + album.capa : album.capa;
-    preview.innerHTML = `<img src="${srcCapa}" alt="">`;
-  } else if (album.capa) {
-    preview.innerHTML = `<img src="${album.capa}" alt="" onerror="this.outerHTML='<span class=\'capa-hint\'>💿<br>Clique para escolher<br>a capa do álbum</span>'">`;
+  if (album.capa) {
+    const src = album.capa.startsWith('/') ? BASE + album.capa : album.capa;
+    preview.innerHTML = `<img src="${src}" alt="" onerror="this.outerHTML='<span class=\\'capa-hint\\'>💿<br>Clique para escolher<br>a capa do álbum</span>'">`;
   } else {
     preview.innerHTML = '<span class="capa-hint">💿<br>Clique para escolher<br>a capa do álbum</span>';
   }
@@ -547,6 +598,7 @@ function fecharEditor() {
   albumAtual = null; capaNova = null;
 }
 
+// ---------- Capa do álbum ----------
 function subirCapa() { document.getElementById('capa-input').click(); }
 function capaEscolhida(e) {
   const arquivo = e.target.files[0];
@@ -565,27 +617,47 @@ function capaEscolhida(e) {
   leitor.readAsDataURL(arquivo);
 }
 
+// ---------- Montar .md do álbum ----------
 function montarMd() {
   const val = id => (document.getElementById(id).value || '').trim();
   const generos = [...document.querySelectorAll('#f-generos input:checked')].map(c => c.value);
   const gLinhas = generos.length
     ? 'generos:\n' + generos.map(g => `  - ${g}`).join('\n')
-    : 'generos: []';
+    : 'generos:';
   const q = s => `"${(s || '').replace(/"/g, '\\"')}"`;
 
-  return `---\ntitulo: ${q(val('f-titulo'))}\nartista: ${q(val('f-artista'))}\nano: ${val('f-ano') || '\"\"'}\ncapa: ${q(albumAtual.capa || '')}\n${gLinhas}\ndestaque: ${document.getElementById('f-destaque').checked}\nfaixas: ${val('f-faixas') || '1'}\nspotify: ${q(val('f-spotify'))}\nyoutube: ${q(val('f-youtube'))}\napple: ${q(val('f-apple'))}\ndeezer: ${q(val('f-deezer'))}\ntexto_en: ${q(val('f-texto-en'))}\n---\n\n${val('f-texto-pt')}\n`;
+  return `---
+titulo: ${q(val('f-titulo'))}
+artista: ${q(val('f-artista'))}
+ano: ${val('f-ano') || '""'}
+capa: ${q(albumAtual.capa || '')}
+ ${gLinhas}
+destaque: ${document.getElementById('f-destaque').checked}
+faixas: ${val('f-faixas') || '1'}
+spotify: ${q(val('f-spotify'))}
+youtube: ${q(val('f-youtube'))}
+apple: ${q(val('f-apple'))}
+deezer: ${q(val('f-deezer'))}
+texto_en: ${q(val('f-texto-en'))}
+---
+
+ ${val('f-texto-pt')}
+`;
 }
 
+// ---------- Salvar álbum ----------
 async function salvarAlbum() {
   if (!albumAtual) return;
   const btn = document.getElementById('btn-salvar');
   if (!document.getElementById('f-titulo').value.trim()) {
-    toast('O título é obrigatório'); return;
+    toast('⚠️ O título é obrigatório'); return;
   }
   btn.disabled = true; btn.textContent = 'Salvando…';
   try {
     if (capaNova) {
-      const baseNome = albumAtual._arquivo ? albumAtual._arquivo.replace('.md', '') : slugify(document.getElementById('f-titulo').value);
+      const baseNome = albumAtual._arquivo
+        ? albumAtual._arquivo.replace('.md', '')
+        : slugify(document.getElementById('f-titulo').value);
       const nomeImg = 'images/uploads/' + baseNome + '.jpg';
       const caminhoImg = '/repos/' + REPO + '/contents/' + nomeImg;
       let shaImg = null;
@@ -620,24 +692,56 @@ async function salvarAlbum() {
       body: JSON.stringify(bodySalvar)
     });
 
-    toast('Álbum salvo! O site atualiza em ~2 min (Ctrl+Shift+R se não mudar na hora).');
+    toast('✓ Álbum salvo! O site atualiza em ~2 min (Ctrl+Shift+R se não mudar na hora).');
     fecharEditor();
     await carregarAlbuns();
-    carregarNoticias();
   } catch (e) {
-    toast('Erro ao salvar: ' + e.message);
+    toast('❌ Erro ao salvar: ' + e.message);
   } finally {
     btn.disabled = false; btn.textContent = '💾 Salvar e Publicar';
   }
 }
 
-// ==========================================================
-// PARTE 4 - NOTICIAS / BLOG
-// ==========================================================
-let NOTICIAS = [];
-let noticiaAtual = null;
-let imagemNoticiaNova = null;
+// ---------- Criar e excluir álbum ----------
+function slugify(texto) {
+  return (texto || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/[\s-]+/g, '-');
+}
 
+function abrirNovoAlbum() {
+  albumAtual = { _arquivo: '', _sha: null, titulo: '', artista: '', ano: '',
+                 generos: [], destaque: false, faixas: '', spotify: '',
+                 youtube: '', apple: '', deezer: '', capa: '', texto_en: '',
+                 corpo: '' };
+  abrirEditor(albumAtual);
+  document.getElementById('editor-titulo').textContent = 'Novo Álbum';
+}
+
+async function excluirAlbum(album) {
+  if (!confirm('Excluir o álbum "' + (album.titulo || album._arquivo) + '"?\n\nIsso apaga a página do site e o arquivo do catálogo.')) return;
+  try {
+    await gh('/repos/' + REPO + '/contents/content/albuns/' + album._arquivo, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message: 'Exclui álbum: ' + album.titulo,
+        sha: album._sha
+      })
+    });
+    toast('✓ Álbum excluído. O site atualiza em ~2 minutos.');
+    await carregarAlbuns();
+  } catch (e) {
+    toast('❌ Erro ao excluir: ' + e.message);
+  }
+}
+
+// ==========================================================
+// NOTÍCIAS
+// ==========================================================
 async function carregarNoticias() {
   const loading = document.getElementById('noticias-loading');
   const wrap = document.getElementById('noticias-table-wrap');
@@ -654,10 +758,9 @@ async function carregarNoticias() {
       meta.corpo = corpo;
       meta._arquivo = f.name;
       meta._sha = blob.sha;
-      if (typeof meta.generos === 'string') meta.generos = [];
       NOTICIAS.push(meta);
     }
-    NOTICIAS.sort((a, b) => String(b.date || b._arquivo).localeCompare(String(a.date || a._arquivo)));
+    NOTICIAS.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
 
     const st = document.getElementById('stat-noticias');
     if (st) st.textContent = NOTICIAS.filter(x => !x.rascunho).length;
@@ -665,29 +768,21 @@ async function carregarNoticias() {
     const tbody = document.getElementById('noticias-tbody');
     tbody.innerHTML = NOTICIAS.map(x => {
       const data = (x.date || '').split('-').reverse().join('/');
-      return '<tr>'
-        + '<td style="white-space:nowrap">' + data + '</td>'
+      return '<tr><td style="white-space:nowrap">' + data + '</td>'
         + '<td><div class="titulo-cell">' + (x.title || x._arquivo) + '</div>'
         + (x.rascunho ? '<span class="tag-genero" style="color:var(--brand-accent)">rascunho</span>' : '') + '</td>'
         + '<td style="color:var(--text-muted);font-size:.75rem;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (x.resumo || '—') + '</td>'
         + '<td><button class="side-item" style="padding:.4rem .7rem" title="Editar" onclick="abrirEditorNoticia(NOTICIAS[' + NOTICIAS.indexOf(x) + '])">✏️</button>'
-        + ' <button class="side-item" style="padding:.4rem .7rem" title="Excluir" onclick="excluirNoticia(NOTICIAS[' + NOTICIAS.indexOf(x) + '])">🗑️</button></td>'
-        + '</tr>';
+        + ' <button class="side-item" style="padding:.4rem .7rem" title="Excluir" onclick="excluirNoticia(NOTICIAS[' + NOTICIAS.indexOf(x) + '])">🗑️</button></td></tr>';
     }).join('');
 
     loading.classList.add('hidden');
     if (NOTICIAS.length) wrap.classList.remove('hidden'); else vazio.classList.remove('hidden');
   } catch (e) {
-    // pasta inexistente = nenhuma notícia ainda (normal no começo)
-    if (String(e.message).includes('404')) {
-      loading.classList.add('hidden');
-      vazio.classList.remove('hidden');
-      const st = document.getElementById('stat-noticias');
-      if (st) st.textContent = '0';
-    } else {
-      loading.textContent = 'Erro: ' + e.message;
-      loading.style.color = '#f0b0b0';
-    }
+    loading.classList.add('hidden');
+    vazio.classList.remove('hidden');
+    const st = document.getElementById('stat-noticias');
+    if (st) st.textContent = '0';
   }
 }
 
@@ -717,8 +812,9 @@ function preencherEditorNoticia() {
   document.getElementById('fn-corpo').value = noticiaAtual.corpo || '';
   document.getElementById('fn-rascunho').checked = !!noticiaAtual.rascunho;
   const prev = document.getElementById('noticia-img-preview');
-  if (noticiaAtual.imagem && noticiaAtual.imagem.startsWith('/images')) {
-    prev.innerHTML = '<img src="' + noticiaAtual.imagem + '" alt="">';
+  if (noticiaAtual.imagem) {
+    const src = noticiaAtual.imagem.startsWith('/') ? BASE + noticiaAtual.imagem : noticiaAtual.imagem;
+    prev.innerHTML = '<img src="' + src + '" alt="">';
   } else {
     prev.innerHTML = '<span class="capa-hint">🖼️<br>Clique para escolher<br>imagem de destaque<br>(opcional)</span>';
   }
@@ -735,14 +831,14 @@ function imagemNoticiaEscolhida(e) {
   const arquivo = e.target.files[0];
   if (!arquivo) return;
   if (arquivo.size > 500 * 1024) {
-    toast('Imagem grande (' + Math.round(arquivo.size/1024) + 'KB). Comprima em tinypng.com.');
+    toast('⚠️ Imagem grande (' + Math.round(arquivo.size/1024) + 'KB). Comprima em tinypng.com.');
     e.target.value = ''; return;
   }
   const leitor = new FileReader();
   leitor.onload = ev => {
     imagemNoticiaNova = ev.target.result.split(',')[1];
     document.getElementById('noticia-img-preview').innerHTML = '<img src="' + ev.target.result + '" alt="">';
-    toast('Imagem pronta — enviada ao salvar');
+    toast('✓ Imagem pronta — enviada ao salvar');
   };
   leitor.readAsDataURL(arquivo);
 }
@@ -764,14 +860,12 @@ async function salvarNoticia() {
   if (!noticiaAtual) return;
   const btn = document.getElementById('btn-salvar-noticia');
   if (!document.getElementById('fn-titulo').value.trim()) {
-    toast('O título é obrigatório'); return;
+    toast('⚠️ O título é obrigatório'); return;
   }
   btn.disabled = true; btn.textContent = 'Salvando…';
   try {
     if (imagemNoticiaNova) {
-      const baseNome = noticiaAtual._arquivo
-        ? noticiaAtual._arquivo.replace('.md', '')
-        : new Date().toISOString().slice(0,10) + '-' + slugify(document.getElementById('fn-titulo').value);
+      const baseNome = new Date().toISOString().slice(0,10) + '-' + slugify(document.getElementById('fn-titulo').value);
       const nomeImg = 'images/uploads/' + baseNome + '.jpg';
       const caminhoImg = '/repos/' + REPO + '/contents/' + nomeImg;
       let shaImg = null;
@@ -780,37 +874,33 @@ async function salvarNoticia() {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          message: 'Imagem da notícia: ' + document.getElementById('fn-titulo').value,
+          message: 'Imagem da notícia',
           content: imagemNoticiaNova,
           ...(shaImg ? {sha: shaImg} : {})
         })
       });
       noticiaAtual.imagem = '/' + nomeImg;
     }
-
     const conteudo = btoa(unescape(encodeURIComponent(montarMdNoticia())));
     const ehNovo = !noticiaAtual._sha;
     const nomeArquivo = ehNovo
       ? new Date().toISOString().slice(0,10) + '-' + slugify(document.getElementById('fn-titulo').value) + '.md'
       : noticiaAtual._arquivo;
-
     const bodySalvar = {
       message: (ehNovo ? 'Nova notícia: ' : 'Edita notícia: ') + document.getElementById('fn-titulo').value,
       content: conteudo
     };
     if (!ehNovo) bodySalvar.sha = noticiaAtual._sha;
-
     await gh('/repos/' + REPO + '/contents/content/posts/' + nomeArquivo, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(bodySalvar)
     });
-
-    toast('Notícia salva! O blog atualiza em ~2 min.');
+    toast('✓ Notícia salva! O blog atualiza em ~2 min.');
     fecharEditorNoticia();
     await carregarNoticias();
   } catch (e) {
-    toast('Erro ao salvar: ' + e.message);
+    toast('❌ Erro ao salvar: ' + e.message);
   } finally {
     btn.disabled = false; btn.textContent = '💾 Salvar Notícia';
   }
@@ -824,51 +914,8 @@ async function excluirNoticia(x) {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ message: 'Exclui notícia: ' + x.title, sha: x._sha })
     });
-    toast('Notícia excluída.');
+    toast('✓ Notícia excluída.');
     await carregarNoticias();
-  } catch (e) {
-    toast('Erro ao excluir: ' + e.message);
-  }
-}
-
-// ==========================================================
-// PARTE 3 - CRIAR E EXCLUIR ALBUNS
-// ==========================================================
-function slugify(texto) {
-  return (texto || '')
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')   // remove acentos
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')                        // remove pontuacao
-    .trim()
-    .replace(/[\s-]+/g, '-');                             // espacos -> hifen
-}
-
-function abrirNovoAlbum() {
-  // abre o editor em MODO CRIACAO: albumAtual com _arquivo vazio
-  albumAtual = { _arquivo: '', _sha: null, titulo: '', artista: '', ano: '',
-                 generos: [], destaque: false, faixas: '', spotify: '',
-                 youtube: '', apple: '', deezer: '', capa: '', texto_en: '',
-                 corpo: '' };
-  // reaproveita o abrirEditor (preenche tudo vazio)
-  abrirEditor(albumAtual);
-  document.getElementById('editor-titulo').textContent = 'Novo Álbum';
-}
-
-async function excluirAlbum(album) {
-  if (!confirm('Excluir o álbum "' + (album.titulo || album._arquivo) + '"?\n\nIsso apaga a página do site e o arquivo do catálogo. Não dá para desfazer (a menos que a gente recupere no GitHub).'))
-    return;
-  try {
-    await gh(`/repos/${REPO}/contents/content/albuns/${album._arquivo}`, {
-      method: 'DELETE',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        message: 'Exclui álbum: ' + album.titulo,
-        sha: album._sha
-      })
-    });
-    toast('✓ Álbum excluído. O site atualiza em ~2 minutos.');
-    await carregarAlbuns();
-    carregarNoticias();
   } catch (e) {
     toast('❌ Erro ao excluir: ' + e.message);
   }
@@ -883,7 +930,7 @@ function toast(msg) {
   setTimeout(() => t.remove(), 3500);
 }
 
-// ---------- Auto-login se já tem token ----------
+// ---------- Init ----------
 (async function init() {
   if (TOKEN) {
     try {
