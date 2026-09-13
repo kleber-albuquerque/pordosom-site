@@ -210,7 +210,6 @@ NAV_HTML = (
     '        <a href="' + BASE + '/blog.html" class="nav-link">Notícias</a>\n'
     '        <a href="' + BASE + '/manifesto.html" class="nav-link">Manifesto</a>\n'
     '        <a href="' + BASE + '/quem-somos.html" class="nav-link">Quem Somos</a>\n'
-    '        <a href="' + BASE + '/contato.html" class="nav-link nav-cta">Fale com o Selo</a>\n'
 )
 
 FOOTER_HTML = (
@@ -482,8 +481,8 @@ playlists_html = (
 '            <h2 class="section-title">Curadoria do <span class="gradient">selo</span></h2>\n'
 '        </div>\n'
 '        <div class="teaser-playlists">\n'
-'            <iframe src="https://open.spotify.com/embed/playlist/2lgoPMSE9e7lxEumGbBaGn" height="380" loading="lazy" title="Samba Raiz e Partido Alto"></iframe>\n'
-'            <iframe src="https://open.spotify.com/embed/playlist/2cyXUj8Qhe3nZ0rbng87nR" height="380" loading="lazy" title="Tambores do Brasil"></iframe>\n'
+'            <iframe src="https://open.spotify.com/embed/playlist/' + str(SITE_CFG.get('playlist1_id','2lgoPMSE9e7lxEumGbBaGn')) + '" height="380" loading="lazy" title="Samba Raiz e Partido Alto"></iframe>\n'
+'            <iframe src="https://open.spotify.com/embed/playlist/' + str(SITE_CFG.get('playlist2_id','2cyXUj8Qhe3nZ0rbng87nR')) + '" height="380" loading="lazy" title="Tambores do Brasil"></iframe>\n'
 '        </div>\n'
 '    </div>\n'
 '</section>\n')
@@ -822,6 +821,36 @@ def _troca_desc(arquivo, inicio_antigo, chave):
 
 for arq, ini, chave in _MAPA_DESC:
     _troca_desc(arq, ini, chave)
+
+# ---------- Textos dos teasers da home (do config) ----------
+_ipath = os.path.join(BASE_DIR, 'index.html')
+if os.path.exists(_ipath):
+    with open(_ipath, encoding='utf-8') as f:
+        _ih = f.read()
+    _trocas_home = [
+        ('Lançamentos & <span class="gradient">clássicos do selo</span>', 'idx_vitrine_titulo'),
+        ('Uma seleção do catálogo — 31 obras de samba de raiz a afro-brasileira.', 'idx_vitrine_descricao'),
+        ('Onde a tradição <span class="gradient">encontra palco</span>', 'idx_projetos_titulo'),
+        ('Séries audiovisuais e festivais que o Por do Som realiza pelo Brasil afora.', 'idx_projetos_descricao'),
+        ('Veja e <span class="gradient">ouça agora</span>', 'idx_audio_titulo'),
+        ('Curadoria do <span class="gradient">selo</span>', 'idx_playlists_titulo'),
+    ]
+    _mudou = False
+    for _antigo, _chave in _trocas_home:
+        _novo = SITE_CFG.get(_chave, '')
+        if _novo and _antigo in _ih:
+            # preserva o gradient na ultima palavra quando o campo e o titulo
+            if '<span class="gradient">' in _antigo and '</span>' in _antigo:
+                _partes = str(_novo).rsplit(' ', 1)
+                if len(_partes) == 2:
+                    _ih = _ih.replace(_antigo, esc(_partes[0]) + ' <span class="gradient">' + esc(_partes[1]) + '</span>', 1)
+            else:
+                _ih = _ih.replace(_antigo, esc(str(_novo)), 1)
+            _mudou = True
+    if _mudou:
+        with open(_ipath, 'w', encoding='utf-8') as f:
+            f.write(_ih)
+        print('✔ teasers da home atualizados do config')
 
 print('✔ ' + str(len(geradas)) + ' páginas de álbum geradas (BASE = ' + (BASE or '(raiz)') + ')')
 print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')

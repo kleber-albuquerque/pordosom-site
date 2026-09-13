@@ -258,6 +258,21 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           <div class="f-field"><label>E-mail de contato</label><input id="cfg-email_contato" type="email"></div>
           <div class="f-field"><label>WhatsApp (com DDI/DDD)</label><input id="cfg-whatsapp_contato" type="text" placeholder="55 11 9..."></div>
         </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🏠 TEXTOS DA HOME</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título da vitrine</label><input id="cfg-idx_vitrine_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição da vitrine</label><input id="cfg-idx_vitrine_descricao" type="text"></div>
+          <div class="f-field full"><label>Título de projetos</label><input id="cfg-idx_projetos_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição de projetos</label><input id="cfg-idx_projetos_descricao" type="text"></div>
+          <div class="f-field"><label>Título audiovisual</label><input id="cfg-idx_audio_titulo" type="text"></div>
+          <div class="f-field"><label>Título playlists</label><input id="cfg-idx_playlists_titulo" type="text"></div></div>
+        <div class="f-grid" style="margin-top:12px">
+          <div class="f-field"><label>Playlist 1 — nome</label><input id="cfg-playlist1_nome" type="text"></div>
+          <div class="f-field"><label>Playlist 1 — ID Spotify</label><input id="cfg-playlist1_id" type="text" placeholder="ex: 2lgoPMSE9e7lxEumGbBaGn"></div>
+          <div class="f-field"><label>Playlist 2 — nome</label><input id="cfg-playlist2_nome" type="text"></div>
+          <div class="f-field"><label>Playlist 2 — ID Spotify</label><input id="cfg-playlist2_id" type="text" placeholder="ex: 2cyXUj8Qhe3nZ0rbng87nR"></div>
+        <div class="f-field"><label>Título audiovisual</label><input id="cfg-idx_audio_titulo" type="text"></div>
+        </div>
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🖼️ IMAGENS DO SITE</h2>
         <div class="f-grid">
           <div class="f-field">
@@ -1552,7 +1567,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato"];
+const CFG_CAMPOS = ["hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","idx_vitrine_titulo","idx_vitrine_descricao","idx_projetos_titulo","idx_projetos_descricao","idx_audio_titulo","idx_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
 let cfgSha = null;
 
 async function carregarConfig() {
