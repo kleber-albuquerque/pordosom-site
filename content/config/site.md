@@ -1,5 +1,5 @@
 ---
-hero_slogan: "Onde a música nasce"
+hero_slogan: "Onde a música nasce."
 hero_texto: "O Pôr do Som é um selo dedicado às brasilidades, à cultura afro-brasileira, aos mestres da tradição popular, aos tambores do norte e ao samba de raiz. Celebre conosco o encontro da ancestralidade com a música brasileira contemporânea."
 manifesto_texto1: "A música brasileira de raiz merece ser ouvida, registrada e celebrada. Somos um selo independente e produtora cultural que se debruça sobre as Brasilidades, esse turbilhão de sons, cores e saberes que pulsa do Maranhão a São Paulo, dos terreiros aos quintais, dos mestres aos jovens que os escutam."
 manifesto_texto2: "Trabalhamos com cultura afro-brasileira, com samba raiz, com bumba meu boi, com tambores e cantigas. Gravamos, produzimos, curamos. Homenageamos mestres e abrigamos parcerias que atravessam gerações porque a tradição só é viva quando segue sendo cantada."
