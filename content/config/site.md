@@ -8,7 +8,7 @@ quemsomos_texto: "O Pôr do Som é um selo independente e produtora cultural nas
 portfolio_link: ""
 editora_texto: "A editora do Pôr do Som administra obras musicais e gerencia direitos autorais no ambiente digital: registro, captação, fiscalização e repasse para que compositores e parceiros do catálogo recebam o que a música deles gera, em qualquer plataforma. Para saber mais, entre em contato conosco."
 grav_titulo: "Conheça nosso catálogo"
-grav_descricao: "Filtre por gênero e explore as Brasilidades do selo."
+grav_descricao: "Filtre por gênero e ouça o melhor da nossa música"
 artistas_titulo: "Artistas que cantam o Brasil"
 artistas_descricao: "Compositores, intérpretes e mestres que carregam a brasilidade nas vozes, nas violas e nos tambores."
 projetos_titulo: "Onde a tradição encontra palco"
