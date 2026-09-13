@@ -1,7 +1,7 @@
 ---
 title: "O Por do Som ganha casa nova"
 date: 2026-09-12
-resumo: "O novo site do selo reúne, pela primeira vez, o catálogo completo, os festivais e toda a produção audiovisual — tudo em um só lugar."
+resumo: "O novo site do selo reúne o catálogo completo, os festivais e toda a produção audiovisual em um só lugar."
 rascunho: false
 imagem: "/images/uploads/2026-09-12-o-por-do-som-ganha-casa-nova.jpg"
 ---
@@ -12,7 +12,7 @@ São mais de vinte anos de música brasileira de raiz — e até hoje, essa hist
 
 ## O que você encontra:
 
-**O catálogo completo** — 31 obras gravadas e lançadas pelo selo, de "Coisa Alguma" (2005) aos lançamentos mais recentes. Cada disco com capa, história e players para ouvir na hora.
+**O catálogo completo** — obras gravadas e lançadas pelo selo, com capa, história e players para ouvir na hora.
 
 **Os artistas** — Marco Vilane, Tião Carvalho, Ana Maria Carvalho, Luana Bayô, Jonathan Silva, Aloysio Letra e os mestres que carregam a brasilidade nas vozes e nos tambores.
 
