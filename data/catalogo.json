@@ -471,5 +471,57 @@
       "date": "2026-09-12",
       "imagem": "/images/uploads/2026-09-12-o-por-do-som-ganha-casa-nova.jpg"
     }
+  ],
+  "artistas": [
+    {
+      "nome": "Aloysio Letra",
+      "role": "Cultura Afro-brasileira",
+      "img": "/img/music-percussion.jpg"
+    },
+    {
+      "nome": "Ana Maria Carvalho",
+      "role": "Mestra da Cultura Popular",
+      "img": "/img/artist-3.jpg"
+    },
+    {
+      "nome": "Conjunto Picafumo",
+      "role": "Samba Paulista",
+      "img": "/img/artist-2.jpg"
+    },
+    {
+      "nome": "Danilo Moraes",
+      "role": "Compositor · Parceiro",
+      "img": "/img/artist-2.jpg"
+    },
+    {
+      "nome": "Jonathan Silva",
+      "role": "Compositor",
+      "img": "/img/artist-4.jpg"
+    },
+    {
+      "nome": "Kennya Macedo",
+      "role": "Cantora · Pesquisadora",
+      "img": "/img/manifesto-afro.jpg"
+    },
+    {
+      "nome": "Luana Bayô",
+      "role": "Cantora",
+      "img": "/img/artist-5.jpg"
+    },
+    {
+      "nome": "Marco Vilane",
+      "role": "Compositor · Intérprete",
+      "img": "/img/artist-1.jpg"
+    },
+    {
+      "nome": "Tião Carvalho",
+      "role": "Raízes Brasileiras",
+      "img": "/img/project-mestres.jpg"
+    },
+    {
+      "nome": "Zeca Baleiro",
+      "role": "Artista Convidado",
+      "img": "/img/artist-3.jpg"
+    }
   ]
 }

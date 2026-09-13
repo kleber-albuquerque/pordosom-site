@@ -505,25 +505,27 @@ def gera_json():
         if isinstance(capa, list): capa = capa[0] if capa else ''
         g = a.get('generos', [])
         if isinstance(g, str): g = [x.strip() for x in g.replace('[','').replace(']','').split(',') if x.strip()]
+        ano = a.get('ano','')
+        if isinstance(ano, list): ano = ano[0] if ano else ''
+        ordem = a.get('ordem','')
+        if isinstance(ordem, list): ordem = ordem[0] if ordem else ''
         return {'slug': a['slug'], 'titulo': str(a.get('titulo','')), 'artista': str(a.get('artista','')),
-                'ano': str(a.get('ano','')) if not isinstance(a.get('ano'), list) else str(a['ano'][0] if a['ano'] else ''),
-                'capa': str(capa or ''), 'generos': g, 'destaque': bool(a.get('destaque')),
-                'ordem': str(a.get('ordem','')) if not isinstance(a.get('ordem'), list) else str(a.get('ordem',[''])[0]),
+                'ano': str(ano), 'capa': str(capa or ''), 'generos': g,
+                'destaque': bool(a.get('destaque')), 'ordem': str(ordem),
                 'spotify': str(a.get('spotify','') or ''), 'youtube': str(a.get('youtube','') or '')}
     artistas_js = [{'nome': str(a.get('nome','')), 'role': str(a.get('role','')),
-                 'img': str(a.get('img','') or '')} for a in artistas]
-posts_js = [{'title': str(p.get('title','')), 'resumo': str(p.get('resumo','')),
+                   'img': str(a.get('img','') or '')} for a in artistas]
+    posts_js = [{'title': str(p.get('title','')), 'resumo': str(p.get('resumo','')),
                  'date': str(p.get('date','')), 'imagem': str(p.get('imagem','') or '')} for p in posts[:3]]
     cat = {'base': BASE,
            'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
            'albuns': [_n(a) for a in albuns],
-           'posts': posts_js, 'artistas': artistas_js}
+           'posts': posts_js,
+           'artistas': artistas_js}
     os.makedirs(os.path.join(BASE_DIR, 'data'), exist_ok=True)
     with open(os.path.join(BASE_DIR, 'data', 'catalogo.json'), 'w', encoding='utf-8') as f:
         json.dump(cat, f, ensure_ascii=False, indent=2)
-    print('✔ catalogo.json (' + str(len(albuns)) + ' álbuns, ' + str(len(posts_js)) + ' posts)')
-
-# ---------- Álbuns ----------
+    print('OK catalogo.json (' + str(len(albuns)) + ' albuns, ' + str(len(posts_js)) + ' posts, ' + str(len(artistas_js)) + ' artistas)')
 def gera_albuns():
     ATUAL_EH_HOME = False
     os.makedirs(os.path.join(BASE_DIR, 'albuns'), exist_ok=True)
