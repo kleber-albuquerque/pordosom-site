@@ -293,20 +293,6 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             <div class="f-field full"><label>URL da Imagem de Destaque (1200x630px - aparece no WhatsApp/Facebook). Deixe vazio para usar a logo.</label><input id="cfg-seo_og_image" type="url" placeholder="https://... ou /img/og-home.jpg"></div>
         </div>
 
-                <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">11 · SEO e Redes Sociais (Google, WhatsApp, Facebook)</h2>
-        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
-            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
-                <strong>Como o Google e o WhatsApp veem sua Home.</strong> Preencha para aparecer bonito nas buscas e compartilhamentos.
-                Álbuns e Notícias têm SEO automático (usam a capa/imagem e o texto do conteúdo).
-            </p>
-        </div>
-        <div class="f-grid">
-            <div class="f-field full"><label>Título SEO (máx. 60 caracteres - aparece na aba do navegador e no Google)</label><input id="cfg-seo_title" type="text" maxlength="60" placeholder="Ex: Pôr do Som — Selo Independente de Brasilidades"></div>
-            <div class="f-field full"><label>Descrição SEO (máx. 155 caracteres - o texto cinza abaixo do link no Google)</label><textarea id="cfg-seo_description" style="min-height:80px" maxlength="155" placeholder="Ex: Selo independente dedicado a samba de raiz, MPB e brasilidades."></textarea></div>
-            <div class="f-field full"><label>Palavras-chave (separadas por vírgula)</label><input id="cfg-seo_keywords" type="text" placeholder="samba de raiz, MPB, brasilidades, selo independente"></div>
-            <div class="f-field full"><label>URL da Imagem de Destaque (1200x630px - aparece no WhatsApp/Facebook). Deixe vazio para usar a logo.</label><input id="cfg-seo_og_image" type="url" placeholder="https://... ou /img/og-home.jpg"></div>
-        </div>
-
         <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
           <button class="btn-salvar" id="btn-salvar-config" onclick="salvarConfig()">💾 Salvar Textos do Site</button>
         </div>
@@ -424,7 +410,25 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           <p class="page-sub" style="margin-bottom:0">Acesse as plataformas externas para monitorar o desempenho do selo.</p>
         </div>
       </div>
-      
+            <!-- SEÇÃO SEO -->
+      <div style="margin-bottom:3rem; border-bottom:1px solid var(--border-light); padding-bottom:2rem">
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🎯 Configurações de SEO (Google e WhatsApp)</h2>
+        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
+            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
+                <strong>Como o Google e o WhatsApp veem sua Home.</strong> Preencha para aparecer bonito nas buscas.
+                (Álbuns e Notícias têm SEO automático).
+            </p>
+        </div>
+        <div class="f-grid">
+            <div class="f-field full"><label>Título SEO (máx. 60 caracteres)</label><input id="cfg-seo_title" type="text" maxlength="60" placeholder="Ex: Pôr do Som — Selo Independente de Brasilidades"></div>
+            <div class="f-field full"><label>Descrição SEO (máx. 155 caracteres)</label><textarea id="cfg-seo_description" style="min-height:80px" maxlength="155" placeholder="Ex: Selo independente dedicado a samba de raiz, MPB e brasilidades."></textarea></div>
+            <div class="f-field full"><label>Palavras-chave (separadas por vírgula)</label><input id="cfg-seo_keywords" type="text" placeholder="samba de raiz, MPB, brasilidades"></div>
+            <div class="f-field full"><label>URL da Imagem de Destaque (1200x630px)</label><input id="cfg-seo_og_image" type="url" placeholder="https://... ou deixe vazio para usar a logo"></div>
+        </div>
+        <div style="margin-top:1.5rem; text-align:right">
+            <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Configurações de SEO</button>
+        </div>
+      </div>
       <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:8px;padding:1.5rem;margin-bottom:2rem">
         <h3 style="margin:0 0 0.5rem;color:#FFD700;font-size:1.1rem">💡 Dica de Ouro do Selo</h3>
         <p style="margin:0;font-size:0.9rem;color:#ccc;line-height:1.6">
