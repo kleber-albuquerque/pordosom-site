@@ -757,6 +757,72 @@ if SITE_CFG.get('hero_slogan') or SITE_CFG.get('hero_texto'):
         f.write(ih)
     print('✔ hero do index atualizado do config')
 
+# ---------- Injeta titulos/descricoes das secoes (todas as paginas) ----------
+def _troca(arquivo, pares):
+    """pares: lista de (texto_antigo, chave_cfg)"""
+    caminho = os.path.join(BASE_DIR, arquivo)
+    if not os.path.exists(caminho):
+        return
+    with open(caminho, encoding='utf-8') as f:
+        h = f.read()
+    mudou = False
+    for antigo, chave in pares:
+        novo = SITE_CFG.get(chave, '')
+        if novo and antigo in h:
+            h = h.replace(antigo, esc(str(novo)), 1)
+            mudou = True
+    if mudou:
+        with open(caminho, 'w', encoding='utf-8') as f:
+            f.write(h)
+
+_troca('gravadora.html', [
+    ('O catálogo <span class="gradient">completo</span>', 'grav_titulo_raw'),
+])
+_troca('index.html', [
+    ('Lançamentos & <span class="gradient">clássicos do selo</span>', 'idx_vitrine_titulo'),
+])
+_troca('projetos.html', [
+    ('Onde a <span class="gradient">tradição encontra palco</span>', 'projetos_titulo_raw'),
+])
+
+# abordagem robusta para todos: substitui o CONTEUDO dos spans por chave mapeada
+_MAPA_TITULOS = [
+    ('gravadora.html', 'O catálogo', 'grav_titulo'),
+    ('gravadora.html', 'Artistas que', 'artistas_titulo'),
+    ('projetos.html', 'Onde a tradição', 'projetos_titulo'),
+    ('audiovisual.html', 'Veja e', 'audio_titulo'),
+    ('blog.html', 'Novidades', 'noticias_titulo'),
+    ('quem-somos.html', 'Mais de 20 anos', 'quemsomos_titulo'),
+    ('index.html', 'Lançamentos', 'idx_vitrine_titulo'),
+]
+
+# descricoes (textos simples, mais faceis)
+_MAPA_DESC = [
+    ('gravadora.html', 'Cada obra com página própria', 'grav_descricao'),
+    ('gravadora.html', 'Compositores, intérpretes e mestres', 'artistas_descricao'),
+    ('projetos.html', 'Séries audiovisuais, festivais e homenagens', 'projetos_descricao'),
+    ('audiovisual.html', 'A produção audiovisual do selo', 'audio_descricao'),
+    ('blog.html', 'Lançamentos, projetos e histórias do Por do Som', 'noticias_descricao'),
+]
+
+def _troca_desc(arquivo, inicio_antigo, chave):
+    caminho = os.path.join(BASE_DIR, arquivo)
+    if not os.path.exists(caminho):
+        return
+    with open(caminho, encoding='utf-8') as f:
+        h = f.read()
+    novo = SITE_CFG.get(chave, '')
+    if not novo or inicio_antigo not in h:
+        return
+    import re as _rd
+    # substitui o paragrafo de descricao que comeca com o texto antigo
+    h = _rd.sub(_rd.escape(inicio_antigo) + r'[^<]*', esc(str(novo)), h, count=1)
+    with open(caminho, 'w', encoding='utf-8') as f:
+        f.write(h)
+
+for arq, ini, chave in _MAPA_DESC:
+    _troca_desc(arq, ini, chave)
+
 print('✔ ' + str(len(geradas)) + ' páginas de álbum geradas (BASE = ' + (BASE or '(raiz)') + ')')
 print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
 print('✔ audiovisual.html gerada com ' + str(len(clips)) + ' vídeos em ' + str(len(partes_pagina)) + ' grupos')

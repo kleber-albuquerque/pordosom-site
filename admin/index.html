@@ -226,6 +226,38 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         <div class="f-grid">
           <div class="f-field full"><label>Texto institucional</label><textarea id="cfg-editora_texto" style="min-height:110px"></textarea></div>
         </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">💿 GRAVADORA</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título</label><input id="cfg-grav_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição</label><textarea id="cfg-grav_descricao" style="min-height:70px"></textarea></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">👥 ARTISTAS</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título</label><input id="cfg-artistas_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição</label><textarea id="cfg-artistas_descricao" style="min-height:70px"></textarea></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🎬 PROJETOS</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título</label><input id="cfg-projetos_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição</label><textarea id="cfg-projetos_descricao" style="min-height:70px"></textarea></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🎬 AUDIOVISUAL</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título</label><input id="cfg-audio_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição</label><textarea id="cfg-audio_descricao" style="min-height:70px"></textarea></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">📰 NOTÍCIAS</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título</label><input id="cfg-noticias_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição</label><textarea id="cfg-noticias_descricao" style="min-height:70px"></textarea></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">📮 CONTATO</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título</label><input id="cfg-contato_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição</label><textarea id="cfg-contato_descricao" style="min-height:70px"></textarea></div>
+          <div class="f-field"><label>E-mail de contato</label><input id="cfg-email_contato" type="email"></div>
+          <div class="f-field"><label>WhatsApp (com DDI/DDD)</label><input id="cfg-whatsapp_contato" type="text" placeholder="55 11 9..."></div>
+        </div>
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🖼️ IMAGENS DO SITE</h2>
         <div class="f-grid">
           <div class="f-field">
@@ -1520,7 +1552,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto"];
+const CFG_CAMPOS = ["hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato"];
 let cfgSha = null;
 
 async function carregarConfig() {
