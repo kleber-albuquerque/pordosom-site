@@ -140,10 +140,11 @@ albuns[:] = sorted(_com, key=_ordem) + _sem
 
 # ---------- Templates compartilhados ----------
 def _nav(ativo=None):
-    ITENS = [('Home', BASE + '/site.html'), ('Notícias', '#noticias'),
-             ('Gravadora', '#gravadora'), ('Projetos', '#projetos'),
-             ('Audiovisual', '#audiovisual'), ('Manifesto', '#manifesto'),
-             ('Quem Somos', '#quemsomos'), ('Contato', '#contato')]
+    ITENS = [('Home', BASE + '/site.html'), ('Gravadora', '#gravadora'),
+             ('Projetos', '#projetos'), ('Editora & Direitos', '#editora'),
+             ('Audiovisual', '#audiovisual'), ('Playlists', '#playlists'),
+             ('Notícias/Blog', '#noticias'), ('Quem Somos', '#quemsomos'),
+             ('Contato', '#contato')]
     # na home: ancoras; nas demais: links para site.html#ancora
     linhas = []
     for nome, href in ITENS:
@@ -457,8 +458,8 @@ def gera_site():
             '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
             '        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n' + _nav() +
             '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n\n'
-            + hero + sec_noticias + sec_grav + sec_proj + sec_av + sec_pl
-            + sec_manif + sec_qs + sec_ed + sec_cont + '\n' + _footer() + _scripts() + js_site)
+            + hero + sec_noticias + sec_grav + sec_proj + sec_ed + sec_av + sec_pl
+            + sec_manif + sec_qs + sec_cont + '\n' + _footer() + _scripts() + js_site)
 
     _conteudo = _doc('Por do Som | Selo Independente & Produtora Cultural',
                      cfg_str('hero_texto', 'Selo dedicado às Brasilidades')[:155], body)
