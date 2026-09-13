@@ -170,6 +170,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <button class="side-item" data-pagina="projetos"><span class="icone">🎬</span> Projetos</button>
     <button class="side-item" data-pagina="audiovisual"><span class="icone">🎵</span> Audiovisual</button>
     <button class="side-item" data-pagina="config"><span class="icone">⚙️</span> Textos do Site</button>
+    <button class="side-item" data-pagina="analytics"><span class="icone">📊</span> Analytics & Ferramentas</button>
     <div class="side-footer">
       <div class="side-user" id="side-user">—</div>
       <button class="side-sair" onclick="sair()">Sair do painel</button>
@@ -381,6 +382,55 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         <span class="icone">📰</span>
         Nenhuma notícia publicada ainda.<br>
         <small>Clique em "＋ Nova Notícia" para o primeiro lançamento.</small>
+      </div>
+    </div>
+
+    <!-- ABA ANALYTICS & FERRAMENTAS -->
+    <div id="pagina-analytics" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Analytics & Ferramentas</h1>
+          <p class="page-sub" style="margin-bottom:0">Acesse as plataformas externas para monitorar o desempenho do selo.</p>
+        </div>
+      </div>
+      
+      <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:8px;padding:1.5rem;margin-bottom:2rem">
+        <h3 style="margin:0 0 0.5rem;color:#FFD700;font-size:1.1rem">💡 Dica de Ouro do Selo</h3>
+        <p style="margin:0;font-size:0.9rem;color:#ccc;line-height:1.6">
+          Use o <strong>Google Search Console</strong> semanalmente para descobrir por quais termos (ex: "samba de raiz", nomes de artistas) o site está sendo encontrado. 
+          Use esses dados para criar novas <em>Notícias</em> ou ajustar os textos do <em>Manifesto</em>, melhorando seu SEO e descoberta por IAs.
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:1.5rem">
+        <a href="https://search.google.com/search-console" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+          <div style="background:var(--bg-card,#1a1a1a);border:1px solid var(--border-light);border-radius:6px;padding:1.5rem;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:2rem;margin-bottom:0.5rem">🔍</div>
+            <h4 style="margin:0 0 0.5rem;color:#fff">Google Search Console</h4>
+            <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Termos de busca no Google e IA.</p>
+          </div>
+        </a>
+        <a href="https://analytics.google.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+          <div style="background:var(--bg-card,#1a1a1a);border:1px solid var(--border-light);border-radius:6px;padding:1.5rem;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:2rem;margin-bottom:0.5rem">📊</div>
+            <h4 style="margin:0 0 0.5rem;color:#fff">Google Analytics</h4>
+            <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Visitas, tempo no site e origem.</p>
+          </div>
+        </a>
+        <a href="https://artists.spotify.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+          <div style="background:var(--bg-card,#1a1a1a);border:1px solid var(--border-light);border-radius:6px;padding:1.5rem;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:2rem;margin-bottom:0.5rem">🎵</div>
+            <h4 style="margin:0 0 0.5rem;color:#fff">Spotify for Artists</h4>
+            <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Streams e ouvintes mensais.</p>
+          </div>
+        </a>
+        <a href="https://studio.youtube.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+          <div style="background:var(--bg-card,#1a1a1a);border:1px solid var(--border-light);border-radius:6px;padding:1.5rem;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+            <div style="font-size:2rem;margin-bottom:0.5rem">📺</div>
+            <h4 style="margin:0 0 0.5rem;color:#fff">YouTube Studio</h4>
+            <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Retenção e origem do tráfego.</p>
+          </div>
+        </a>
       </div>
     </div>
   </main>
@@ -631,7 +681,7 @@ document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.side-item').forEach(b => b.classList.remove('ativo'));
     btn.classList.add('ativo');
-    ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual', 'config'].forEach(p =>
+    ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual', 'config', 'analytics'].forEach(p =>
       document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
     if (btn.dataset.pagina === 'audiovisual' && VIDEOS && !VIDEOS.length) carregarVideos();
   });
@@ -1591,7 +1641,7 @@ async function salvarConfig() {
       await _subirImagemRepo("img/hero-bg.jpg", heroSiteNova, "Atualiza imagem da home");
       heroSiteNova = null;
     }
-    toast("Textos do Site salvas! O site atualiza em ~2 min.");
+    toast("Configurações salvas! O site atualiza em ~2 min.");
   } catch (e) {
     toast("Erro ao salvar: " + e.message);
   } finally {
@@ -1647,15 +1697,6 @@ async function _subirImagemRepo(caminho, b64, msg) {
 
 </script>
 
-    <!-- KA Agência Criativa Signature -->
-    <div style="text-align:center;padding:2rem 0;opacity:0.5;transition:opacity 0.3s" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.5'">
-        
-    </div>
-\n<!-- KA Agência Criativa Signature -->
-    <div style="text-align:center;padding:2.5rem 0;opacity:0.6;transition:opacity 0.3s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
-        
-    </div>
-
     <!-- KA Agência Criativa - Assinatura Única -->
     <div style="text-align:center;padding:3rem 0 2rem;opacity:0.6;transition:opacity 0.3s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
         <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">
@@ -1666,7 +1707,6 @@ async function _subirImagemRepo(caminho, b64, msg) {
             <div style="color:#888;font-size:0.65rem;text-align:center;font-style:italic;letter-spacing:0.5px">Presença digital sem ruído</div>
         </a>
     </div>
-
 </body>
 </html>
 <style>
