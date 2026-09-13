@@ -105,6 +105,7 @@ def _ler(pasta):
     return itens
 
 albuns = _ler(PASTA['albuns'])
+artistas = _ler(os.path.join(BASE_DIR, 'content', 'artistas'))
 posts = _ler(PASTA['posts'])
 projetos = _ler(PASTA['projetos'])
 clips = _ler(PASTA['audiovisual'])
@@ -509,12 +510,14 @@ def gera_json():
                 'capa': str(capa or ''), 'generos': g, 'destaque': bool(a.get('destaque')),
                 'ordem': str(a.get('ordem','')) if not isinstance(a.get('ordem'), list) else str(a.get('ordem',[''])[0]),
                 'spotify': str(a.get('spotify','') or ''), 'youtube': str(a.get('youtube','') or '')}
-    posts_js = [{'title': str(p.get('title','')), 'resumo': str(p.get('resumo','')),
+    artistas_js = [{'nome': str(a.get('nome','')), 'role': str(a.get('role','')),
+                 'img': str(a.get('img','') or '')} for a in artistas]
+posts_js = [{'title': str(p.get('title','')), 'resumo': str(p.get('resumo','')),
                  'date': str(p.get('date','')), 'imagem': str(p.get('imagem','') or '')} for p in posts[:3]]
     cat = {'base': BASE,
            'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
            'albuns': [_n(a) for a in albuns],
-           'posts': posts_js}
+           'posts': posts_js, 'artistas': artistas_js}
     os.makedirs(os.path.join(BASE_DIR, 'data'), exist_ok=True)
     with open(os.path.join(BASE_DIR, 'data', 'catalogo.json'), 'w', encoding='utf-8') as f:
         json.dump(cat, f, ensure_ascii=False, indent=2)
