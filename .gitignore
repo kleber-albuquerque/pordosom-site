@@ -1,8 +1,7 @@
+__pycache__/
+*.bak
 *.bak*
 fix_*.py
-__pycache__/
-gerador_*.py
-lote/
-gera_posts.py
-gera_posts.py
-gera_posts.py
+escreve_*.py
+render_v4_backup.py
+admin/config.yml
