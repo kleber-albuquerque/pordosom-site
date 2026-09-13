@@ -860,7 +860,21 @@ def _processa(arquivo, operacoes, h1=False):
         h = f.read()
     mudou = False
     for op in operacoes:
-        if op[0] == 'titulo':
+        if op[0] == 'texto_sem_gradient':
+            # troca o texto COMPLETO entre as tags do h2 (com ou sem gradient)
+            novo_v = SITE_CFG.get(op[1], '')
+            if novo_v and op[2] in h:
+                pat = r'<h2 class="section-title">[\s\S]*?</h2>'
+                for m2 in re.finditer(pat, h):
+                    if op[2] in m2.group(0):
+                        partes = str(novo_v).rsplit(' ', 1)
+                        novo_html = ('<h2 class="section-title">' + esc(partes[0]) +
+                                     (' <span class="gradient">' + esc(partes[1]) + '</span>' if len(partes) > 1 else '') +
+                                     '</h2>')
+                        h = h[:m2.start()] + novo_html + h[m2.end():]
+                        ok = True
+                        break
+        elif op[0] == 'titulo':
             # op = ('titulo', chave, trecho_antigo_que_identifica_o_elemento)
             h, ok = _troca_titulo(h, op[1], op[2], 'h1' if h1 else 'h2')
         else:
@@ -874,10 +888,10 @@ def _processa(arquivo, operacoes, h1=False):
 
 # HOME — cada titulo mira o SEU elemento (pela ancora do texto atual)
 _processa('index.html', [
-    ('titulo', 'home_vitrine_titulo', 'Lançamentos'),
-    ('texto', 'home_vitrine_descricao', 'Uma seleção do catálogo'),
-    ('titulo', 'home_projetos_titulo', 'Onde a tradição'),
-    ('texto', 'home_projetos_descricao', 'Séries audiovisuais e festivais'),
+    ('texto_sem_gradient', 'home_vitrine_titulo', 'Lançamentos &amp; clássicos do selo'),
+    ('texto', 'home_vitrine_descricao', 'Do samba de raiz à música afro-brasileira'),
+    ('texto_sem_gradient', 'home_projetos_titulo', 'Curadoria do <span class="gradient">selo</span>'),
+    ('texto', 'home_projetos_descricao', 'Conheça as séries audiovisuais e festivais'),
     ('titulo', 'home_audio_titulo', 'Veja e ouça'),
     ('titulo', 'home_playlists_titulo', 'Curadoria'),
 ])
