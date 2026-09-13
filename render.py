@@ -272,19 +272,14 @@ def gera_site():
 
     # --- GRAVADORA (catalogo + filtros + artistas) ---
     vitrine_js = '<div class="vitrine-grid" id="vitrine"></div>\n        <div style="text-align:center"><a href="#gravadora" class="teaser-link" style="display:none"></a></div>'
-    filtros_js = ('<div class="filtros" id="filtros"></div>\n        <div class="catalogo-grid" id="catalogo-grid"></div>')
+    vitrine_js = '<div class="vitrine-grid" id="vitrine"></div>\n        <div style="text-align:center;margin-top:2.5rem"><a href="' + BASE + '/catalogo.html" class="btn btn-outline" style="text-decoration:none">Ver catálogo completo (' + str(len(albuns)) + ' obras) →</a></div>'
     sec_grav = ('<section class="teaser" id="gravadora">\n    <div class="container">\n'
                 '        <div class="teaser-head">\n'
                 '            <span class="section-subtitle">Gravadora</span>\n'
                 '            <h2 class="section-title">' + esc(cfg_str('grav_titulo')) + '</h2>\n'
                 '            <p class="section-description">' + esc(cfg_str('grav_descricao')) + '</p>\n'
-                '        </div>\n        ' + filtros_js + '\n    </div>\n</section>\n')
-    sec_artistas = ('<section class="teaser teaser-alt" id="artistas">\n    <div class="container">\n'
-                    '        <div class="teaser-head">\n'
-                    '            <span class="section-subtitle">Gravadora</span>\n'
-                    '            <h2 class="section-title">' + esc(cfg_str('artistas_titulo')) + '</h2>\n'
-                    '            <p class="section-description">' + esc(cfg_str('artistas_descricao')) + '</p>\n'
-                    '        </div>\n        <div class="artistas-grid" id="artistas-grid"></div>\n    </div>\n</section>\n')
+                '        </div>\n        ' + vitrine_js + '\n    </div>\n</section>\n')
+
 
     # --- PROJETOS ---
     cards_p = []
@@ -306,15 +301,13 @@ def gera_site():
                     '\n'.join(cards_p), alt=True)
 
     # --- AUDIOVISUAL (clips por grupo) ---
-    grupos_html = []
-    for gid, gname in GRUPOS_AV.items():
-        do_g = [c for c in clips if str(c.get('grupo')) == gid]
-        if not do_g: continue
-        vids = '\n'.join('            <iframe src="https://www.youtube.com/embed/' + str(c.get('yt_id','')) +
-                         '" loading="lazy" allowfullscreen title="' + esc(c.get('titulo','')) + '"></iframe>' for c in do_g)
-        grupos_html.append('<h2 class="section-title" style="font-size:1.3rem;margin-top:3rem">' + esc(gname) + '</h2>\n'
-                          '<div class="teaser-videos">\n' + vids + '\n        </div>')
-    sec_av = _sec('audiovisual', 'Audiovisual', 'audio_titulo', 'audio_descricao', '\n'.join(grupos_html))
+    _clips_home = clips[:4]
+    vids_home = '\n'.join('            <iframe src="https://www.youtube.com/embed/' + str(c.get('yt_id','')) +
+                         '" loading="lazy" allowfullscreen title="' + esc(c.get('titulo','')) + '"></iframe>' for c in _clips_home)
+    btn_av = ('\n        <div style="text-align:center;margin-top:2.5rem"><a href="' + BASE + '/audiovisual.html" '
+              'class="btn btn-outline" style="text-decoration:none">Ver todos os vídeos (' + str(len(clips)) + ') →</a></div>')
+    sec_av = _sec('audiovisual', 'Audiovisual', 'audio_titulo', 'audio_descricao',
+                  '<div class="teaser-videos">\n' + vids_home + '\n        </div>' + btn_av)
 
     # --- PLAYLISTS ---
     p1id = cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn')
@@ -446,7 +439,7 @@ def gera_site():
             '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
             '        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n' + _nav() +
             '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n\n'
-            + hero + sec_noticias + sec_grav + sec_artistas + sec_proj + sec_av + sec_pl
+            + hero + sec_noticias + sec_grav + sec_proj + sec_av + sec_pl
             + sec_manif + sec_qs + sec_ed + sec_cont + '\n' + _footer() + _scripts() + js_site)
 
     _conteudo = _doc('Por do Som | Selo Independente & Produtora Cultural',
@@ -536,9 +529,125 @@ def gera_sitemap():
         f.write(sm)
     print('✔ sitemap.xml (' + str(len(urls)) + ' URLs)')
 
+
+
+# ---------- JS para paginas de dados (catalogo, etc.) ----------
+def _js_dados():
+    """JS reutilizavel: filtros do catalogo + grade de artistas."""
+    return ('<script>\n'
+    '(async function(){\n'
+    '  const BASE = "' + BASE + '";\n'
+    '  let CAT;\n'
+    '  try { const r = await fetch(BASE + "/data/catalogo.json?v=" + Date.now()); CAT = await r.json(); } catch(e){ return; }\n'
+    '  if (CAT.albuns) CAT.albuns.forEach(a => {\n'
+    '    if (Array.isArray(a.capa)) a.capa = a.capa[0] || "";\n'
+    '    if (typeof a.capa !== "string") a.capa = String(a.capa || "");\n'
+    '    if (typeof a.generos === "string") a.generos = a.generos.replace(/[\\[\\]]/g,"").split(",").map(s=>s.trim()).filter(Boolean);\n'
+    '    if (!Array.isArray(a.generos)) a.generos = [];\n'
+    '  });\n'
+    '  if (!CAT.albuns) CAT.albuns = []; if (!CAT.generos) CAT.generos = [];\n'
+    '  const capaSrc = c => (c && c.startsWith("/")) ? BASE + c : (c || "");\n'
+    '  const fallback = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%231a0e0e%22 width=%22300%22 height=%22300%22/%3E%3Ccircle cx=%22150%22 cy=%22130%22 r=%2255%22 fill=%22%23a83030%22 opacity=%220.7%22/%3E%3C/svg%3E";\n'
+    '  CAT.albuns.sort((x,y)=>{const ox=parseInt(x.ordem)||0,oy=parseInt(y.ordem)||0;'
+    'if(ox&&oy)return ox-oy;if(ox)return -1;if(oy)return 1;'
+    'return String(y.ano||"").localeCompare(String(x.ano||""))});\n'
+    '  const filtrosEl = document.getElementById("filtros");\n'
+    '  const grid = document.getElementById("catalogo-grid");\n'
+    '  if (filtrosEl && grid) {\n'
+    '    const contagem = { todos: CAT.albuns.length };\n'
+    '    CAT.generos.forEach(g => { contagem[g.id] = CAT.albuns.filter(a=>a.generos.includes(g.id)).length });\n'
+    '    filtrosEl.innerHTML = `<button class="filtro ativo" data-g="todos">Todos <span class="count">${contagem.todos}</span></button>` +\n'
+    '      CAT.generos.filter(g=>contagem[g.id]>0).map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]}</span></button>`).join("");\n'
+    '    const nomeG = id => (CAT.generos.find(g=>g.id===id)||{}).nome || id;\n'
+    '    function renderGrid(g){\n'
+    '      const lista = g==="todos" ? CAT.albuns : CAT.albuns.filter(a=>a.generos.includes(g));\n'
+    '      grid.innerHTML = lista.map(a => `<a class="album-card" href="${BASE}/albuns/${a.slug}.html">\n'
+    '        <div class="album-capa"><img src="${capaSrc(a.capa)}" alt="" loading="lazy" onerror="this.src=\'${fallback}\'"></div>\n'
+    '        <div class="album-info"><div class="album-titulo">${a.titulo}</div>\n'
+    '        <div class="album-artista">${a.artista}${a.ano?" · "+a.ano:""}</div>\n'
+    '        <div class="album-tags">${a.generos.map(g=>`<span class="album-tag">${nomeG(g)}</span>`).join("")}</div></div></a>`).join("") || \'<p style="grid-column:1/-1;text-align:center;color:var(--text-muted)">Nenhum álbum neste gênero.</p>\';\n'
+    '    }\n'
+    '    filtrosEl.addEventListener("click", e => { const b = e.target.closest(".filtro"); if (b) {\n'
+    '      filtrosEl.querySelectorAll(".filtro").forEach(x=>x.classList.toggle("ativo", x===b)); renderGrid(b.dataset.g); } });\n'
+    '    renderGrid("todos");\n'
+    '  }\n'
+    '  const artGrid = document.getElementById("artistas-grid");\n'
+    '  if (artGrid && Array.isArray(CAT.artistas)) { artGrid.innerHTML = CAT.artistas.map(a =>\n'
+    '    `<div class="artist-card fade-in"><div class="artist-card-img" style="background-image:url(\'${a.img||""}\')"></div>\n'
+    '    <div class="artist-card-overlay"></div><div class="artist-card-content">\n'
+    '    <div class="artist-initial">${(a.nome||"?").trim()[0].toUpperCase()}</div>\n'
+    '    <div class="artist-name">${a.nome||""}</div><div class="artist-role">${a.role||""}</div></div></div>`).join(""); }\n'
+    '})();\n'
+    '</script>\n')
+
+
+# ---------- Página do catálogo completo (aprofundamento) ----------
+def gera_catalogo():
+    ATUAL_EH_HOME = False
+    filtros_js = ('<div class="filtros" id="filtros"></div>\n        <div class="catalogo-grid" id="catalogo-grid"></div>')
+    body = ('<header class="header" id="header">\n    <a href="' + BASE + '/index.html" class="logo">\n'
+            '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n' + _nav('Gravadora') +
+            '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+            '<header class="page-header">\n    <div class="container">\n'
+            '        <span class="section-subtitle">Gravadora</span>\n'
+            '        <h1 class="section-title">' + esc(cfg_str('grav_titulo')) + '</h1>\n'
+            '        <p class="section-description">' + esc(cfg_str('grav_descricao')) + '</p>\n'
+            '    </div>\n</header>\n'
+            '<section style="padding-top:2rem">\n    <div class="container">\n        ' + filtros_js + '\n'
+            '    </div>\n</section>\n'
+            '<section class="teaser teaser-alt" style="padding-top:2rem">\n    <div class="container">\n'
+            '        <div class="teaser-head">\n'
+            '            <span class="section-subtitle">Gravadora</span>\n'
+            '            <h2 class="section-title">' + esc(cfg_str('artistas_titulo')) + '</h2>\n'
+            '            <p class="section-description">' + esc(cfg_str('artistas_descricao')) + '</p>\n'
+            '        </div>\n        <div class="artistas-grid" id="artistas-grid"></div>\n'
+            '    </div>\n</section>\n\n' + _footer() + _scripts() + _js_dados())
+    with open(os.path.join(BASE_DIR, 'catalogo.html'), 'w', encoding='utf-8') as f:
+        f.write(_doc('Gravadora — Catálogo & Artistas', cfg_str('grav_descricao')[:155], body))
+    print('✔ catalogo.html gerada (catálogo completo + artistas)')
+
+# ---------- Página audiovisual completa (aprofundamento) ----------
+def gera_audiovisual():
+    ATUAL_EH_HOME = False
+    grupos_html = []
+    for gid, gname in GRUPOS_AV.items():
+        do_g = [c for c in clips if str(c.get('grupo')) == gid]
+        if not do_g: continue
+        vids = '\n'.join('            <iframe src="https://www.youtube.com/embed/' + str(c.get('yt_id','')) +
+                         '" loading="lazy" allowfullscreen title="' + esc(c.get('titulo','')) + '"></iframe>' for c in do_g)
+        grupos_html.append('<h2 class="section-title" style="font-size:1.3rem;margin-top:3rem">' + esc(gname) + '</h2>\n'
+                          '<div class="teaser-videos">\n' + vids + '\n        </div>')
+    p1id = cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn')
+    p2id = cfg_str('playlist2_id', '2cyXUj8Qhe3nZ0rbng87nR')
+    playlists = ('<section class="teaser teaser-alt">\n    <div class="container">\n'
+                 '        <div class="teaser-head">\n'
+                 '            <span class="section-subtitle">Playlists</span>\n'
+                 '            <h2 class="section-title">' + esc(cfg_str('playlists_titulo', 'Curadoria do selo')) + '</h2>\n'
+                 '        </div>\n        <div class="teaser-playlists">\n'
+                 '            <iframe src="https://open.spotify.com/embed/playlist/' + p1id + '" height="380" loading="lazy" title="Playlist 1"></iframe>\n'
+                 '            <iframe src="https://open.spotify.com/embed/playlist/' + p2id + '" height="380" loading="lazy" title="Playlist 2"></iframe>\n'
+                 '        </div>\n    </div>\n</section>\n')
+    body = ('<header class="header" id="header">\n    <a href="' + BASE + '/index.html" class="logo">\n'
+            '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n' + _nav('Audiovisual') +
+            '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+            '<header class="page-header">\n    <div class="container">\n'
+            '        <span class="section-subtitle">Audiovisual</span>\n'
+            '        <h1 class="section-title">' + esc(cfg_str('audio_titulo')) + '</h1>\n'
+            '        <p class="section-description">' + esc(cfg_str('audio_descricao')) + '</p>\n'
+            '    </div>\n</header>\n'
+            '<section style="padding-top:2rem">\n    <div class="container">\n'
+            + '\n'.join(grupos_html) + '\n    </div>\n</section>\n\n' + playlists + '\n' + _footer() + _scripts())
+    with open(os.path.join(BASE_DIR, 'audiovisual.html'), 'w', encoding='utf-8') as f:
+        f.write(_doc('Audiovisual & Playlists', cfg_str('audio_descricao')[:155], body))
+    print('✔ audiovisual.html gerada (' + str(len(clips)) + ' vídeos em ' + str(len(grupos_html)) + ' grupos)')
+
 # ---------- MAIN ----------
 if __name__ == '__main__':
     gera_site()
+    gera_catalogo()
+    gera_audiovisual()
     gera_albuns()
     gera_posts()
     gera_json()
