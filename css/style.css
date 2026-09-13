@@ -11,19 +11,19 @@
        Tom terroso, ancestral, que remete ao barro, ao pôr do sol
        e às raízes da cultura popular brasileira.
     */
-    --brand-primary: #a83030;       /* Cor da logo — sol poente */
+    --brand-primary: #a83030;       /* Cor predominante da logo */
     --brand-primary-dark: #7a1f1f;  /* Sombra profunda */
-    --brand-primary-light: #d4555a; /* Realce — sol alto */
-    --brand-accent: #e8965a;        /* Dourado do sol */
-    --brand-gold: #d4a85a;          /* Dourado suave */
-    --brand-cream: #f2e8dc;         /* Luz do fim de tarde */
-    --brand-sand: #c9a7c7;          /* Rosé das nuvens */
+    --brand-primary-light: #c84545; /* Realce */
+    --brand-accent: #e8a04a;        /* Âmbar quente — sol */
+    --brand-gold: #d4a85a;          /* Dourado discreto */
+    --brand-cream: #f5ede0;         /* Creme — texto claro */
+    --brand-sand: #c9a87a;          /* Areia */
 
-    /* Backgrounds — crepúsculo índigo */
-    --bg-dark: #141021;             /* Céu alto — índigo profundo */
-    --bg-darker: #0c0916;           /* Azul da noite chegando */
-    --bg-card: #1d1730;             /* Cartões — púrpura tênue */
-    --bg-card-hover: #291f40;
+    /* Backgrounds dark com lavagem terracota */
+    --bg-dark: #0d0707;             /* Quase preto com aquecimento vermelho */
+    --bg-darker: #060303;
+    --bg-card: #1a0e0e;
+    --bg-card-hover: #251515;
 
     /* Gradientes derivados da logo */
     --gradient-brand: linear-gradient(135deg, #7a1f1f 0%, #a83030 50%, #c84545 100%);
