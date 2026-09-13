@@ -204,10 +204,10 @@ if os.path.exists(cfg_path):
 # ---------- Template da página de álbum ----------
 NAV_HTML = (
     '        <a href="' + BASE + '/" class="nav-link">Home</a>\n'
+    '        <a href="' + BASE + '/blog.html" class="nav-link">Notícias</a>\n'
     '        <a href="' + BASE + '/gravadora.html" class="nav-link">Gravadora</a>\n'
     '        <a href="' + BASE + '/projetos.html" class="nav-link">Projetos</a>\n'
     '        <a href="' + BASE + '/audiovisual.html" class="nav-link">Audiovisual</a>\n'
-    '        <a href="' + BASE + '/blog.html" class="nav-link">Notícias</a>\n'
     '        <a href="' + BASE + '/manifesto.html" class="nav-link">Manifesto</a>\n'
     '        <a href="' + BASE + '/quem-somos.html" class="nav-link">Quem Somos</a>\n'
 )
@@ -889,10 +889,10 @@ def _processa(arquivo, operacoes, h1=False):
 
 # HOME — cada titulo mira o SEU elemento (pela ancora do texto atual)
 _processa('index.html', [
-    ('texto_sem_gradient', 'home_vitrine_titulo', 'Lançamentos &amp; clássicos do selo'),
-    ('texto', 'home_vitrine_descricao', 'Do samba de raiz à música afro-brasileira'),
-    ('texto_sem_gradient', 'home_projetos_titulo', 'Curadoria do <span class="gradient">selo</span>'),
-    ('texto', 'home_projetos_descricao', 'Conheça as séries audiovisuais e festivais'),
+    ('texto_sem_gradient', 'home_vitrine_titulo', 'Lançamentos'),
+    ('texto', 'home_vitrine_descricao', 'Do samba de raiz'),
+    ('titulo', 'home_projetos_titulo', 'Onde a tradição'),
+    ('texto', 'home_projetos_descricao', 'Conheça as séries'),
     ('titulo', 'home_audio_titulo', 'Veja e ouça'),
     ('titulo', 'home_playlists_titulo', 'Curadoria'),
 ])
