@@ -860,6 +860,7 @@ def _processa(arquivo, operacoes, h1=False):
         h = f.read()
     mudou = False
     for op in operacoes:
+        ok = False
         if op[0] == 'texto_sem_gradient':
             # troca o texto COMPLETO entre as tags do h2 (com ou sem gradient)
             novo_v = SITE_CFG.get(op[1], '')
