@@ -1,12 +1,11 @@
 ---
-generos:
-  - cultura-popular
 titulo: "Frevo da Ilusão"
 artista: "Tião Carvalho"
-ano: 2026
+ano: 2025
 capa: "/images/uploads/frevo-da-ilusao.jpg"
  generos:
-destaque: false
+  - cultura-popular
+destaque: true
 faixas: 1
 ordem: "1"
 spotify: "https://open.spotify.com/artist/0wTtDVcd69RifkABuA9OBb"
