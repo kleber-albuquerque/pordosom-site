@@ -6,6 +6,22 @@
 <title>Boi Chegou — Ana Maria Carvalho | Por do Som</title>
 <meta name="description" content="[TEXTO A REDIGIR — gerado em lote]
 &lt;!-- OBS DA PESQUISA: musica de Edmundo Silva --&gt;">
+<meta name="keywords" content="">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kleber-albuquerque.github.io/pordosom-site/pordosom-site/site.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Boi Chegou — Ana Maria Carvalho | Por do Som">
+<meta property="og:description" content="[TEXTO A REDIGIR — gerado em lote]
+&lt;!-- OBS DA PESQUISA: musica de Edmundo Silva --&gt;">
+<meta property="og:image" content="https://kleber-albuquerque.github.io/pordosom-site/pordosom-site/pordosom-profile.jpg">
+<meta property="og:url" content="https://kleber-albuquerque.github.io/pordosom-site/pordosom-site/site.html">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Por do Som">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Boi Chegou — Ana Maria Carvalho | Por do Som">
+<meta name="twitter:description" content="[TEXTO A REDIGIR — gerado em lote]
+&lt;!-- OBS DA PESQUISA: musica de Edmundo Silva --&gt;">
+<meta name="twitter:image" content="https://kleber-albuquerque.github.io/pordosom-site/pordosom-site/pordosom-profile.jpg">
 <link rel="icon" type="image/jpeg" href="/pordosom-site/pordosom-profile.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/pordosom-site/css/style.css">
@@ -14,13 +30,6 @@
 </script>
 </head>
 <body>
-<canvas id="bg"></canvas>
-<div class="grain"></div>
-<style>
-#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
-.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-main,section,header.header,footer.footer{position:relative;z-index:2}
-</style>
 <header class="header" id="header">
     <a href="/pordosom-site/site.html" class="logo">
         <span class="logo-mark"><img src="/pordosom-site/pordosom-profile.jpg" alt="Por do Som"></span>
@@ -77,6 +86,17 @@ main,section,header.header,footer.footer{position:relative;z-index:2}
             <a href="https://linktr.ee/pordosom" target="_blank" rel="noopener">Linktree</a>
         </div>
         <p class="footer-text">© 2026 Por do Som Cultural · Todos os direitos reservados</p>
+        <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-color, #332020);text-align:center;opacity:0.5">
+            <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;color:var(--text-muted, #999);transition:opacity 0.3s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">
+                <div style="width:28px;height:28px;background:linear-gradient(135deg,#000 0%,#1a1a1a 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--brand-accent, #FFD700)">
+                    <span style="color:var(--brand-accent, #FFD700);font-weight:900;font-size:0.75rem;letter-spacing:1px">KA</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.2">
+                    <span style="font-size:0.7rem;font-weight:700;color:var(--text-secondary, #ccc);letter-spacing:0.5px">KA. Agência Criativa.</span>
+                    <span style="font-size:0.6rem;font-style:italic;color:var(--text-muted, #888);letter-spacing:0.5px">Presença digital sem ruído</span>
+                </div>
+            </a>
+        </div>
     </div>
 </footer>
 <script>
@@ -99,5 +119,8 @@ mobileMenuBtn.addEventListener("click",()=>{nav.classList.toggle("active");mobil
 const fadeObserver=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");fadeObserver.unobserve(e.target)}})},{threshold:0.1,rootMargin:"0px 0px -50px 0px"});
 document.querySelectorAll(".fade-in").forEach(el=>fadeObserver.observe(el));
 </script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"MusicGroup","name":"Por do Som","genre":["Samba de Raiz","MPB","Brasilidades","Instrumental"],"url":"https://kleber-albuquerque.github.io/pordosom-site/pordosom-site/site.html","description":"Selo independente e produtora cultural dedicado às brasilidades."}</script>
 </body>
 </html>

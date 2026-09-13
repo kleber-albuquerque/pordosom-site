@@ -204,22 +204,38 @@ def _scripts():
             'const fadeObserver=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");fadeObserver.unobserve(e.target)}})},{threshold:0.1,rootMargin:"0px 0px -50px 0px"});\n'
             'document.querySelectorAll(".fade-in").forEach(el=>fadeObserver.observe(el));\n'
             '</script>\n')
-def _doc(title, desc, body):
+def _doc(title, desc, body, img_og=None):
+    # SEO: Define título, descrição e imagem (fallback para o configurado no painel)
+    final_title = SITE_CFG.get('seo_title', title + ' | Por do Som') if title == 'Por do Som | Selo Independente & Produtora Cultural' else (title + ' | Por do Som')
+    final_desc = SITE_CFG.get('seo_description', desc) if desc == cfg_str('hero_texto', 'Selo dedicado às Brasilidades')[:155] else desc
+    final_img = img_og if img_og else (SITE_CFG.get('seo_og_image') or (DOMINIO + BASE + '/pordosom-profile.jpg'))
+    final_url = DOMINIO + BASE + '/site.html'
+    keywords = SITE_CFG.get('seo_keywords', '')
+
     return ('<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-            '<title>' + esc(title) + ' | Por do Som</title>\n'
-            '<meta name="description" content="' + esc(desc) + '">\n'
+            '<title>' + esc(final_title) + '</title>\n'
+            '<meta name="description" content="' + esc(final_desc) + '">\n'
+            '<meta name="keywords" content="' + esc(keywords) + '">\n'
+            '<meta name="robots" content="index, follow">\n'
+            '<link rel="canonical" href="' + esc(final_url) + '">\n'
+            '<meta property="og:type" content="website">\n'
+            '<meta property="og:title" content="' + esc(final_title) + '">\n'
+            '<meta property="og:description" content="' + esc(final_desc) + '">\n'
+            '<meta property="og:image" content="' + esc(final_img) + '">\n'
+            '<meta property="og:url" content="' + esc(final_url) + '">\n'
+            '<meta property="og:locale" content="pt_BR">\n'
+            '<meta property="og:site_name" content="Por do Som">\n'
+            '<meta name="twitter:card" content="summary_large_image">\n'
+            '<meta name="twitter:title" content="' + esc(final_title) + '">\n'
+            '<meta name="twitter:description" content="' + esc(final_desc) + '">\n'
+            '<meta name="twitter:image" content="' + esc(final_img) + '">\n'
             '<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
             '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
             '<link rel="stylesheet" href="' + BASE + '/css/style.css">\n'
-            '</head>\n<body>\n'
-            '<canvas id="bg"></canvas>\n<div class="grain"></div>\n'
-            '<style>\n'
-            '#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}\n'
-            '.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'2\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E");}\n'
-            'main,section,header.header,footer.footer{position:relative;z-index:2}\n'
-            '</style>\n'
-            + body + '</body>\n</html>\n')
+            '</head>\n<body>\n' + body +
+            '\n<script type="application/ld+json">\n{"@context":"https://schema.org","@type":"MusicGroup","name":"Por do Som","genre":["Samba de Raiz","MPB","Brasilidades","Instrumental"],"url":"' + DOMINIO + BASE + '/site.html","description":"Selo independente e produtora cultural dedicado às brasilidades."}</script>\n' +
+            '</body>\n</html>\n')
 
 # ---------- Página de álbum ----------
 def page_album(a, prev, next_):
@@ -260,7 +276,7 @@ def page_album(a, prev, next_):
             '        <div class="album-navegacao">\n            ' + prev_h + '\n'
             '            <a class="album-nav-link" href="' + BASE + '/site.html#gravadora">Voltar ao catálogo</a>\n'
             '            ' + next_h + '\n        </div>\n    </div>\n</main>\n\n' + _footer() + _scripts())
-    d = _doc(a['titulo'] + ' — ' + a['artista'], (a.get('corpo') or a['titulo'])[:155], body)
+    d = _doc(a['titulo'] + ' — ' + a['artista'], (a.get('corpo') or a['titulo'])[:155], body, img_og=str(a.get('capa','')))
     return d.replace('</head>', '<script type="application/ld+json">\n' + json.dumps(schema, ensure_ascii=False) + '\n</script>\n</head>')
 
 # ---------- site.html (o site inteiro, seções por âncoras) ----------
@@ -508,7 +524,7 @@ def gera_posts():
                 '            <a class="album-nav-link" href="' + BASE + '/site.html#noticias">Todas as notícias</a>\n            <span></span>\n'
                 '        </div>\n    </div>\n</main>\n\n' + _footer() + _scripts())
         with open(os.path.join(BASE_DIR, 'posts', slugify(p.get('title','post')) + '.html'), 'w', encoding='utf-8') as f:
-            f.write(_doc(p.get('title',''), str(p.get('resumo',''))[:155], body))
+            f.write(_doc(p.get('title',''), str(p.get('resumo',''))[:155], body, img_og=img))
         n += 1
     print('✔ ' + str(n) + ' páginas de notícia geradas')
 
@@ -587,6 +603,13 @@ def gera_projetos():
     with open(os.path.join(BASE_DIR, 'projetos.html'), 'w', encoding='utf-8') as f:
         f.write(_doc('Projetos & Festivais', cfg_str('projetos_descricao')[:155], body))
     print('✔ projetos.html gerada (' + str(len(projetos)) + ' projetos)')
+
+def gera_robots():
+    txt = "User-agent: *\nAllow: /\nSitemap: " + DOMINIO + BASE + "/sitemap.xml\n"
+    with open(os.path.join(BASE_DIR, 'robots.txt'), 'w', encoding='utf-8') as f:
+        f.write(txt)
+    print('✔ robots.txt gerado')
+
 
 def gera_sitemap():
     urls = [DOMINIO + '/site.html'] + [DOMINIO + '/albuns/' + a['slug'] + '.html' for a in albuns] + \
@@ -723,5 +746,6 @@ if __name__ == '__main__':
     gera_albuns()
     gera_posts()
     gera_json()
+    gera_robots()
     gera_sitemap()
     print('\n🎉 RENDER v5 COMPLETO — uma fonte (content/), um autor (render.py)')

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kleber-albuquerque.github.io/pordosom-site/pordosom-site/sitemap.xml
