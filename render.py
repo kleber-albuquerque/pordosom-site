@@ -169,6 +169,17 @@ def _footer():
             '            <a href="https://linktr.ee/pordosom" target="_blank" rel="noopener">Linktree</a>\n'
             '        </div>\n'
             '        <p class="footer-text">© ' + str(datetime.now().year) + ' Por do Som Cultural · Todos os direitos reservados</p>\n'
+            '        <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-color, #332020);text-align:center;opacity:0.5">\n'
+            '            <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;color:var(--text-muted, #999);transition:opacity 0.3s" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0.5\'">\n'
+            '                <div style="width:28px;height:28px;background:linear-gradient(135deg,#000 0%,#1a1a1a 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--brand-accent, #FFD700)">\n'
+            '                    <span style="color:var(--brand-accent, #FFD700);font-weight:900;font-size:0.75rem;letter-spacing:1px">KA</span>\n'
+            '                </div>\n'
+            '                <div style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.2">\n'
+            '                    <span style="font-size:0.7rem;font-weight:700;color:var(--text-secondary, #ccc);letter-spacing:0.5px">KA. Agência Criativa.</span>\n'
+            '                    <span style="font-size:0.6rem;font-style:italic;color:var(--text-muted, #888);letter-spacing:0.5px">Presença digital sem ruído</span>\n'
+            '                </div>\n'
+            '            </a>\n'
+            '        </div>\n'
             '    </div>\n</footer>\n')
 
 def _scripts():
