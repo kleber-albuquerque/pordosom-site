@@ -3,118 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Por do Som | Selo Independente & Produtora Cultural</title>
-<meta name="description" content="Por do Som — selo independente e produtora cultural dedicado às Brasilidades: música popular brasileira de raiz, cultura afro-brasileira, samba raiz e tambores do Brasil.">
-<meta property="og:title" content="Por do Som | Selo Independente & Produtora Cultural">
-<meta property="og:description" content="Selo independente dedicado às Brasilidades — música popular brasileira de raiz.">
-<meta property="og:type" content="website">
-<meta property="og:image" content="/pordosom-site/pordosom-profile.jpg">
+<title>Por do Som | Selo Independente &amp; Produtora Cultural | Por do Som</title>
+<meta name="description" content="O Pôr do Som é um selo dedicado às brasilidades, à cultura afro-brasileira, aos mestres da tradição popular, aos tambores do norte e ao samba de raiz. Cele">
 <link rel="icon" type="image/jpeg" href="/pordosom-site/pordosom-profile.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/pordosom-site/css/style.css">
 </head>
 <body>
 <header class="header" id="header">
-    <a href="/pordosom-site/" class="logo">
+    <a href="/pordosom-site/site.html" class="logo">
         <span class="logo-mark"><img src="/pordosom-site/pordosom-profile.jpg" alt="Por do Som"></span>
         <span class="logo-text">PÔR DO SOM</span>
     </a>
-    <nav class="nav" id="nav">
-        <a href="/pordosom-site/" class="nav-link">Home</a>
+<nav class="nav" id="nav">
+        <a href="/pordosom-site/site.html" class="nav-link">Home</a>
         <a href="#noticias" class="nav-link">Notícias</a>
-        <a href="#lancamentos" class="nav-link">Gravadora</a>
+        <a href="#gravadora" class="nav-link">Gravadora</a>
         <a href="#projetos" class="nav-link">Projetos</a>
         <a href="#audiovisual" class="nav-link">Audiovisual</a>
         <a href="#manifesto" class="nav-link">Manifesto</a>
-        <a href="/pordosom-site/quem-somos.html" class="nav-link">Quem Somos</a>
-    </nav>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <a href="#quemsomos" class="nav-link">Quem Somos</a>
+        <a href="#contato" class="nav-link">Contato</a>
+    </nav>    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </header>
+
 <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-bg-overlay"></div>
     <div class="hero-noise"></div>
     <div class="hero-content">
         <p class="hero-subtitle">Selo Independente · Produtora Cultural</p>
-        <h1 class="hero-title">Onde a música <span class="gradient">nasce</span></h1>
-        <p class="hero-description">
-            O Pôr do Som é um selo dedicado às Brasilidades, à cultura afro-brasileira, aos mestres da tradição popular, aos tambores do norte e ao samba de raiz. Celebre conosco o encontro da ancestralidade com o tempo presente.
-        </p>
-        
+        <h1 class="hero-title">Onde a música <span class="gradient">nasce.</span></h1>
+        <p class="hero-description">O Pôr do Som é um selo dedicado às brasilidades, à cultura afro-brasileira, aos mestres da tradição popular, aos tambores do norte e ao samba de raiz. Celebre conosco o encontro da ancestralidade com a música brasileira contemporânea.</p>
     </div>
     <div class="hero-scroll">
         <span>Role para descobrir</span>
         <div class="hero-scroll-line"></div>
     </div>
 </section>
-
-<!-- BANNER DA NOTÍCIA EM DESTAQUE -->
-<section class="teaser" id="noticias" data-secao="noticias" style="padding-top:2rem;padding-bottom:2rem">
-    <div class="container">
-        <div id="banner-noticia"></div>
-    </div>
+<section class="teaser" id="noticias" style="padding-top:2rem;padding-bottom:2rem">
+<div class="container"><div id="banner-noticia"></div></div>
 </section>
-
-<section class="teaser" id="lancamentos">
+<section class="teaser" id="gravadora">
     <div class="container">
         <div class="teaser-head">
             <span class="section-subtitle">Gravadora</span>
-            <h2 class="section-title">Lançamentos &amp; clássicos do <span class="gradient">selo</span></h2>
+            <h2 class="section-title">Conheça o catálogo do Pôr do Som</h2>
             <p class="section-description">Do samba de raiz à música afro-brasileira, o Pôr do Som traz o melhor da nossa música.</p>
         </div>
-        <div class="vitrine-grid" id="vitrine"></div>
-        <div style="text-align:center">
-            <a href="/pordosom-site/gravadora.html" class="teaser-link">Catálogo completo e artistas →</a>
+        <div class="filtros" id="filtros"></div>
+        <div class="catalogo-grid" id="catalogo-grid"></div>
+    </div>
+</section>
+<section class="teaser teaser-alt" id="artistas">
+    <div class="container">
+        <div class="teaser-head">
+            <span class="section-subtitle">Gravadora</span>
+            <h2 class="section-title">Artistas que cantam o Brasil</h2>
+            <p class="section-description">Compositores, intérpretes e mestres que carregam a brasilidade nas vozes, nas violas e nos tambores.</p>
         </div>
+        <div class="artistas-grid" id="artistas-grid"></div>
     </div>
 </section>
 <section class="teaser teaser-alt" id="projetos">
     <div class="container">
         <div class="teaser-head">
-            <span class="section-subtitle">Projetos & Festivais</span>
-            <h2 class="section-title">Onde a tradição encontra <span class="gradient">palco</span></h2>
+            <span class="section-subtitle">Projetos &amp; Festivais</span>
+            <h2 class="section-title">Curadoria do <span class="gradient">selo</span></h2>
             <p class="section-description">Conheça as séries audiovisuais e festivais que o Por do Som realiza pelo Brasil afora.</p>
         </div>
-        <div class="projetos-grid">
-            <a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVRhtZUUYrhVvTT6IEBlzUFI" target="_blank" rel="noopener" class="project-card fade-in">
-                <div class="project-card-visual">
-                    <div class="project-card-img" style="background-image: url('/pordosom-site/img/project-sotaques.jpg');"></div>
-                    <span class="project-badge">Série Audiovisual</span>
-                </div>
-                <div class="project-body">
-                    <h3 class="project-title">Série Sotaques do Brasil</h3>
-                    <p class="project-desc">Um mapa sonoro do Brasil — os sotaques musicais das regiões, revelando vozes e tradições.</p>
-                    <span class="project-link">Assistir</span>
-                </div>
-            </a>
-            <a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVRQgAaXO4DdD2zO5LEt5mAK" target="_blank" rel="noopener" class="project-card fade-in">
-                <div class="project-card-visual">
-                    <div class="project-card-img" style="background-image: url('/pordosom-site/img/project-malungo.jpg');"></div>
-                    <span class="project-badge">Festival Cultural</span>
-                </div>
-                <div class="project-body">
-                    <h3 class="project-title">Festival Malungo</h3>
-                    <p class="project-desc">Diversidade e fraternidade musical brasileira — artistas de várias gerações num mesmo palco.</p>
-                    <span class="project-link">Assistir</span>
-                </div>
-            </a>
-            <a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVQFSZ6UnrFhRwZ0YBkoajMD" target="_blank" rel="noopener" class="project-card fade-in">
-                <div class="project-card-visual">
-                    <div class="project-card-img" style="background-image: url('/pordosom-site/img/project-mestres.jpg');"></div>
-                    <span class="project-badge">Festival Cultural</span>
-                </div>
-                <div class="project-body">
-                    <h3 class="project-title">Festival Mestres dos Saberes</h3>
-                    <p class="project-desc">Homenagem aos mestres da cultura popular e seus saberes tradicionais.</p>
-                    <span class="project-link">Assistir</span>
-                </div>
-            </a>
-        </div>
-        <div style="text-align:center">
-            <a href="/pordosom-site/projetos.html" class="teaser-link">Todos os projetos →</a>
-        </div>
+<div class="projeto-card"><div class="galeria"><img src="/pordosom-site/img/project-malungo.jpg" alt="Festival Malungo" loading="lazy" onerror="this.style.display='none'"></div><div class="projeto-corpo"><span class="projeto-badge status-realizado">✓ Realizado</span><h3>Festival Malungo</h3><p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">Festival que celebra a diversidade e a fraternidade musical brasileira. Já em sua 2ª edição, reúne artistas de várias gerações e regiões em um mesmo palco com o show &quot;Caminhos&quot;, gravado no Estúdio 185 Apodi.</p><a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVRQgAaXO4DdD2zO5LEt5mAK" target="_blank" rel="noopener" class="teaser-link" style="margin-top:14px">Ver projeto →</a></div></div>
+<div class="projeto-card"><div class="galeria"><img src="/pordosom-site/img/project-mestres.jpg" alt="Festival Mestres dos Saberes" loading="lazy" onerror="this.style.display='none'"></div><div class="projeto-corpo"><span class="projeto-badge status-realizado">✓ Realizado</span><h3>Festival Mestres dos Saberes</h3><p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">Festival que homenageia mestres da cultura popular e seus saberes tradicionais. Perpetua raízes musicais que definem a identidade do Brasil — do bumba meu boi às ladainhas do Divino.</p><a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVQFSZ6UnrFhRwZ0YBkoajMD" target="_blank" rel="noopener" class="teaser-link" style="margin-top:14px">Ver projeto →</a></div></div>
+<div class="projeto-card"><div class="galeria"><img src="/pordosom-site/img/project-sotaques.jpg" alt="Série Sotaques do Brasil" loading="lazy" onerror="this.style.display='none'"></div><div class="projeto-corpo"><span class="projeto-badge status-realizado">✓ Realizado</span><h3>Série Sotaques do Brasil</h3><p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">Série que percorre os sotaques musicais das regiões brasileiras, revelando sonoridades, vozes e tradições que moldam a música do país. Um mapa sonoro do Brasil — duas temporadas completas.</p><a href="https://www.youtube.com/playlist?list=PLFwSUQfrxbVRhtZUUYrhVvTT6IEBlzUFI" target="_blank" rel="noopener" class="teaser-link" style="margin-top:14px">Ver projeto →</a></div></div>
     </div>
 </section>
 <section class="teaser" id="audiovisual">
@@ -122,13 +82,61 @@
         <div class="teaser-head">
             <span class="section-subtitle">Audiovisual</span>
             <h2 class="section-title">Veja e ouça <span class="gradient">agora</span></h2>
+            <p class="section-description">A produção audiovisual do selo — séries, festivais e o canal completo no YouTube.</p>
         </div>
-        <div class="teaser-videos">
-            <iframe src="https://www.youtube.com/embed/lmVf87iV_0g" loading="lazy" allowfullscreen title="Luana Bayô — Abebé (Festival Malungo)"></iframe>
-            <iframe src="https://www.youtube.com/embed/2QJKf1SatqUhbpm5WcYeXZ" loading="lazy" allowfullscreen title="Marco Vilane — Eu Apenas Queria que Você Soubesse"></iframe>
+<h2 class="section-title" style="font-size:1.3rem;margin-top:3rem">Série Sotaques do Brasil</h2>
+<div class="teaser-videos">
+            <iframe src="https://www.youtube.com/embed/nsU4xFYXiTE" loading="lazy" allowfullscreen title="Ep.01 Tiao Carvalho (MA) convida Sapopemba (AL)"></iframe>
+            <iframe src="https://www.youtube.com/embed/fWLZhcbN8kE" loading="lazy" allowfullscreen title="Ep.02 A Quatro Vozes (MG) convida Lula Barbosa (SP)"></iframe>
+            <iframe src="https://www.youtube.com/embed/nvIckS8_D98" loading="lazy" allowfullscreen title="Ep.03 Toinho Melodia (PE) convida Adriana Moreira (SP)"></iframe>
+            <iframe src="https://www.youtube.com/embed/tVEK1foQLiw" loading="lazy" allowfullscreen title="Ep.04 Fernanda de Paula (MG) convida Osvaldinho da Cuica (SP)"></iframe>
+            <iframe src="https://www.youtube.com/embed/bxttmZRKobA" loading="lazy" allowfullscreen title="Ep.05 Marcelo Pretto (SP) convida Patricia Bastos (AP)"></iframe>
+            <iframe src="https://www.youtube.com/embed/Sfpz9qVuWLI" loading="lazy" allowfullscreen title="Ep.07 Miriam Maria (SP) convida Chico Cesar (PB)"></iframe>
+            <iframe src="https://www.youtube.com/embed/zwE57ciiHkI" loading="lazy" allowfullscreen title="Jessica Gaspar"></iframe>
+            <iframe src="https://www.youtube.com/embed/HzqHkfDKv8Q" loading="lazy" allowfullscreen title="Teaser 1a Temporada"></iframe>
+            <iframe src="https://www.youtube.com/embed/I21Z3gsl8YI" loading="lazy" allowfullscreen title="Teaser 2a Temporada"></iframe>
         </div>
-        <div style="text-align:center">
-            <a href="/pordosom-site/audiovisual.html" class="teaser-link">Canal completo →</a>
+<h2 class="section-title" style="font-size:1.3rem;margin-top:3rem">Festival Malungo</h2>
+<div class="teaser-videos">
+            <iframe src="https://www.youtube.com/embed/hhgoLS7A7Nk" loading="lazy" allowfullscreen title="Adriana Moreira — Santa Segunda"></iframe>
+            <iframe src="https://www.youtube.com/embed/61aqk2Wq9F4" loading="lazy" allowfullscreen title="Aloysio Letra — Instantes"></iframe>
+            <iframe src="https://www.youtube.com/embed/gB3eYOHS3Sk" loading="lazy" allowfullscreen title="Clarianas — Xire"></iframe>
+            <iframe src="https://www.youtube.com/embed/q3FNdq4d6Yk" loading="lazy" allowfullscreen title="Conjunto Picafumo e Convidados — Tambem sou"></iframe>
+            <iframe src="https://www.youtube.com/embed/T04KLPaRo6Y" loading="lazy" allowfullscreen title="Fanta Konate e E Djembedon — Donaba"></iframe>
+            <iframe src="https://www.youtube.com/embed/6e0X-BBgE6g" loading="lazy" allowfullscreen title="Grupo Paranapanema — Segura nessa pisada"></iframe>
+            <iframe src="https://www.youtube.com/embed/6tXWDCdauWM" loading="lazy" allowfullscreen title="Henrique Araujo Quarteto — O Choro Negro"></iframe>
+            <iframe src="https://www.youtube.com/embed/BDzUJdr6j_Q" loading="lazy" allowfullscreen title="Kennya Macedo — Caminhos"></iframe>
+            <iframe src="https://www.youtube.com/embed/lmVf87iV_0g" loading="lazy" allowfullscreen title="Luana Bayo — Abebe"></iframe>
+        </div>
+<h2 class="section-title" style="font-size:1.3rem;margin-top:3rem">Festival Mestres dos Saberes</h2>
+<div class="teaser-videos">
+            <iframe src="https://www.youtube.com/embed/fE4il_2ZQfU" loading="lazy" allowfullscreen title="Ana Maria Carvalho — Paparu"></iframe>
+            <iframe src="https://www.youtube.com/embed/lcmwgAAs11I" loading="lazy" allowfullscreen title="Lumumba"></iframe>
+            <iframe src="https://www.youtube.com/embed/dUtt89qWSg0" loading="lazy" allowfullscreen title="Mestre Kenura"></iframe>
+            <iframe src="https://www.youtube.com/embed/HI27c-Qyb1M" loading="lazy" allowfullscreen title="Mestre Lumumba — Ire Ire"></iframe>
+            <iframe src="https://www.youtube.com/embed/ngaIRiysOeI" loading="lazy" allowfullscreen title="Mestre Plinio — Capoeira Angola"></iframe>
+            <iframe src="https://www.youtube.com/embed/rqSUVRWmHF0" loading="lazy" allowfullscreen title="Tiao Carvalho"></iframe>
+        </div>
+<h2 class="section-title" style="font-size:1.3rem;margin-top:3rem">Outros vídeos do canal</h2>
+<div class="teaser-videos">
+            <iframe src="https://www.youtube.com/embed/r81jPy6tQQE" loading="lazy" allowfullscreen title="Batendo Forte"></iframe>
+            <iframe src="https://www.youtube.com/embed/jTG8EQUhgz8" loading="lazy" allowfullscreen title="Boi Chegou"></iframe>
+            <iframe src="https://www.youtube.com/embed/pgDRxqAWpkM" loading="lazy" allowfullscreen title="Boi de Cofo (Tiao Carvalho)"></iframe>
+            <iframe src="https://www.youtube.com/embed/I2WRFOvZd5M" loading="lazy" allowfullscreen title="Boi do Butanta"></iframe>
+            <iframe src="https://www.youtube.com/embed/L70zg27dxVo" loading="lazy" allowfullscreen title="Causo Matuto no Fitibo"></iframe>
+            <iframe src="https://www.youtube.com/embed/eWfF_odWGmM" loading="lazy" allowfullscreen title="Dente de Ouro (Josias Sobrinho)"></iframe>
+            <iframe src="https://www.youtube.com/embed/y4IbzUvhp1g" loading="lazy" allowfullscreen title="Esperando Alice"></iframe>
+            <iframe src="https://www.youtube.com/embed/U41GrUTFKMM" loading="lazy" allowfullscreen title="Ir e Vir (com Kleber Albuquerque)"></iframe>
+            <iframe src="https://www.youtube.com/embed/5INkY_Et-Vw" loading="lazy" allowfullscreen title="Maria Filo"></iframe>
+            <iframe src="https://www.youtube.com/embed/tzFolX3bEFQ" loading="lazy" allowfullscreen title="Na Barra do Morro (Ro Macedo)"></iframe>
+            <iframe src="https://www.youtube.com/embed/LKaZb_hj0Pc" loading="lazy" allowfullscreen title="Por Mim e Pelo Meu Povo"></iframe>
+            <iframe src="https://www.youtube.com/embed/mrhzAOeDR_Y" loading="lazy" allowfullscreen title="Sanharo (Tambor de Crioula)"></iframe>
+            <iframe src="https://www.youtube.com/embed/xzVHa6qoHhE" loading="lazy" allowfullscreen title="Santos do Morro (Ana Maria Carvalho)"></iframe>
+            <iframe src="https://www.youtube.com/embed/Dge5MaAjIys" loading="lazy" allowfullscreen title="Santos do Morro"></iframe>
+            <iframe src="https://www.youtube.com/embed/QPyX8hlQoTQ" loading="lazy" allowfullscreen title="The most beautiful woman in the world"></iframe>
+            <iframe src="https://www.youtube.com/embed/1_OlzIMjo0Y" loading="lazy" allowfullscreen title="Truque de Menino"></iframe>
+            <iframe src="https://www.youtube.com/embed/5masKu04Tmg" loading="lazy" allowfullscreen title="Varal Diverso (Full Album)"></iframe>
+            <iframe src="https://www.youtube.com/embed/TGfOYgisoN8" loading="lazy" allowfullscreen title="Versa e Vice (com Edu Capello)"></iframe>
         </div>
     </div>
 </section>
@@ -138,9 +146,9 @@
             <span class="section-subtitle">Playlists</span>
             <h2 class="section-title">Curadoria do <span class="gradient">selo</span></h2>
         </div>
-        <div class="teaser-playlists">
-            <iframe src="https://open.spotify.com/embed/playlist/2lgoPMSE9e7lxEumGbBaGn" height="380" loading="lazy" title="Samba Raiz e Partido Alto"></iframe>
-            <iframe src="https://open.spotify.com/embed/playlist/2cyXUj8Qhe3nZ0rbng87nR" height="380" loading="lazy" title="Tambores do Brasil"></iframe>
+<div class="teaser-playlists">
+            <iframe src="https://open.spotify.com/embed/playlist/" height="380" loading="lazy" title="Playlist 1"></iframe>
+            <iframe src="https://open.spotify.com/embed/playlist/" height="380" loading="lazy" title="Playlist 2"></iframe>
         </div>
     </div>
 </section>
@@ -149,44 +157,60 @@
         <div class="manifesto-content">
             <span class="section-subtitle">Manifesto</span>
             <h2 class="section-title">Som que <span class="gradient">pulsa Brasil</span></h2>
-            <p class="manifesto-text">
-                O Por do Som nasceu de uma certeza simples: a música brasileira de raiz merece ser
-                ouvida, registrada e celebrada. Cada lançamento é um <span class="highlight">ato de resistência cultural</span>.
-            </p>
-            <div style="text-align:center">
-                <a href="/pordosom-site/manifesto.html" class="teaser-link">Leia o manifesto →</a>
-            </div>
+            <p class="manifesto-text">A música brasileira de raiz merece ser ouvida, registrada e celebrada. Somos um selo independente e produtora cultural que se debruça sobre as Brasilidades, esse turbilhão de sons, cores e saberes que pulsa do Maranhão a São Paulo, dos terreiros aos quintais, dos mestres aos jovens que os escutam.</p>
+            <p class="manifesto-text">Trabalhamos com cultura afro-brasileira, com samba raiz, com bumba meu boi, com tambores e cantigas. Gravamos, produzimos, curamos. Homenageamos mestres e abrigamos parcerias que atravessam gerações porque a tradição só é viva quando segue sendo cantada.</p>
+            <p class="manifesto-text">Cada lançamento é um ato de resistência cultural. Cada projeto, uma forma de dizer: a música popular brasileira segue inventando, segue ensinando, segue reunindo gente em torno do que é nosso.</p>
+            <p class="manifesto-signature">— Por do Som Cultural</p>
             <div class="manifesto-stats" style="margin-top:3rem">
-                <div class="stat-item fade-in"><div class="stat-num">31</div><div class="stat-label">Obras no catálogo</div></div>
-                <div class="stat-item fade-in"><div class="stat-num">10+</div><div class="stat-label">Artistas</div></div>
-                <div class="stat-item fade-in"><div class="stat-num">3</div><div class="stat-label">Festivais próprios</div></div>
-                <div class="stat-item fade-in"><div class="stat-num">42</div><div class="stat-label">Vídeos produzidos</div></div>
+<div class="stat-item fade-in"><div class="stat-num">31</div><div class="stat-label">Obras no catálogo</div></div>
+<div class="stat-item fade-in"><div class="stat-num">10+</div><div class="stat-label">Artistas</div></div>
+<div class="stat-item fade-in"><div class="stat-num">3</div><div class="stat-label">Festivais próprios</div></div>
+<div class="stat-item fade-in"><div class="stat-num">42</div><div class="stat-label">Vídeos produzidos</div></div>
             </div>
         </div>
     </div>
 </section>
-<section class="teaser" id="contato">
+<section class="teaser teaser-alt" id="quemsomos">
+    <div class="container">
+        <div class="manifesto-content">
+            <span class="section-subtitle">Quem Somos</span>
+            <h2 class="section-title">Mais de 20 anos <span class="gradient">cantando o Brasil</span></h2>
+            <p class="manifesto-text">O Por do Som é um selo independente e produtora cultural nascido da convivência com a música brasileira de raiz. Ao longo de mais de duas décadas, gravou e lançou obras de Marco Vilane, Tião Carvalho, Ana Maria Carvalho, Luana Bayô, Jonathan Silva, Aloysio Letra e de mestres da cultura popular de norte a sul do país. Somos também editora e produtora de festivais e séries audiovisuais que celebram mestres e saberes da tradição.</p>
+
+        </div>
+    </div>
+</section>
+<section class="teaser" id="editora">
+    <div class="container">
+        <div class="manifesto-content">
+            <span class="section-subtitle">Editora &amp; Direitos</span>
+            <h2 class="section-title">Administração de <span class="gradient">obras musicais</span></h2>
+            <p class="manifesto-text">A editora do Pôr do Som administra obras musicais e gerencia direitos autorais no ambiente digital: registro, captação, fiscalização e repasse para que compositores e parceiros do catálogo recebam o que a música deles gera, em qualquer plataforma. Para saber mais, entre em contato conosco.</p>
+            <p class="manifesto-signature">Consultoria: <a href="#contato" style="color:var(--brand-primary-light);text-decoration:none;text-transform:none;letter-spacing:normal">fale com o selo</a></p>
+        </div>
+    </div>
+</section>
+<section class="teaser teaser-alt" id="contato">
     <div class="container">
         <div class="teaser-head">
             <span class="section-subtitle">Contato</span>
-            <h2 class="section-title">Vamos <span class="gradient">fazer música</span> juntos?</h2>
-            <p class="section-description">Parcerias, projetos e lançamentos — o selo está aberto.</p>
+            <h2 class="section-title">Entre em contato</h2>
+            <p class="section-description"></p>
             <div class="teaser-contato" style="margin-top:1.5rem">
-                <a href="mailto:contato@pordosom.com.br" class="social-card" style="text-decoration:none">
+                <a href="mailto:" class="social-card" style="text-decoration:none">
                     <div class="social-card-icon">✉</div>
-                    <div class="social-card-text"><div class="social-card-label">E-mail</div><div class="social-card-handle">contato@pordosom.com.br</div></div>
-                </a>
+                    <div class="social-card-text"><div class="social-card-label">E-mail</div>
+                    <div class="social-card-handle"></div></div></a>
                 <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener" class="social-card" style="text-decoration:none">
                     <div class="social-card-icon">📷</div>
-                    <div class="social-card-text"><div class="social-card-label">Instagram</div><div class="social-card-handle">@pordosomcultural</div></div>
-                </a>
-            </div>
-            <div style="margin-top:2rem">
-                <a href="/pordosom-site/contato.html" class="teaser-link">Todos os contatos →</a>
+                    <div class="social-card-text"><div class="social-card-label">Instagram</div>
+                    <div class="social-card-handle">@pordosomcultural</div></div></a>
+
             </div>
         </div>
     </div>
 </section>
+
 <footer class="footer">
     <div class="container">
         <span class="footer-logo">PÔR DO SOM</span>
@@ -194,7 +218,7 @@
         <div class="footer-social">
             <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener">Instagram</a>
             <a href="https://www.youtube.com/user/pordosomcultural" target="_blank" rel="noopener">YouTube</a>
-            <a href="https://open.spotify.com/user/pordosom?si=386032c6b03644ad" target="_blank" rel="noopener">Spotify</a>
+            <a href="https://open.spotify.com/user/pordosom" target="_blank" rel="noopener">Spotify</a>
             <a href="https://www.facebook.com/pordosomcultural" target="_blank" rel="noopener">Facebook</a>
             <a href="https://tiktok.com/@pordosom" target="_blank" rel="noopener">TikTok</a>
             <a href="https://linktr.ee/pordosom" target="_blank" rel="noopener">Linktree</a>
@@ -202,34 +226,71 @@
         <p class="footer-text">© 2026 Por do Som Cultural · Todos os direitos reservados</p>
     </div>
 </footer>
-<script src="/pordosom-site/js/catalogo.js"></script>
 <script>
-const header = document.getElementById('header');
-const nav = document.getElementById('nav');
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) header.classList.add('scrolled');
-    else header.classList.remove('scrolled');
-}, { passive: true });
-mobileMenuBtn.addEventListener('click', () => {
-    nav.classList.toggle('active');
-    mobileMenuBtn.textContent = nav.classList.contains('active') ? '✕' : '☰';
-});
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        nav.classList.remove('active');
-        mobileMenuBtn.textContent = '☰';
-    });
-});
-const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            fadeObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+const header=document.getElementById("header");const nav=document.getElementById("nav");const mobileMenuBtn=document.getElementById("mobileMenuBtn");
+window.addEventListener("scroll",()=>{if(window.scrollY>50)header.classList.add("scrolled");else header.classList.remove("scrolled")},{passive:true});
+mobileMenuBtn.addEventListener("click",()=>{nav.classList.toggle("active");mobileMenuBtn.textContent=nav.classList.contains("active")?"✕":"☰"});
+const fadeObserver=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");fadeObserver.unobserve(e.target)}})},{threshold:0.1,rootMargin:"0px 0px -50px 0px"});
+document.querySelectorAll(".fade-in").forEach(el=>fadeObserver.observe(el));
+</script>
+<script>
+(async function(){
+  const BASE = "/pordosom-site";
+  let CAT;
+  try { const r = await fetch(BASE + "/data/catalogo.json?v=" + Date.now()); CAT = await r.json(); } catch(e){ return; }
+  if (CAT.albuns) CAT.albuns.forEach(a => {
+    if (Array.isArray(a.capa)) a.capa = a.capa[0] || "";
+    if (typeof a.capa !== "string") a.capa = String(a.capa || "");
+    if (typeof a.generos === "string") a.generos = a.generos.replace(/[\[\]]/g,"").split(",").map(s=>s.trim()).filter(Boolean);
+    if (!Array.isArray(a.generos)) a.generos = [];
+  });
+  if (!CAT.albuns) CAT.albuns = []; if (!CAT.generos) CAT.generos = [];
+  const capaSrc = c => (c && c.startsWith("/")) ? BASE + c : (c || "");
+  const fallback = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%231a0e0e%22 width=%22300%22 height=%22300%22/%3E%3Ccircle cx=%22150%22 cy=%22130%22 r=%2255%22 fill=%22%23a83030%22 opacity=%220.7%22/%3E%3C/svg%3E";
+  CAT.albuns.sort((x,y)=>{const ox=parseInt(x.ordem)||0,oy=parseInt(y.ordem)||0;if(ox&&oy)return ox-oy;if(ox)return -1;if(oy)return 1;return String(y.ano||"").localeCompare(String(x.ano||""))});
+  const vitrine = document.getElementById("vitrine");
+  if (vitrine) { vitrine.innerHTML = CAT.albuns.filter(a=>a.destaque).slice(0,6).map(a =>
+    `<a href="${BASE}/albuns/${a.slug}.html"><img src="${capaSrc(a.capa)}" alt="Capa: ${a.title||a.titulo||""}" loading="lazy" onerror="this.src='${fallback}'"><span class="vitrine-titulo">${a.titulo||""}</span></a>`).join(""); }
+  const filtrosEl = document.getElementById("filtros");
+  const grid = document.getElementById("catalogo-grid");
+  if (filtrosEl && grid) {
+    const contagem = { todos: CAT.albuns.length };
+    CAT.generos.forEach(g => { contagem[g.id] = CAT.albuns.filter(a=>a.generos.includes(g.id)).length });
+    filtrosEl.innerHTML = `<button class="filtro ativo" data-g="todos">Todos <span class="count">${contagem.todos}</span></button>` +
+      CAT.generos.filter(g=>contagem[g.id]>0).map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]}</span></button>`).join("");
+    const nomeG = id => (CAT.generos.find(g=>g.id===id)||{}).nome || id;
+    function renderGrid(g){
+      const lista = g==="todos" ? CAT.albuns : CAT.albuns.filter(a=>a.generos.includes(g));
+      grid.innerHTML = lista.map(a => `<a class="album-card" href="${BASE}/albuns/${a.slug}.html">
+        <div class="album-capa"><img src="${capaSrc(a.capa)}" alt="" loading="lazy" onerror="this.src='${fallback}'"></div>
+        <div class="album-info"><div class="album-titulo">${a.titulo}</div>
+        <div class="album-artista">${a.artista}${a.ano?" · "+a.ano:""}</div>
+        <div class="album-tags">${a.generos.map(g=>`<span class="album-tag">${nomeG(g)}</span>`).join("")}</div></div></a>`).join("") || '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted)">Nenhum álbum neste gênero.</p>';
+    }
+    filtrosEl.addEventListener("click", e => { const b = e.target.closest(".filtro"); if (b) {
+      filtrosEl.querySelectorAll(".filtro").forEach(x=>x.classList.toggle("ativo", x===b)); renderGrid(b.dataset.g); } });
+    renderGrid("todos");
+  }
+  const artGrid = document.getElementById("artistas-grid");
+  if (artGrid && Array.isArray(CAT.artistas)) { artGrid.innerHTML = CAT.artistas.map(a =>
+    `<div class="artist-card fade-in"><div class="artist-card-img" style="background-image:url('${a.img||""}')"></div>
+    <div class="artist-card-overlay"></div><div class="artist-card-content">
+    <div class="artist-initial">${(a.nome||"?").trim()[0].toUpperCase()}</div>
+    <div class="artist-name">${a.nome||""}</div><div class="artist-role">${a.role||""}</div></div></div>`).join(""); }
+  const bannerEl = document.getElementById("banner-noticia");
+  if (bannerEl && Array.isArray(CAT.posts) && CAT.posts.length) {
+    const p = CAT.posts[0]; const partes = String(p.date||"").split("-");
+    const data = partes.length===3 ? partes.reverse().join("/") : "";
+    bannerEl.innerHTML = `<a href="${BASE}/blog.html" style="display:flex;gap:1.8rem;max-width:860px;margin:0 auto;padding:2rem;background:linear-gradient(135deg,var(--bg-card),var(--bg-darker));border:1px solid var(--border-color);border-left:4px solid var(--brand-primary);border-radius:6px;text-decoration:none;align-items:center;box-shadow:0 12px 40px rgba(0,0,0,.35);transition:transform .3s"
+      onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+      <div style="flex:1">
+      <div style="font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--brand-accent);margin-bottom:.7rem">📰 Última notícia · ${data}</div>
+      <h3 style="font-size:clamp(1.15rem,3vw,1.6rem);font-weight:800;text-transform:uppercase;color:var(--text-primary);line-height:1.25;margin-bottom:.8rem">${p.title||""}</h3>
+      <p style="font-size:.9rem;color:var(--text-secondary);line-height:1.7">${p.resumo||""}</p>
+      <span style="display:inline-block;margin-top:1.1rem;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand-primary-light)">Ler a notícia completa →</span>
+      </div></a>`;
+  }
+})();
 </script>
 </body>
 </html>

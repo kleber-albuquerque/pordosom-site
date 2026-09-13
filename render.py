@@ -449,10 +449,12 @@ def gera_site():
             + hero + sec_noticias + sec_grav + sec_artistas + sec_proj + sec_av + sec_pl
             + sec_manif + sec_qs + sec_ed + sec_cont + '\n' + _footer() + _scripts() + js_site)
 
-    with open(os.path.join(BASE_DIR, 'site.html'), 'w', encoding='utf-8') as f:
-        f.write(_doc('Por do Som | Selo Independente & Produtora Cultural',
-                     cfg_str('hero_texto', 'Selo dedicado às Brasilidades')[:155], body))
-    print('✔ site.html gerado (seções: hero, notícias, gravadora, artistas, projetos, audiovisual, playlists, manifesto, quem-somos, editora, contato)')
+    _conteudo = _doc('Por do Som | Selo Independente & Produtora Cultural',
+                     cfg_str('hero_texto', 'Selo dedicado às Brasilidades')[:155], body)
+    for _alvo in ('site.html', 'index.html'):
+        with open(os.path.join(BASE_DIR, _alvo), 'w', encoding='utf-8') as f:
+            f.write(_conteudo)
+    print('✔ site.html + index.html gerados (seções: hero, notícias, gravadora, artistas, projetos, audiovisual, playlists, manifesto, quem-somos, editora, contato)')
 
 # ---------- Páginas de notícia ----------
 def gera_posts():
