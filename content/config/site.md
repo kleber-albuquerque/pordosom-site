@@ -7,7 +7,7 @@ manifesto_texto3: "Cada lançamento é um ato de resistência cultural. Cada pro
 quemsomos_texto: "O Por do Som é um selo independente e produtora cultural nascido da convivência com a música brasileira de raiz. Ao longo de mais de duas décadas, gravou e lançou obras de Marco Vilane, Tião Carvalho, Ana Maria Carvalho, Luana Bayô, Jonathan Silva, Aloysio Letra e de mestres da cultura popular de norte a sul do país. Somos também editora e produtora de festivais e séries audiovisuais que celebram mestres e saberes da tradição."
 portfolio_link: ""
 editora_texto: "A editora do Pôr do Som administra obras musicais e gerencia direitos autorais no ambiente digital: registro, captação, fiscalização e repasse para que compositores e parceiros do catálogo recebam o que a música deles gera, em qualquer plataforma. Para saber mais, entre em contato conosco."
-grav_titulo: "Conheça o catálogo do Pôr do Som"
+grav_titulo: "Conheça o nosso catálogo.."
 grav_descricao: "Do samba de raiz à música afro-brasileira, o Pôr do Som traz o melhor da nossa música."
 artistas_titulo: "Artistas que cantam o Brasil"
 artistas_descricao: "Compositores, intérpretes e mestres que carregam a brasilidade nas vozes, nas violas e nos tambores."
