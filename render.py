@@ -1,47 +1,40 @@
 #!/usr/bin/env python3
 # ==========================================================
-# POR DO SOM — render.py v4 (consolidado)
-#
-# Lê:  content/albuns/*.md      (catálogo)
-#      content/posts/*.md       (notícias)
-#      content/audiovisual/*.md (clips)
-# Gera: albuns/*.html, data/catalogo.json,
-#       blog.html, audiovisual.html, sitemap.xml
-#
-# ⚠️ REGRA DA BASE: '/pordosom-site' no Pages | '' no domínio
+# POR DO SOM — render.py v5 (consolidado)
+# A ÚNICA fonte: content/*.md → gera TUDO:
+#   site.html (o site inteiro, seções por âncoras)
+#   albuns/*.html (páginas individuais — deep-link/SEO)
+#   posts/*.html (páginas de notícia)
+#   data/catalogo.json + sitemap.xml
+# Sem HTML à mão. Sem injeção regex. Uma técnica: geração.
 # ==========================================================
 import os, re, json, html
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PASTA_MD = os.path.join(BASE_DIR, 'content', 'albuns')
-PASTA_POSTS = os.path.join(BASE_DIR, 'content', 'posts')
-PASTA_AV = os.path.join(BASE_DIR, 'content', 'audiovisual')
-OUT_ALBUNS = os.path.join(BASE_DIR, 'albuns')
-OUT_JSON = os.path.join(BASE_DIR, 'data', 'catalogo.json')
-OUT_SITEMAP = os.path.join(BASE_DIR, 'sitemap.xml')
+PASTA = {
+    'albuns': os.path.join(BASE_DIR, 'content', 'albuns'),
+    'posts': os.path.join(BASE_DIR, 'content', 'posts'),
+    'projetos': os.path.join(BASE_DIR, 'content', 'projetos'),
+    'audiovisual': os.path.join(BASE_DIR, 'content', 'audiovisual'),
+    'config': os.path.join(BASE_DIR, 'content', 'config'),
+}
 
 BASE = '/pordosom-site'
 DOMINIO = 'https://kleber-albuquerque.github.io' + BASE
 
 GENEROS = {
-    'samba-de-raiz': 'Samba de Raiz',
-    'instrumental': 'Instrumental',
-    'mpb': 'MPB/Nova MPB',
-    'brasilidades': 'Brasilidades',
-    'cultura-popular': 'Cultura Popular',
-    'afro-brasileira': 'Afro-brasileira',
+    'samba-de-raiz': 'Samba de Raiz', 'instrumental': 'Instrumental',
+    'mpb': 'MPB/Nova MPB', 'brasilidades': 'Brasilidades',
+    'cultura-popular': 'Cultura Popular', 'afro-brasileira': 'Afro-brasileira',
     'infantil': 'Infantil',
 }
-
 GRUPOS_AV = {
-    'sotaques': 'Série Sotaques do Brasil',
-    'malungo': 'Festival Malungo',
-    'mestres': 'Festival Mestres dos Saberes',
-    'outros': 'Outros vídeos do canal',
+    'sotaques': 'Série Sotaques do Brasil', 'malungo': 'Festival Malungo',
+    'mestres': 'Festival Mestres dos Saberes', 'outros': 'Outros vídeos do canal',
 }
 
-# ---------- Parser de frontmatter ----------
+# ---------- Parser ----------
 def parse_md(caminho):
     with open(caminho, encoding='utf-8') as f:
         texto = f.read()
@@ -49,878 +42,503 @@ def parse_md(caminho):
     m = re.match(r'^---\s*\n(.*?)\n---\s*\n?(.*)$', texto, re.DOTALL)
     if m:
         bloco, corpo = m.group(1), m.group(2)
-        lista_atual = None
+        lista = None
         for linha in bloco.split('\n'):
-            m_item = re.match(r'^\s+-\s+(\S+)\s*$', linha)
-            if m_item and lista_atual:
-                if not isinstance(meta.get(lista_atual), list):
-                    if lista_atual in meta:
-                        meta[lista_atual] = [meta[lista_atual]]
-                    else:
-                        meta[lista_atual] = []
-                meta[lista_atual].append(m_item.group(1))
+            mi = re.match(r'^\s+-\s+(\S+)\s*$', linha)
+            if mi and lista:
+                if not isinstance(meta.get(lista), list):
+                    meta[lista] = [meta[lista]] if lista in meta else []
+                meta[lista].append(mi.group(1))
                 continue
-            m_kv = re.match(r'^(\w[\w_-]*):\s*(.*)$', linha)
-            if m_kv:
-                chave, valor = m_kv.group(1), m_kv.group(2).strip()
-                lista_atual = chave
-                m_str = re.match(r'^"(.*)"$', valor) or re.match(r"^'(.*)'$", valor)
-                if m_str:
-                    meta[chave] = m_str.group(1)
-                elif valor == '':
-                    meta[chave] = []
-                elif re.match(r'^\d+$', valor):
-                    meta[chave] = int(valor)
-                elif valor in ('true', 'false'):
-                    meta[chave] = valor == 'true'
-                else:
-                    meta[chave] = valor
+            mk = re.match(r'^(\w[\w_-]*):\s*(.*)$', linha)
+            if mk:
+                k, v = mk.group(1), mk.group(2).strip()
+                lista = k
+                ms = re.match(r'^"(.*)"$', v) or re.match(r"^'(.*)'$", v)
+                if ms: meta[k] = ms.group(1)
+                elif v == '': meta[k] = []
+                elif re.match(r'^\d+$', v): meta[k] = int(v)
+                elif v in ('true', 'false'): meta[k] = v == 'true'
+                else: meta[k] = v
     return meta, corpo.strip()
 
 def esc(t):
     return html.escape(str(t or ''))
 
-def caminho(c):
-    if not c:
-        return c
-    if isinstance(c, list):
-        c = c[0] if c else ''
-    if not isinstance(c, str):
-        c = str(c)
-    return BASE + c if c.startswith('/') else c
+def cfg_str(chave, default=''):
+    v = SITE_CFG.get(chave, default)
+    if isinstance(v, list): v = v[0] if v else ''
+    return str(v) if v is not None else default
 
-def embed_spotify(url):
-    if not url:
-        return ''
-    return url.replace('open.spotify.com/', 'open.spotify.com/embed/')
+def slugify(t):
+    t = re.sub(r'[^a-z0-9\s-]', '', str(t or '').lower())
+    return re.sub(r'[\s-]+', '-', t.strip())
 
-def embed_youtube(url):
-    if not url:
-        return ''
-    m = re.search(r'(?:v=|youtu\.be/|embed/)([\w-]{11})', url)
-    if m:
-        return 'https://www.youtube.com/embed/' + m.group(1)
-    return ''
+def yt_id(url):
+    m = re.search(r'(?:v=|youtu\.be/|embed/)([\w-]{11})', str(url or ''))
+    return m.group(1) if m else ''
 
-# ---------- Lê os álbuns ----------
-albuns = []
-if os.path.isdir(PASTA_MD):
-    for nome in sorted(os.listdir(PASTA_MD)):
-        if not nome.endswith('.md'):
-            continue
-        meta, corpo = parse_md(os.path.join(PASTA_MD, nome))
-        slug = nome[:-3]
-        meta.setdefault('titulo', slug.replace('-', ' ').title())
-        meta.setdefault('artista', '')
-        meta.setdefault('ano', '')
-        meta.setdefault('generos', [])
-        meta.setdefault('destaque', False)
-        meta.setdefault('faixas', '')
-        meta['slug'] = slug
-        meta['texto_pt'] = corpo
-        if isinstance(meta.get('generos'), str):
-            meta['generos'] = [x.strip() for x in meta['generos'].replace('[','').replace(']','').split(',') if x.strip()]
-        if isinstance(meta.get('capa'), list):
-            meta['capa'] = meta['capa'][0] if meta['capa'] else ''
-        albuns.append(meta)
+def sp_embed(url):
+    return str(url or '').replace('open.spotify.com/', 'open.spotify.com/embed/')
 
-# Ordenação: com ordem: primeiro; sem: ano desc
-def _tem_ordem(a):
-    o = a.get('ordem')
-    if isinstance(o, list):
-        o = o[0] if o else None
-    try:
-        return o is not None and str(o).strip() != ''
-    except Exception:
-        return False
-
-_com = [a for a in albuns if _tem_ordem(a)]
-_sem = [a for a in albuns if not _tem_ordem(a)]
-_com.sort(key=lambda a: int(str(a.get('ordem')).strip()))
-_sem.sort(key=lambda a: (str(a.get('ano', '')), a['titulo']), reverse=True)
-albuns[:] = _com + _sem
-
-# ---------- Lê as notícias ----------
-posts = []
-if os.path.isdir(PASTA_POSTS):
-    for nome in sorted(os.listdir(PASTA_POSTS)):
-        if not nome.endswith('.md'):
-            continue
-        meta, corpo = parse_md(os.path.join(PASTA_POSTS, nome))
-        meta.setdefault('title', nome[:-3])
-        meta.setdefault('date', '')
-        meta.setdefault('resumo', '')
-        meta.setdefault('rascunho', False)
-        meta.setdefault('imagem', '')
-        meta['corpo'] = corpo
-        posts.append(meta)
-posts = [p for p in posts if not p.get('rascunho')]
-posts.sort(key=lambda p: str(p.get('date', '')), reverse=True)
-
-# ---------- Lê os clips ----------
-clips = []
-if os.path.isdir(PASTA_AV):
-    for nome in sorted(os.listdir(PASTA_AV)):
-        if not nome.endswith('.md'):
-            continue
-        meta, corpo = parse_md(os.path.join(PASTA_AV, nome))
-        meta.setdefault('titulo', nome[:-3])
-        meta.setdefault('grupo', 'outros')
-        meta.setdefault('ano', '')
-        meta.setdefault('artista', '')
-        meta.setdefault('yt_id', '')
-        clips.append(meta)
-clips.sort(key=lambda c: str(c.get('ano', '')))
-
-# ---------- Lê os projetos ----------
-PASTA_PROJ = os.path.join(BASE_DIR, 'content', 'projetos')
-projetos = []
-if os.path.isdir(PASTA_PROJ):
-    for nome in sorted(os.listdir(PASTA_PROJ)):
-        if not nome.endswith('.md'):
-            continue
-        meta, corpo = parse_md(os.path.join(PASTA_PROJ, nome))
-        meta.setdefault('titulo', nome[:-3])
-        meta.setdefault('status', 'realizado')
-        meta.setdefault('badge', 'Projeto')
-        meta.setdefault('ano', '')
-        meta.setdefault('imagem', '')
-        meta.setdefault('link', '')
-        meta.setdefault('relatorio', '')
-        meta.setdefault('tags', [])
-        meta['corpo'] = corpo
-        if isinstance(meta.get('tags'), str):
-            meta['tags'] = [t.strip() for t in meta['tags'].split(',') if t.strip()]
-        projetos.append(meta)
-projetos.sort(key=lambda p: str(p.get('ano', '')), reverse=True)
-
-# ---------- Le o config do site ----------
-SITE_CFG = {}
-cfg_path = os.path.join(BASE_DIR, 'content', 'config', 'site.md')
-if os.path.exists(cfg_path):
-    cfg_meta, _ = parse_md(cfg_path)
-    SITE_CFG = cfg_meta
-
-# ---------- Template da página de álbum ----------
-NAV_HTML = (
-    '        <a href="' + BASE + '/" class="nav-link">Home</a>\n'
-    '        <a href="' + BASE + '/blog.html" class="nav-link">Notícias</a>\n'
-    '        <a href="' + BASE + '/gravadora.html" class="nav-link">Gravadora</a>\n'
-    '        <a href="' + BASE + '/projetos.html" class="nav-link">Projetos</a>\n'
-    '        <a href="' + BASE + '/audiovisual.html" class="nav-link">Audiovisual</a>\n'
-    '        <a href="' + BASE + '/manifesto.html" class="nav-link">Manifesto</a>\n'
-    '        <a href="' + BASE + '/quem-somos.html" class="nav-link">Quem Somos</a>\n'
-)
-
-FOOTER_HTML = (
-'<footer class="footer">\n'
-'    <div class="container">\n'
-'        <span class="footer-logo">PÔR DO SOM</span>\n'
-'        <p class="footer-tagline">Selo Independente · Brasilidades</p>\n'
-'        <p class="footer-text">© ' + str(datetime.now().year) + ' Por do Som</p>\n'
-'    </div>\n'
-'</footer>\n'
-)
-
-def page_album(a, prev, next_):
-    generos_str = ' · '.join(GENEROS.get(g, g) for g in (a.get('generos') or []))
-    schema = {
-        "@context": "https://schema.org",
-        "@type": "MusicAlbum",
-        "name": a['titulo'],
-        "byArtist": {"@type": "MusicGroup", "name": a['artista']},
-        "genre": generos_str,
-        "datePublished": str(a.get('ano', '')),
-        "publisher": {"@type": "Organization", "name": "Por do Som"},
-    }
-    embeds_html = ''
-    sp = embed_spotify(a.get('spotify', ''))
-    if sp:
-        embeds_html += '\n        <iframe src="' + esc(sp) + '" height="152" loading="lazy" title="Ouvir no Spotify"></iframe>'
-    yt = embed_youtube(a.get('youtube', ''))
-    if yt:
-        embeds_html += '\n        <iframe src="' + esc(yt) + '" style="aspect-ratio:16/9" loading="lazy" allowfullscreen title="Vídeo do álbum"></iframe>'
-
-    plats = []
-    if a.get('spotify'):  plats.append(('Spotify', a['spotify']))
-    if a.get('youtube'):  plats.append(('YouTube', a['youtube']))
-    if a.get('apple'):    plats.append(('Apple Music', a['apple']))
-    if a.get('deezer'):   plats.append(('Deezer', a['deezer']))
-    plats_html = ''.join(
-        '<a class="plat-link" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(n) + '</a>'
-        for n, u in plats)
-
-    en_html = ''
-    if a.get('texto_en'):
-        en_html = '<p class="album-descricao-en">' + esc(a['texto_en']) + '</p>'
-
-    prev_html = '<span></span>'
-    if prev:
-        href_p = caminho('/albuns/' + prev['slug'] + '.html')
-        prev_html = '<a class="album-nav-link" href="' + href_p + '">&#8592; ' + esc(prev['titulo']) + '</a>'
-    next_html = '<span></span>'
-    if next_:
-        href_n = caminho('/albuns/' + next_['slug'] + '.html')
-        next_html = '<a class="album-nav-link" href="' + href_n + '">' + esc(next_['titulo']) + ' &#8594;</a>'
-
-    faixas_txt = ''
-    if a.get('faixas'):
-        faixas_txt = str(a['faixas']) + ' faixas · '
-
-    capa_val = a.get('capa', '')
-    if isinstance(capa_val, list):
-        capa_val = capa_val[0] if capa_val else ''
-    capa_attr = esc(capa_val) if capa_val else ''
-
-    return (
-'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n'
-'<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-'<title>' + esc(a['titulo']) + ' — ' + esc(a['artista']) + ' | Por do Som</title>\n'
-'<meta name="description" content="' + esc((a['texto_pt'] or a['titulo'])[:155]) + '">\n'
-'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
-'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
-'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n'
-'<script type="application/ld+json">\n' + json.dumps(schema, ensure_ascii=False, indent=2) + '\n</script>\n'
-'</head>\n<body class="page-interna">\n\n'
-'<header class="header" id="header">\n'
-'    <a href="' + BASE + '/" class="logo">\n'
-'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
-'        <span class="logo-text">PÔR DO SOM</span>\n'
-'    </a>\n'
-'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
-'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n'
-'</header>\n\n'
-'<main class="album-page">\n'
-'    <div class="container">\n'
-'        <div class="album-hero">\n'
-'            <div class="album-capa-grande">\n'
-'                <img src="' + esc(caminho(capa_val)) + '" alt="Capa do álbum ' + esc(a['titulo']) + '"\n'
-'                     onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 600%22%3E%3Crect fill=%22%231a0e0e%22 width=%22600%22 height=%22600%22/%3E%3Ccircle cx=%22300%22 cy=%22260%22 r=%22100%22 fill=%22%23a83030%22 opacity=%220.75%22/%3E%3C/svg%3E\'">\n'
-'            </div>\n'
-'            <div>\n'
-'                <span class="album-kicker">Álbum · ' + esc(a.get('ano', '')) + ' · ' + esc(generos_str) + '</span>\n'
-'                <h1 class="album-titulo-grande">' + esc(a['titulo']) + '</h1>\n'
-'                <div class="album-artista-grande">' + esc(a['artista']) + '</div>\n'
-'                <div class="album-meta-info">' + faixas_txt + 'Por do Som</div>\n\n'
-'                <p class="album-descricao">' + esc(a['texto_pt']) + '</p>\n'
-+ en_html + '\n'
-'                <div class="album-embeds">' + embeds_html + '\n                </div>\n'
-'                <div class="album-plataformas">' + plats_html + '</div>\n'
-'            </div>\n'
-'        </div>\n\n'
-'        <div class="album-navegacao">\n'
-'            ' + prev_html + '\n'
-'            <a class="album-nav-link" href="' + BASE + '/gravadora.html">Voltar ao catálogo</a>\n'
-'            ' + next_html + '\n'
-'        </div>\n'
-'    </div>\n'
-'</main>\n\n'
-+ FOOTER_HTML +
-'<script>\n'
-'const menuBtn = document.getElementById(\'mobileMenuBtn\');\n'
-'const nav = document.getElementById(\'nav\');\n'
-'menuBtn.addEventListener(\'click\', () => nav.classList.toggle(\'active\'));\n'
-'</script>\n'
-'</body>\n</html>\n')
-
-# ---------- Gera as páginas de álbum ----------
-os.makedirs(OUT_ALBUNS, exist_ok=True)
-os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
-
-geradas = []
-for i, a in enumerate(albuns):
-    prev = albuns[i - 1] if i > 0 else None
-    next_ = albuns[i + 1] if i < len(albuns) - 1 else None
-    path = os.path.join(OUT_ALBUNS, a['slug'] + '.html')
-    with open(path, 'w', encoding='utf-8') as f:
-        f.write(page_album(a, prev, next_))
-    geradas.append(a['slug'])
-
-# ---------- Gera o catalogo.json (nasce limpo) ----------
-def _norm_json(a):
-    capa = a.get('capa', '')
-    if isinstance(capa, list):
-        capa = capa[0] if capa else ''
-    capa = str(capa) if capa else ''
-    generos = a.get('generos', [])
-    if isinstance(generos, str):
-        generos = [x.strip() for x in generos.replace('[', '').replace(']', '').split(',') if x.strip()]
-    ano = a.get('ano', '')
-    if isinstance(ano, list):
-        ano = ano[0] if ano else ''
-    ordem = a.get('ordem', '')
-    if isinstance(ordem, list):
-        ordem = ordem[0] if ordem else ''
-    return {
-        'slug': a['slug'],
-        'titulo': str(a.get('titulo', '')),
-        'artista': str(a.get('artista', '')),
-        'ano': ano,
-        'capa': capa,
-        'generos': generos,
-        'destaque': bool(a.get('destaque', False)),
-        'ordem': str(ordem) if ordem else '',
-        'spotify': str(a.get('spotify', '') or ''),
-        'youtube': str(a.get('youtube', '') or ''),
-    }
-
-posts_js = [{
-    'title': str(p.get('title', '')),
-    'resumo': str(p.get('resumo', '')),
-    'date': str(p.get('date', '')),
-    'imagem': str(p.get('imagem', '') or ''),
-} for p in posts[:3]]   # as 3 ultimas
-
-catalogo_js = {
-    'posts': posts_js,
-    'base': BASE,
-    'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
-    'albuns': [_norm_json(a) for a in albuns]
-}
-with open(OUT_JSON, 'w', encoding='utf-8') as f:
-    json.dump(catalogo_js, f, ensure_ascii=False, indent=2)
-
-
-def md_para_html(texto):
+def md_html(texto):
     c = esc(texto)
-    c = re.sub(r'^## (.+)$', r'<h2 style="font-size:1.3rem;text-transform:uppercase;letter-spacing:.5px;color:#f5ede0;margin:2.5rem 0 1rem">\1</h2>', c, flags=re.M)
-    c = re.sub(r'\*\*(.+?)\*\*', r'<strong style="color:#f5ede0">\1</strong>', c)
-    c = re.sub(r'(?m)^\*(.+)\*$', r'<p style="font-style:italic;color:#7a6a5e">\1</p>', c)
-    c = re.sub(r'\[(.+?)\]\((https?://[^)]+)\)', r'<a href="\2" target="_blank" rel="noopener" style="color:#c84545">\1</a>', c)
-    paragrafos = '\n<p>'.join(par for par in c.split('\n\n') if par.strip())
-    c = '<p>' + paragrafos + '</p>'
+    c = re.sub(r'^## (.+)$', r'<h2 style="font-size:1.25rem;text-transform:uppercase;letter-spacing:.5px;color:var(--text-primary);margin:2.2rem 0 1rem">\1</h2>', c, flags=re.M)
+    c = re.sub(r'\*\*(.+?)\*\*', r'<strong style="color:var(--text-primary)">\1</strong>', c)
+    c = re.sub(r'(?m)^\*(.+)\*$', r'<p style="font-style:italic;color:var(--text-muted)">\1</p>', c)
+    c = re.sub(r'\[(.+?)\]\((https?://[^)]+)\)', r'<a href="\2" target="_blank" rel="noopener" style="color:var(--brand-primary-light)">\1</a>', c)
+    c = '<p>' + '\n<p>'.join(p for p in c.split('\n\n') if p.strip()) + '</p>'
     c = c.replace('<p><h2', '<h2').replace('</h2></p>', '</h2>')
     c = c.replace('<p><p style', '<p style').replace('</p></p>', '</p>')
     return c
 
-# ---------- Gera o blog.html ----------
-if True:
+# ---------- Leitura de TODOS os dados ----------
+def _ler(pasta):
     itens = []
-    for i, p in enumerate(posts):
-        partes = str(p.get('date', '')).split('-')
-        data_str = '/'.join(reversed(partes)) if len(partes) == 3 else str(p.get('date', ''))
-        itens.append(
-            '<a class="song-item fade-in" href="' + BASE + '/posts/' + re.sub(r'[^a-z0-9-]', '', str(p['title']).lower().replace(' ', '-')) + '.html">'
-            '<div class="song-num">' + str(i + 1) + '</div>'
-            '<div class="song-info">'
-            '<div class="song-title">' + esc(p['title']) + '</div>'
-            '<div class="song-artist">' + esc(p.get('resumo', '')) + '</div>'
-            '</div>'
-            '<span class="song-platform">' + data_str + '</span>'
-            '<div class="song-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>'
-            '</a>')
-    corpo_posts = []
-    for i, p in enumerate(posts):
-        partes = str(p.get('date', '')).split('-')
-        data_str = '/'.join(reversed(partes)) if len(partes) == 3 else str(p.get('date', ''))
-        img_html = ''
-        if p.get('imagem'):
-            img_html = ('<img src="' + caminho(p['imagem']) + '" alt="" style="width:100%;border-radius:4px;margin-bottom:1.5rem" loading="lazy">')
-        corpo_posts.append(
-            '<article id="noticia-' + str(i) + '" style="max-width:760px;margin:3.5rem auto 0;padding:2rem;background:#1a0e0e;border:1px solid rgba(168,48,48,.12);border-radius:4px">'
-            '<div style="font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:#e8a04a;margin-bottom:.8rem">' + data_str + '</div>'
-            '<h2 style="font-size:1.3rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1rem;color:#f5ede0">' + esc(p['title']) + '</h2>'
-            + img_html +
-            '<div style="font-size:.95rem;line-height:1.9;color:#b8a89a;">' + md_para_html(p.get('corpo', '')) + '</div>'
-            '</article>')
-    lista_final = '\n'.join(itens) if itens else '<p style="text-align:center;color:var(--text-muted);padding:2rem">Em breve, as primeiras notícias do selo.</p>'
-    blog_html = (
-'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
-'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-'<title>Notícias | Por do Som</title>\n'
-'<meta name="description" content="Notícias, lançamentos e novidades do Selo Por do Som.">\n'
-'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
-'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
-'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n</head>\n<body class="page-interna">\n'
-'<header class="header" id="header">\n    <a href="' + BASE + '/" class="logo">\n'
-'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
-'        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n'
-'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
-'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
-'<section class="musicas" style="padding-top:calc(var(--spacing-section) + 3rem)">\n'
-'    <div class="container">\n'
-'        <span class="section-subtitle">Notícias</span>\n'
-'        <h1 class="section-title">Novidades <span class="gradient">do selo</span></h1>\n'
-'        <p class="section-description">Lançamentos, projetos e histórias do Por do Som.</p>\n'
-'        <div style="max-width:760px;margin:0 auto;display:grid;gap:1rem">\n'
-+ lista_final + '\n        </div>\n'
-+ '\n\n'.join(corpo_posts) + '\n    </div>\n</section>\n\n'
-+ FOOTER_HTML +
-'<script>\nconst menuBtn = document.getElementById(\'mobileMenuBtn\');\nconst nav = document.getElementById(\'nav\');\nmenuBtn.addEventListener(\'click\', () => nav.classList.toggle(\'active\'));\n</script>\n</body>\n</html>\n')
-    with open(os.path.join(BASE_DIR, 'blog.html'), 'w', encoding='utf-8') as f:
-        f.write(blog_html)
+    if os.path.isdir(pasta):
+        for nome in sorted(os.listdir(pasta)):
+            if nome.endswith('.md'):
+                meta, corpo = parse_md(os.path.join(pasta, nome))
+                meta['corpo'] = corpo
+                meta['slug'] = nome[:-3]
+                itens.append(meta)
+    return itens
 
-# ---------- Gera a audiovisual.html ----------
-sec_template = (
-'<section class="{bg}">\n'
-'    <div class="container">\n'
-'        <span class="section-subtitle">{sub}</span>\n'
-'        <h2 class="section-title">{titulo}</h2>\n'
-'        <div class="teaser-videos">\n{videos}\n        </div>\n'
-'    </div>\n'
-'</section>\n')
+albuns = _ler(PASTA['albuns'])
+posts = _ler(PASTA['posts'])
+projetos = _ler(PASTA['projetos'])
+clips = _ler(PASTA['audiovisual'])
+SITE_CFG = {}
+cfg_path = os.path.join(PASTA['config'], 'site.md')
+if os.path.exists(cfg_path):
+    SITE_CFG, _ = parse_md(cfg_path)
 
-partes_pagina = []
-for gid, gnome in GRUPOS_AV.items():
-    do_grupo = [c for c in clips if str(c.get('grupo', '')) == gid]
-    if not do_grupo:
-        continue
-    videos_html = []
-    for c in do_grupo:
-        videos_html.append(
-            '            <iframe src="https://www.youtube.com/embed/' + str(c.get('yt_id', '')) + '" '
-            'loading="lazy" allowfullscreen title="' + esc(c.get('titulo', '')) + '"></iframe>')
-    bg = 'teaser' if len(partes_pagina) % 2 == 0 else 'teaser teaser-alt'
-    partes_pagina.append(sec_template.format(bg=bg, sub='Audiovisual', titulo=esc(gnome), videos='\n'.join(videos_html)))
+# normalizacoes (a blindagem herdada)
+for a in albuns:
+    if isinstance(a.get('capa'), list): a['capa'] = a['capa'][0] if a['capa'] else ''
+    if isinstance(a.get('generos'), str):
+        a['generos'] = [x.strip() for x in a['generos'].replace('[','').replace(']','').split(',') if x.strip()]
+    if not isinstance(a.get('generos'), list): a['generos'] = []
+    a.setdefault('titulo', a['slug'].replace('-',' ').title())
+    a.setdefault('artista', ''); a.setdefault('ano', ''); a.setdefault('destaque', False)
 
-playlists_html = (
-'<section class="teaser teaser-alt">\n'
-'    <div class="container">\n'
-'        <div class="teaser-head">\n'
-'            <span class="section-subtitle">Playlists</span>\n'
-'            <h2 class="section-title">Curadoria do <span class="gradient">selo</span></h2>\n'
-'        </div>\n'
-'        <div class="teaser-playlists">\n'
-'            <iframe src="https://open.spotify.com/embed/playlist/' + str(SITE_CFG.get('playlist1_id','2lgoPMSE9e7lxEumGbBaGn')) + '" height="380" loading="lazy" title="Samba Raiz e Partido Alto"></iframe>\n'
-'            <iframe src="https://open.spotify.com/embed/playlist/' + str(SITE_CFG.get('playlist2_id','2cyXUj8Qhe3nZ0rbng87nR')) + '" height="380" loading="lazy" title="Tambores do Brasil"></iframe>\n'
-'        </div>\n'
-'    </div>\n'
-'</section>\n')
+posts = [p for p in posts if str(p.get('rascunho')).lower() != 'true']
+posts.sort(key=lambda p: str(p.get('date','')), reverse=True)
 
-if partes_pagina:
-    av_html = (
-'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
-'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-'<title>Audiovisual &amp; Playlists | Por do Som</title>\n'
-'<meta name="description" content="Vídeos e playlists curadas do Selo Por do Som — séries, festivais e o canal completo no YouTube.">\n'
-'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
-'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
-'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n</head>\n<body class="page-interna">\n'
-'<header class="header" id="header">\n    <a href="' + BASE + '/" class="logo">\n'
-'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
-'        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n'
-'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
-'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
-'<header class="page-header">\n    <div class="container">\n'
-'        <span class="section-subtitle">Audiovisual</span>\n'
-'        <h1 class="section-title">Veja e <span class="gradient">ouça</span></h1>\n'
-'        <p class="section-description">A produção audiovisual do selo — séries, festivais e o canal no YouTube.</p>\n'
-'    </div>\n</header>\n'
-+ '\n'.join(partes_pagina) + '\n' + playlists_html + '\n'
-+ FOOTER_HTML +
-'<script>\nconst menuBtn = document.getElementById(\'mobileMenuBtn\');\nconst nav = document.getElementById(\'nav\');\nmenuBtn.addEventListener(\'click\', () => nav.classList.toggle(\'active\'));\n</script>\n</body>\n</html>\n')
-    with open(os.path.join(BASE_DIR, 'audiovisual.html'), 'w', encoding='utf-8') as f:
-        f.write(av_html)
+# ordenacao do catalogo: com ordem: primeiro; sem: ano desc
+def _ordem(a):
+    o = a.get('ordem')
+    if isinstance(o, list): o = o[0] if o else None
+    try: return (0, int(str(o).strip())) if o is not None and str(o).strip() else (1, 0)
+    except: return (1, 0)
+albuns.sort(key=lambda a: (_ordem(a)[0], _ordem(a)[1], str(a.get('ano',''))), reverse=False)
+_com = [a for a in albuns if _ordem(a)[0] == 0]
+_sem = [a for a in albuns if _ordem(a)[0] == 1]
+_sem.sort(key=lambda a: (str(a.get('ano','')), a['titulo']), reverse=True)
+albuns[:] = sorted(_com, key=_ordem) + _sem
 
-# ---------- Gera o sitemap.xml ----------
-paginas_estaticas = ['', 'gravadora.html', 'manifesto.html', 'quem-somos.html',
-                     'editora.html', 'audiovisual.html', 'projetos.html',
-                     'blog.html', 'contato.html']
-urls = [DOMINIO + '/' + p for p in paginas_estaticas] + \
-       [DOMINIO + '/albuns/' + s + '.html' for s in geradas]
-hoje = datetime.now().strftime('%Y-%m-%d')
-sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-for u in urls:
-    sitemap += '  <url><loc>' + u + '</loc><lastmod>' + hoje + '</lastmod></url>\n'
-sitemap += '</urlset>\n'
-with open(OUT_SITEMAP, 'w', encoding='utf-8') as f:
-    f.write(sitemap)
+# ---------- Templates compartilhados ----------
+def _nav(ativo=None):
+    ITENS = [('Home', BASE + '/site.html'), ('Notícias', '#noticias'),
+             ('Gravadora', '#gravadora'), ('Projetos', '#projetos'),
+             ('Audiovisual', '#audiovisual'), ('Manifesto', '#manifesto'),
+             ('Quem Somos', '#quemsomos'), ('Contato', '#contato')]
+    # na home: ancoras; nas demais: links para site.html#ancora
+    linhas = []
+    for nome, href in ITENS:
+        if href.startswith('#') and not ATUAL_EH_HOME:
+            href = BASE + '/site.html' + href
+        st = ' style="color:var(--brand-primary-light)"' if nome == ativo else ''
+        linhas.append('        <a href="' + href + '" class="nav-link"' + st + '>' + nome + '</a>')
+    return ('<nav class="nav" id="nav">\n' + '\n'.join(linhas) + '\n    </nav>')
 
-# ---------- Relatório ----------
-# ---------- Gera a projetos.html ----------
-def card_projeto(p):
-    status_cls = 'status-realizado' if str(p.get('status')) == 'realizado' else 'status-captacao'
-    status_lbl = '✓ Realizado' if str(p.get('status')) == 'realizado' else '★ Em captação'
-    img = p.get('imagem') or ''
-    if isinstance(img, list):
-        img = img[0] if img else ''
-    img_style = 'background-image:url(\'' + BASE + img + '\')' if img else 'background:#1a0e0e'
-    tags_html = ''.join('<span class="project-tag">' + esc(t) + '</span>' for t in (p.get('tags') or []))
-    rel_html = ''
-    if p.get('relatorio'):
-        rel_html = '<a href="' + esc(p['relatorio']) + '" target="_blank" rel="noopener" class="btn btn-ghost" style="margin-top:12px;padding:8px 16px;font-size:.65rem">📄 Relatório completo ↗</a>'
-    link_html = ''
-    if p.get('link'):
-        link_html = '<a href="' + esc(p['link']) + '" target="_blank" rel="noopener" class="teaser-link" style="margin-top:14px">Ver projeto →</a>'
-    return (
-'<div class="projeto-card">'
-'<div class="galeria"><img src="' + BASE + (img or '/pordosom-profile.jpg') + '" alt="' + esc(p['titulo']) + '" loading="lazy" onerror="this.style.display=\'none\'"></div>'
-'<div class="projeto-corpo">'
-'<span class="projeto-badge ' + status_cls + '">' + status_lbl + '</span>'
-'<h3>' + esc(p['titulo']) + '</h3>'
-'<p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">' + esc(p.get('corpo', '')) + '</p>'
-'<div class="project-tags">' + tags_html + '</div>'
-+ link_html + rel_html +
-'</div></div>')
+ATUAL_EH_HOME = True  # controla o _nav por contexto
 
-if projetos:
-    cards = '\n\n'.join(card_projeto(p) for p in projetos)
-    projetos_html = (
-'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
-'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-'<title>Projetos &amp; Festivais | Por do Som</title>\n'
-'<meta name="description" content="Projetos culturais, festivais e séries realizados pelo Por do Som — celebrando mestres e saberes da cultura popular.">\n'
-'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
-'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
-'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n</head>\n<body class="page-interna">\n'
-'<header class="header" id="header">\n    <a href="' + BASE + '/" class="logo">\n'
-'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
-'        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n'
-'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
-'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
-'<header class="page-header">\n    <div class="container">\n'
-'        <span class="section-subtitle">Projetos &amp; Festivais</span>\n'
-'        <h1 class="section-title">Boas <span class="gradient">realizações</span></h1>\n'
-'        <p class="section-description">A produção cultural do selo — do YouTube ao edital.</p>\n'
-'    </div>\n</header>\n'
-'<section style="padding-top:2rem">\n    <div class="container">\n'
-+ cards + '\n    </div>\n</section>\n\n'
-+ FOOTER_HTML +
-'<script>\nconst menuBtn=document.getElementById("mobileMenuBtn");const nav=document.getElementById("nav");menuBtn.addEventListener("click",()=>nav.classList.toggle("active"));\n</script>\n</body>\n</html>\n')
-    with open(os.path.join(BASE_DIR, 'projetos.html'), 'w', encoding='utf-8') as f:
-        f.write(projetos_html)
-    print('✔ projetos.html gerada com', len(projetos), 'projetos')
+def _footer():
+    return ('<footer class="footer">\n    <div class="container">\n'
+            '        <span class="footer-logo">PÔR DO SOM</span>\n'
+            '        <p class="footer-tagline">Selo Independente · Produtora Cultural · Brasilidades</p>\n'
+            '        <div class="footer-social">\n'
+            '            <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener">Instagram</a>\n'
+            '            <a href="https://www.youtube.com/user/pordosomcultural" target="_blank" rel="noopener">YouTube</a>\n'
+            '            <a href="https://open.spotify.com/user/pordosom" target="_blank" rel="noopener">Spotify</a>\n'
+            '            <a href="https://www.facebook.com/pordosomcultural" target="_blank" rel="noopener">Facebook</a>\n'
+            '            <a href="https://tiktok.com/@pordosom" target="_blank" rel="noopener">TikTok</a>\n'
+            '            <a href="https://linktr.ee/pordosom" target="_blank" rel="noopener">Linktree</a>\n'
+            '        </div>\n'
+            '        <p class="footer-text">© ' + str(datetime.now().year) + ' Por do Som Cultural · Todos os direitos reservados</p>\n'
+            '    </div>\n</footer>\n')
 
+def _scripts():
+    return ('<script>\n'
+            'const header=document.getElementById("header");const nav=document.getElementById("nav");'
+            'const mobileMenuBtn=document.getElementById("mobileMenuBtn");\n'
+            'window.addEventListener("scroll",()=>{if(window.scrollY>50)header.classList.add("scrolled");'
+            'else header.classList.remove("scrolled")},{passive:true});\n'
+            'mobileMenuBtn.addEventListener("click",()=>{nav.classList.toggle("active");'
+            'mobileMenuBtn.textContent=nav.classList.contains("active")?"✕":"☰"});\n'
+            'const fadeObserver=new IntersectionObserver(es=>{es.forEach(e=>{'
+            'if(e.isIntersecting){e.target.classList.add("visible");fadeObserver.unobserve(e.target)}})},'
+            '{threshold:0.1,rootMargin:"0px 0px -50px 0px"});\n'
+            'document.querySelectorAll(".fade-in").forEach(el=>fadeObserver.observe(el));\n'
+            '</script>\n')
 
-# [DESATIVADO — injetor em revisao]
-# # ---------- Injeta textos do config nas paginas estaticas ----------
-# def injeta_cfg(arquivo, mapa):
-#     caminho = os.path.join(BASE_DIR, arquivo)
-#     if not os.path.exists(caminho):
-#         return
-#     with open(caminho, encoding='utf-8') as f:
-#         html = f.read()
-#     alterado = False
-#     for valor_antigo, chave_cfg in mapa:
-#         novo = esc(SITE_CFG.get(chave_cfg, '')) or valor_antigo
-#         if valor_antigo in html and novo != valor_antigo:
-#             html = html.replace(valor_antigo, novo, 1)
-#             alterado = True
-#     if alterado:
-#         with open(caminho, 'w', encoding='utf-8') as f:
-#             f.write(html)
-# 
-# # hero (index)
-# injeta_cfg('index.html', [
-#     ('Onde a música <span class="gradient">nasce.</span>', 'hero_slogan_placeholder'),
-# ])
-# if SITE_CFG.get('hero_slogan'):
-#     # o slogan tem span gradient — injeta por partes
-#     ipath = os.path.join(BASE_DIR, 'index.html')
-#     with open(ipath, encoding='utf-8') as f:
-#         ih = f.read()
-#     slog = str(SITE_CFG['hero_slogan'])
-#     # divide na ultima palavra para o gradiente
-#     partes_s = slog.rsplit(' ', 1)
-#     if len(partes_s) == 2 and 'nasce' in ih:
-#         ih = ih.replace('Onde a música <span class="gradient">nasce.</span>',
-#                         esc(partes_s[0]) + ' <span class="gradient">' + esc(partes_s[1]) + '</span>', 1)
-#     if SITE_CFG.get('hero_texto') and 'Um selo dedicado às' in ih:
-#         ih = ih.replace(
-#             'Um selo dedicado às <strong>Brasilidades</strong> — à cultura afro-brasileira,
-#             aos mestres da tradição popular, aos tambores do norte e ao samba de raiz.
-#             Onde a ancestralidade encontra o tempo presente.',
-#             esc(SITE_CFG['hero_texto']), 1)
-#     with open(ipath, 'w', encoding='utf-8') as f:
-#         f.write(ih)
-# 
-# # manifesto
-# if SITE_CFG.get('manifesto_texto1'):
-#     mpath = os.path.join(BASE_DIR, 'manifesto.html')
-#     with open(mpath, encoding='utf-8') as f:
-#         mh = f.read()
-#     for old, key in [
-#         ('O <strong>Por do Som</strong> nasceu de uma certeza simples', 'manifesto_texto1'),
-#     ]:
-#         # injeta o texto completo substituindo o paragrafo antigo (aproximado)
-#         pass
-#     # abordagem mais segura: substitui o TEXTO entre tags <p class="manifesto-text">...</p> por ordem
-#     import re as _re
-#     textos = [SITE_CFG.get('manifesto_texto1',''), SITE_CFG.get('manifesto_texto2',''), SITE_CFG.get('manifesto_texto3','')]
-#     idx = [0]
-#     def _repl(m):
-#         if idx[0] < len(textos) and textos[idx[0]]:
-#             t = esc(textos[idx[0]])
-#             idx[0] += 1
-#             return '<p class="manifesto-text">' + t + '</p>'
-#         return m.group(0)
-#     mh = _re.sub(r'<p class="manifesto-text">[^<]*(?:<(?!/p>)[^<]*)*</p>', _repl, mh, count=3)
-#     with open(mpath, 'w', encoding='utf-8') as f:
-#         f.write(mh)
-# 
-# # quem somos
-# if SITE_CFG.get('quemsomos_texto'):
-#     qpath = os.path.join(BASE_DIR, 'quem-somos.html')
-#     with open(qpath, encoding='utf-8') as f:
-#         qh = f.read()
-#     qh = qh.replace('[TEXTO DO CLIENTE — currículo do selo]', esc(SITE_CFG['quemsomos_texto']), 1)
-#     with open(qpath, 'w', encoding='utf-8') as f:
-#         f.write(qh)
-# 
-# # editora
-# if SITE_CFG.get('editora_texto'):
-#     epath = os.path.join(BASE_DIR, 'editora.html')
-#     with open(epath, encoding='utf-8') as f:
-#         eh = f.read()
-#     eh = eh.replace('[TEXTO INSTITUCIONAL — a confirmar com o cliente]', esc(SITE_CFG['editora_texto']), 1)
-#     with open(epath, 'w', encoding='utf-8') as f:
-#         f.write(eh)
+def _doc(title, desc, body):
+    return ('<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
+            '<title>' + esc(title) + ' | Por do Som</title>\n'
+            '<meta name="description" content="' + esc(desc) + '">\n'
+            '<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
+            '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
+            '<link rel="stylesheet" href="' + BASE + '/css/style.css">\n'
+            '</head>\n<body>\n' + body + '</body>\n</html>\n')
 
-# ---------- Gera paginas estaticas (manifesto, quem-somos, editora) do config ----------
-def _gera_pagina_estatica(arquivo, kicker, titulo_grad, textos, extra_html=''):
-    """textos: lista de paragrafos (strings)"""
-    paragrafos = '\n            '.join(
-        '<p class="manifesto-text">' + esc(t) + '</p>' for t in textos if t)
-    slog = str(SITE_CFG.get('hero_slogan', ''))
-    return (
-'<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
-'<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-'<title>' + kicker + ' | Por do Som</title>\n'
-'<meta name="description" content="' + esc((textos[0] if textos else '')[:155]) + '">\n'
-'<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
-'<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
-'<link rel="stylesheet" href="' + BASE + '/css/style.css">\n</head>\n<body class="page-interna">\n'
-'<header class="header" id="header">\n    <a href="' + BASE + '/" class="logo">\n'
-'        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
-'        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n'
-'    <nav class="nav" id="nav">\n' + NAV_HTML + '    </nav>\n'
-'    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
-'<section class="manifesto" style="padding-top:calc(var(--spacing-section) + 3rem)">\n'
-'    <div class="container">\n'
-'        <div class="manifesto-content">\n'
-'            <span class="section-subtitle">' + kicker + '</span>\n'
-'            <h1 class="section-title">' + titulo_grad + '</h1>\n'
-'            ' + paragrafos + '\n'
-+ extra_html +
-'        </div>\n    </div>\n</section>\n\n'
-+ FOOTER_HTML +
-'<script>\nconst menuBtn=document.getElementById("mobileMenuBtn");const nav=document.getElementById("nav");menuBtn.addEventListener("click",()=>nav.classList.toggle("active"));\n</script>\n'
-'</body>\n</html>\n')
+# ---------- Página de álbum ----------
+def page_album(a, prev, next_):
+    ATUAL_EH_HOME = False
+    generos_str = ' · '.join(GENEROS.get(g, g) for g in a['generos'])
+    schema = {"@context": "https://schema.org", "@type": "MusicAlbum",
+              "name": a['titulo'], "byArtist": {"@type": "MusicGroup", "name": a['artista']},
+              "genre": generos_str, "datePublished": str(a.get('ano','')),
+              "publisher": {"@type": "Organization", "name": "Por do Som"}}
+    embeds = ''
+    if a.get('spotify'):
+        embeds += '\n        <iframe src="' + esc(sp_embed(a['spotify'])) + '" height="152" loading="lazy" title="Ouvir no Spotify"></iframe>'
+    yid = yt_id(a.get('youtube',''))
+    if yid:
+        embeds += '\n        <iframe src="https://www.youtube.com/embed/' + yid + '" style="aspect-ratio:16/9" loading="lazy" allowfullscreen title="Vídeo"></iframe>'
+    plats = ''.join('<a class="plat-link" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(n) + '</a>'
+                    for n, u in [('Spotify', a.get('spotify','')), ('YouTube', a.get('youtube','')),
+                                  ('Apple', a.get('apple','')), ('Deezer', a.get('deezer',''))] if u)
+    prev_h = ('<a class="album-nav-link" href="' + BASE + '/albuns/' + prev['slug'] + '.html">&#8592; ' + esc(prev['titulo']) + '</a>') if prev else '<span></span>'
+    next_h = ('<a class="album-nav-link" href="' + BASE + '/albuns/' + next_['slug'] + '.html">' + esc(next_['titulo']) + ' &#8594;</a>') if next_ else '<span></span>'
+    body = ('<header class="header" id="header">\n    <a href="' + BASE + '/site.html" class="logo">\n'
+            '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n' + _nav() +
+            '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+            '<main class="album-page">\n    <div class="container">\n        <div class="album-hero">\n'
+            '            <div class="album-capa-grande">\n'
+            '                <img src="' + esc(str(a.get('capa',''))) + '" alt="Capa" loading="lazy" '
+            'onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 600%22%3E%3Crect fill=%22%231a0e0e%22 width=%22600%22 height=%22600%22/%3E%3C/svg%3E\'">\n'
+            '            </div>\n            <div>\n'
+            '                <span class="album-kicker">Álbum · ' + esc(a.get('ano','')) + ' · ' + esc(generos_str) + '</span>\n'
+            '                <h1 class="album-titulo-grande">' + esc(a['titulo']) + '</h1>\n'
+            '                <div class="album-artista-grande">' + esc(a['artista']) + '</div>\n'
+            '                <p class="album-descricao">' + esc(a.get('corpo','')) + '</p>\n'
+            + ('<p class="album-descricao-en">' + esc(a.get('texto_en','')) + '</p>' if a.get('texto_en') else '') +
+            '                <div class="album-embeds">' + embeds + '\n                </div>\n'
+            '                <div class="album-plataformas">' + plats + '</div>\n'
+            '            </div>\n        </div>\n'
+            '        <div class="album-navegacao">\n            ' + prev_h + '\n'
+            '            <a class="album-nav-link" href="' + BASE + '/site.html#gravadora">Voltar ao catálogo</a>\n'
+            '            ' + next_h + '\n        </div>\n    </div>\n</main>\n\n' + _footer() + _scripts())
+    d = _doc(a['titulo'] + ' — ' + a['artista'], (a.get('corpo') or a['titulo'])[:155], body)
+    return d.replace('</head>', '<script type="application/ld+json">\n' + json.dumps(schema, ensure_ascii=False) + '\n</script>\n</head>')
 
-def _stats_html():
+# ---------- site.html (o site inteiro, seções por âncoras) ----------
+def _sec(id_, subtitulo, titulo_cfg, desc_cfg=None, conteudo='', alt=False):
+    titulo = cfg_str(titulo_cfg)
+    partes = titulo.rsplit(' ', 1)
+    titulo_html = (esc(partes[0]) + ' <span class="gradient">' + esc(partes[1]) + '</span>') if len(partes) == 2 else esc(titulo)
+    desc = ''
+    if desc_cfg and cfg_str(desc_cfg):
+        desc = '\n            <p class="section-description">' + esc(cfg_str(desc_cfg)) + '</p>'
+    cls = 'teaser teaser-alt' if alt else 'teaser'
+    return ('<section class="' + cls + '" id="' + id_ + '">\n    <div class="container">\n'
+            '        <div class="teaser-head">\n'
+            '            <span class="section-subtitle">' + esc(subtitulo) + '</span>\n'
+            '            <h2 class="section-title">' + titulo_html + '</h2>' + desc + '\n'
+            '        </div>\n' + conteudo + '\n    </div>\n</section>\n')
+
+def gera_site():
+    ATUAL_EH_HOME = True
+
+    # --- HERO ---
+    slog = cfg_str('hero_slogan', 'Onde a música nasce')
+    sp = slog.rsplit(' ', 1)
+    slog_html = esc(sp[0]) + (' <span class="gradient">' + esc(sp[1]) + '</span>' if len(sp) > 1 else '')
+    hero = ('<section class="hero">\n    <div class="hero-bg"></div>\n    <div class="hero-bg-overlay"></div>\n'
+            '    <div class="hero-noise"></div>\n    <div class="hero-content">\n'
+            '        <p class="hero-subtitle">Selo Independente · Produtora Cultural</p>\n'
+            '        <h1 class="hero-title">' + slog_html + '</h1>\n'
+            '        <p class="hero-description">' + esc(cfg_str('hero_texto')) + '</p>\n'
+            '    </div>\n    <div class="hero-scroll">\n        <span>Role para descobrir</span>\n'
+            '        <div class="hero-scroll-line"></div>\n    </div>\n</section>\n')
+
+    # --- NOTICIAS (banner da ultima) ---
+    banner_js = ('<div class="container"><div id="banner-noticia"></div></div>')
+    sec_noticias = ('<section class="teaser" id="noticias" style="padding-top:2rem;padding-bottom:2rem">\n'
+                    + banner_js + '\n</section>\n')
+
+    # --- GRAVADORA (catalogo + filtros + artistas) ---
+    vitrine_js = '<div class="vitrine-grid" id="vitrine"></div>\n        <div style="text-align:center"><a href="#gravadora" class="teaser-link" style="display:none"></a></div>'
+    filtros_js = ('<div class="filtros" id="filtros"></div>\n        <div class="catalogo-grid" id="catalogo-grid"></div>')
+    sec_grav = ('<section class="teaser" id="gravadora">\n    <div class="container">\n'
+                '        <div class="teaser-head">\n'
+                '            <span class="section-subtitle">Gravadora</span>\n'
+                '            <h2 class="section-title">' + esc(cfg_str('grav_titulo')) + '</h2>\n'
+                '            <p class="section-description">' + esc(cfg_str('grav_descricao')) + '</p>\n'
+                '        </div>\n        ' + filtros_js + '\n    </div>\n</section>\n')
+    sec_artistas = ('<section class="teaser teaser-alt" id="artistas">\n    <div class="container">\n'
+                    '        <div class="teaser-head">\n'
+                    '            <span class="section-subtitle">Gravadora</span>\n'
+                    '            <h2 class="section-title">' + esc(cfg_str('artistas_titulo')) + '</h2>\n'
+                    '            <p class="section-description">' + esc(cfg_str('artistas_descricao')) + '</p>\n'
+                    '        </div>\n        <div class="artistas-grid" id="artistas-grid"></div>\n    </div>\n</section>\n')
+
+    # --- PROJETOS ---
+    cards_p = []
+    for p in projetos:
+        img = p.get('imagem') or ''
+        if isinstance(img, list): img = img[0] if img else ''
+        st_cls = 'status-realizado' if str(p.get('status')) != 'captacao' else 'status-captacao'
+        st_lbl = '✓ Realizado' if str(p.get('status')) != 'captacao' else '★ Em captação'
+        link = p.get('link') or '#'
+        cards_p.append(
+            '<div class="projeto-card"><div class="galeria">'
+            '<img src="' + BASE + (img or '/pordosom-profile.jpg') + '" alt="' + esc(p['titulo']) + '" loading="lazy" onerror="this.style.display=\'none\'"></div>'
+            '<div class="projeto-corpo"><span class="projeto-badge ' + st_cls + '">' + st_lbl + '</span>'
+            '<h3>' + esc(p['titulo']) + '</h3>'
+            '<p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">' + esc(p.get('corpo','')) + '</p>'
+            '<a href="' + esc(link) + '" target="_blank" rel="noopener" class="teaser-link" style="margin-top:14px">Ver projeto →</a>'
+            '</div></div>')
+    sec_proj = _sec('projetos', 'Projetos & Festivais', 'projetos_titulo', 'projetos_descricao',
+                    '\n'.join(cards_p), alt=True)
+
+    # --- AUDIOVISUAL (clips por grupo) ---
+    grupos_html = []
+    for gid, gname in GRUPOS_AV.items():
+        do_g = [c for c in clips if str(c.get('grupo')) == gid]
+        if not do_g: continue
+        vids = '\n'.join('            <iframe src="https://www.youtube.com/embed/' + str(c.get('yt_id','')) +
+                         '" loading="lazy" allowfullscreen title="' + esc(c.get('titulo','')) + '"></iframe>' for c in do_g)
+        grupos_html.append('<h2 class="section-title" style="font-size:1.3rem;margin-top:3rem">' + esc(gname) + '</h2>\n'
+                          '<div class="teaser-videos">\n' + vids + '\n        </div>')
+    sec_av = _sec('audiovisual', 'Audiovisual', 'audio_titulo', 'audio_descricao', '\n'.join(grupos_html))
+
+    # --- PLAYLISTS ---
+    p1id = cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn')
+    p2id = cfg_str('playlist2_id', '2cyXUj8Qhe3nZ0rbng87nR')
+    playlists_html = ('<div class="teaser-playlists">\n'
+                     '            <iframe src="https://open.spotify.com/embed/playlist/' + p1id + '" height="380" loading="lazy" title="Playlist 1"></iframe>\n'
+                     '            <iframe src="https://open.spotify.com/embed/playlist/' + p2id + '" height="380" loading="lazy" title="Playlist 2"></iframe>\n'
+                     '        </div>')
+    sec_pl = _sec('playlists', 'Playlists', 'home_playlists_titulo', None, playlists_html, alt=True)
+
+    # --- MANIFESTO ---
+    manifesto_ps = '\n            '.join('<p class="manifesto-text">' + esc(cfg_str('manifesto_texto' + str(i))) + '</p>' for i in (1,2,3) if cfg_str('manifesto_texto' + str(i)))
     stats = [('31','Obras no catálogo'),('10+','Artistas'),('3','Festivais próprios'),('42','Vídeos produzidos')]
-    linhas = '\n'.join(
-        '<div class="stat-item fade-in"><div class="stat-num">' + n + '</div><div class="stat-label">' + l + '</div></div>'
-        for n, l in stats)
-    return '<div class="manifesto-stats">' + linhas + '</div>'
+    stats_html = '\n'.join('<div class="stat-item fade-in"><div class="stat-num">' + n + '</div><div class="stat-label">' + l + '</div></div>' for n,l in stats)
+    sec_manif = ('<section class="teaser" id="manifesto">\n    <div class="container">\n'
+                 '        <div class="manifesto-content">\n'
+                 '            <span class="section-subtitle">Manifesto</span>\n'
+                 '            <h2 class="section-title">Som que <span class="gradient">pulsa Brasil</span></h2>\n'
+                 '            ' + manifesto_ps + '\n'
+                 '            <p class="manifesto-signature">— Por do Som Cultural</p>\n'
+                 '            <div class="manifesto-stats" style="margin-top:3rem">\n' + stats_html + '\n            </div>\n'
+                 '        </div>\n    </div>\n</section>\n')
 
-# manifesto
-_textos_m = [SITE_CFG.get('manifesto_texto1',''), SITE_CFG.get('manifesto_texto2',''), SITE_CFG.get('manifesto_texto3','')]
-if any(_textos_m):
-    with open(os.path.join(BASE_DIR, 'manifesto.html'), 'w', encoding='utf-8') as f:
-        f.write(_gera_pagina_estatica('manifesto.html', 'Manifesto',
-            'Som que <span class="gradient">pulsa Brasil</span>', _textos_m,
-            '<p class="manifesto-signature">— Por do Som Cultural</p>' + _stats_html()))
-    print('✔ manifesto.html regenerada do config')
+    # --- QUEM SOMOS ---
+    portfolio = cfg_str('portfolio_link')
+    port_html = ('<div style="margin-top:3rem" class="fade-in"><a href="' + esc(portfolio) + '" target="_blank" rel="noopener" '
+                  'class="btn btn-outline" style="text-decoration:none">Currículo completo &amp; Portfolio ↗</a></div>') if portfolio else ''
+    sec_qs = ('<section class="teaser teaser-alt" id="quemsomos">\n    <div class="container">\n'
+              '        <div class="manifesto-content">\n'
+              '            <span class="section-subtitle">Quem Somos</span>\n'
+              '            <h2 class="section-title">Mais de 20 anos <span class="gradient">cantando o Brasil</span></h2>\n'
+              '            <p class="manifesto-text">' + esc(cfg_str('quemsomos_texto')) + '</p>\n'
+              + port_html + '\n        </div>\n    </div>\n</section>\n')
 
-# quem somos
-_textos_q = [SITE_CFG.get('quemsomos_texto','')]
-if any(_textos_q):
-    portfolio = str(SITE_CFG.get('portfolio_link','') or '')
-    port_html = ''
-    if portfolio:
-        port_html = ('<div style="margin-top:3rem" class="fade-in">'
-                     '<a href="' + esc(portfolio) + '" target="_blank" rel="noopener" class="btn btn-outline" style="text-decoration:none">'
-                     'Currículo completo &amp; Portfolio ↗</a></div>')
-    with open(os.path.join(BASE_DIR, 'quem-somos.html'), 'w', encoding='utf-8') as f:
-        f.write(_gera_pagina_estatica('quem-somos.html', 'Quem Somos',
-            'Mais de 20 anos <span class="gradient">cantando o Brasil</span>', _textos_q,
-            port_html + _stats_html()))
-    print('✔ quem-somos.html regenerada do config')
+    # --- EDITORA ---
+    sec_ed = ('<section class="teaser" id="editora">\n    <div class="container">\n'
+              '        <div class="manifesto-content">\n'
+              '            <span class="section-subtitle">Editora &amp; Direitos</span>\n'
+              '            <h2 class="section-title">Administração de <span class="gradient">obras musicais</span></h2>\n'
+              '            <p class="manifesto-text">' + esc(cfg_str('editora_texto')) + '</p>\n'
+              '            <p class="manifesto-signature">Consultoria: <a href="#contato" style="color:var(--brand-primary-light);text-decoration:none;text-transform:none;letter-spacing:normal">fale com o selo</a></p>\n'
+              '        </div>\n    </div>\n</section>\n')
 
-# editora
-_textos_e = [SITE_CFG.get('editora_texto','')]
-if any(_textos_e):
-    with open(os.path.join(BASE_DIR, 'editora.html'), 'w', encoding='utf-8') as f:
-        f.write(_gera_pagina_estatica('editora.html', 'Editora & Direitos',
-            'Administração de <span class="gradient">obras musicais</span>', _textos_e,
-            '<p class="manifesto-signature">Consultoria: <a href="' + BASE + '/contato.html" style="color:var(--brand-primary-light);text-decoration:none">fale com o selo</a></p>'))
-    print('✔ editora.html regenerada do config')
+    # --- CONTATO ---
+    email = cfg_str('email_contato', 'contato@pordosom.com.br')
+    wa = cfg_str('whatsapp_contato')
+    wa_html = ('<a href="https://wa.me/' + esc(wa) + '" class="social-card" style="text-decoration:none">'
+               '<div class="social-card-icon">📱</div>'
+               '<div class="social-card-text"><div class="social-card-label">WhatsApp</div>'
+               '<div class="social-card-handle">' + esc(wa) + '</div></div></a>') if wa else ''
+    sec_cont = ('<section class="teaser teaser-alt" id="contato">\n    <div class="container">\n'
+                '        <div class="teaser-head">\n'
+                '            <span class="section-subtitle">Contato</span>\n'
+                '            <h2 class="section-title">' + esc(cfg_str('contato_titulo', 'Vamos fazer música juntos?')) + '</h2>\n'
+                '            <p class="section-description">' + esc(cfg_str('contato_descricao')) + '</p>\n'
+                '            <div class="teaser-contato" style="margin-top:1.5rem">\n'
+                '                <a href="mailto:' + esc(email) + '" class="social-card" style="text-decoration:none">\n'
+                '                    <div class="social-card-icon">✉</div>\n'
+                '                    <div class="social-card-text"><div class="social-card-label">E-mail</div>\n'
+                '                    <div class="social-card-handle">' + esc(email) + '</div></div></a>\n'
+                '                <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener" class="social-card" style="text-decoration:none">\n'
+                '                    <div class="social-card-icon">📷</div>\n'
+                '                    <div class="social-card-text"><div class="social-card-label">Instagram</div>\n'
+                '                    <div class="social-card-handle">@pordosomcultural</div></div></a>\n'
+                + wa_html + '\n            </div>\n        </div>\n    </div>\n</section>\n')
 
-# hero do index (slogan + texto)
-if SITE_CFG.get('hero_slogan') or SITE_CFG.get('hero_texto'):
-    ipath = os.path.join(BASE_DIR, 'index.html')
-    with open(ipath, encoding='utf-8') as f:
-        ih = f.read()
-    slog = str(SITE_CFG.get('hero_slogan', ''))
-    if slog and 'Onde a música' in ih:
-        partes = slog.rsplit(' ', 1)
-        if len(partes) == 2:
-            ih = ih.replace('Onde a música <span class="gradient">nasce.</span>',
-                            esc(partes[0]) + ' <span class="gradient">' + esc(partes[1]) + '</span>', 1)
-    htxt = str(SITE_CFG.get('hero_texto', ''))
-    if htxt and 'Um selo dedicado às' in ih:
-        import re as _r2
-        ih = _r2.sub(r'Um selo dedicado às[\s\S]*?tempo presente\.', esc(htxt), ih, count=1)
-    with open(ipath, 'w', encoding='utf-8') as f:
-        f.write(ih)
-    print('✔ hero do index atualizado do config')
+    # --- O JS da vitrine/filtros/banner EMBUTIDO ---
+    js_site = ('<script>\n(async function(){\n'
+               '  const BASE = "' + BASE + '";\n'
+               '  let CAT;\n'
+               '  try { const r = await fetch(BASE + "/data/catalogo.json?v=" + Date.now()); CAT = await r.json(); } catch(e){ return; }\n'
+               '  if (CAT.albuns) CAT.albuns.forEach(a => {\n'
+               '    if (Array.isArray(a.capa)) a.capa = a.capa[0] || "";\n'
+               '    if (typeof a.capa !== "string") a.capa = String(a.capa || "");\n'
+               '    if (typeof a.generos === "string") a.generos = a.generos.replace(/[\\[\\]]/g,"").split(",").map(s=>s.trim()).filter(Boolean);\n'
+               '    if (!Array.isArray(a.generos)) a.generos = [];\n'
+               '  });\n'
+               '  if (!CAT.albuns) CAT.albuns = []; if (!CAT.generos) CAT.generos = [];\n'
+               '  const capaSrc = c => (c && c.startsWith("/")) ? BASE + c : (c || "");\n'
+               '  const fallback = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%231a0e0e%22 width=%22300%22 height=%22300%22/%3E%3Ccircle cx=%22150%22 cy=%22130%22 r=%2255%22 fill=%22%23a83030%22 opacity=%220.7%22/%3E%3C/svg%3E";\n'
+               '  CAT.albuns.sort((x,y)=>{const ox=parseInt(x.ordem)||0,oy=parseInt(y.ordem)||0;'
+               'if(ox&&oy)return ox-oy;if(ox)return -1;if(oy)return 1;'
+               'return String(y.ano||"").localeCompare(String(x.ano||""))});\n'
+               '  const vitrine = document.getElementById("vitrine");\n'
+               '  if (vitrine) { vitrine.innerHTML = CAT.albuns.filter(a=>a.destaque).slice(0,6).map(a =>\n'
+               '    `<a href="${BASE}/albuns/${a.slug}.html"><img src="${capaSrc(a.capa)}" alt="Capa: ${a.title||a.titulo||""}" loading="lazy" onerror="this.src=\'${fallback}\'"><span class="vitrine-titulo">${a.titulo||""}</span></a>`).join(""); }\n'
+               '  const filtrosEl = document.getElementById("filtros");\n'
+               '  const grid = document.getElementById("catalogo-grid");\n'
+               '  if (filtrosEl && grid) {\n'
+               '    const contagem = { todos: CAT.albuns.length };\n'
+               '    CAT.generos.forEach(g => { contagem[g.id] = CAT.albuns.filter(a=>a.generos.includes(g.id)).length });\n'
+               '    filtrosEl.innerHTML = `<button class="filtro ativo" data-g="todos">Todos <span class="count">${contagem.todos}</span></button>` +\n'
+               '      CAT.generos.filter(g=>contagem[g.id]>0).map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]}</span></button>`).join("");\n'
+               '    const nomeG = id => (CAT.generos.find(g=>g.id===id)||{}).nome || id;\n'
+               '    function renderGrid(g){\n'
+               '      const lista = g==="todos" ? CAT.albuns : CAT.albuns.filter(a=>a.generos.includes(g));\n'
+               '      grid.innerHTML = lista.map(a => `<a class="album-card" href="${BASE}/albuns/${a.slug}.html">\n'
+               '        <div class="album-capa"><img src="${capaSrc(a.capa)}" alt="" loading="lazy" onerror="this.src=\'${fallback}\'"></div>\n'
+               '        <div class="album-info"><div class="album-titulo">${a.titulo}</div>\n'
+               '        <div class="album-artista">${a.artista}${a.ano?" · "+a.ano:""}</div>\n'
+               '        <div class="album-tags">${a.generos.map(g=>`<span class="album-tag">${nomeG(g)}</span>`).join("")}</div></div></a>`).join("") || \'<p style="grid-column:1/-1;text-align:center;color:var(--text-muted)">Nenhum álbum neste gênero.</p>\';\n'
+               '    }\n'
+               '    filtrosEl.addEventListener("click", e => { const b = e.target.closest(".filtro"); if (b) {\n'
+               '      filtrosEl.querySelectorAll(".filtro").forEach(x=>x.classList.toggle("ativo", x===b)); renderGrid(b.dataset.g); } });\n'
+               '    renderGrid("todos");\n'
+               '  }\n'
+               '  const artGrid = document.getElementById("artistas-grid");\n'
+               '  if (artGrid && Array.isArray(CAT.artistas)) { artGrid.innerHTML = CAT.artistas.map(a =>\n'
+               '    `<div class="artist-card fade-in"><div class="artist-card-img" style="background-image:url(\'${a.img||""}\')"></div>\n'
+               '    <div class="artist-card-overlay"></div><div class="artist-card-content">\n'
+               '    <div class="artist-initial">${(a.nome||"?").trim()[0].toUpperCase()}</div>\n'
+               '    <div class="artist-name">${a.nome||""}</div><div class="artist-role">${a.role||""}</div></div></div>`).join(""); }\n'
+               '  const bannerEl = document.getElementById("banner-noticia");\n'
+               '  if (bannerEl && Array.isArray(CAT.posts) && CAT.posts.length) {\n'
+               '    const p = CAT.posts[0]; const partes = String(p.date||"").split("-");\n'
+               '    const data = partes.length===3 ? partes.reverse().join("/") : "";\n'
+               '    bannerEl.innerHTML = `<a href="${BASE}/blog.html" style="display:flex;gap:1.8rem;max-width:860px;margin:0 auto;padding:2rem;background:linear-gradient(135deg,var(--bg-card),var(--bg-darker));border:1px solid var(--border-color);border-left:4px solid var(--brand-primary);border-radius:6px;text-decoration:none;align-items:center;box-shadow:0 12px 40px rgba(0,0,0,.35);transition:transform .3s"\n'
+               '      onmouseover="this.style.transform=\'translateY(-3px)\'" onmouseout="this.style.transform=\'\'">\n'
+               '      <div style="flex:1">\n'
+               '      <div style="font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--brand-accent);margin-bottom:.7rem">📰 Última notícia · ${data}</div>\n'
+               '      <h3 style="font-size:clamp(1.15rem,3vw,1.6rem);font-weight:800;text-transform:uppercase;color:var(--text-primary);line-height:1.25;margin-bottom:.8rem">${p.title||""}</h3>\n'
+               '      <p style="font-size:.9rem;color:var(--text-secondary);line-height:1.7">${p.resumo||""}</p>\n'
+               '      <span style="display:inline-block;margin-top:1.1rem;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand-primary-light)">Ler a notícia completa →</span>\n'
+               '      </div></a>`;\n'
+               '  }\n'
+               '})();\n</script>\n')
 
-# ---------- Injeta titulos/descricoes das secoes (todas as paginas) ----------
-def _troca(arquivo, pares):
-    """pares: lista de (texto_antigo, chave_cfg)"""
-    caminho = os.path.join(BASE_DIR, arquivo)
-    if not os.path.exists(caminho):
-        return
-    with open(caminho, encoding='utf-8') as f:
-        h = f.read()
-    mudou = False
-    for antigo, chave in pares:
-        novo = SITE_CFG.get(chave, '')
-        if novo and antigo in h:
-            h = h.replace(antigo, esc(str(novo)), 1)
-            mudou = True
-    if mudou:
-        with open(caminho, 'w', encoding='utf-8') as f:
-            f.write(h)
+    body = ('<header class="header" id="header">\n    <a href="' + BASE + '/site.html" class="logo">\n'
+            '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n' + _nav() +
+            '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n\n'
+            + hero + sec_noticias + sec_grav + sec_artistas + sec_proj + sec_av + sec_pl
+            + sec_manif + sec_qs + sec_ed + sec_cont + '\n' + _footer() + _scripts() + js_site)
 
-_troca('gravadora.html', [
-    ('O catálogo <span class="gradient">completo</span>', 'grav_titulo_raw'),
-])
-_troca('index.html', [
-    ('Lançamentos & <span class="gradient">clássicos do selo</span>', 'idx_vitrine_titulo'),
-])
-_troca('projetos.html', [
-    ('Onde a <span class="gradient">tradição encontra palco</span>', 'projetos_titulo_raw'),
-])
+    with open(os.path.join(BASE_DIR, 'site.html'), 'w', encoding='utf-8') as f:
+        f.write(_doc('Por do Som | Selo Independente & Produtora Cultural',
+                     cfg_str('hero_texto', 'Selo dedicado às Brasilidades')[:155], body))
+    print('✔ site.html gerado (seções: hero, notícias, gravadora, artistas, projetos, audiovisual, playlists, manifesto, quem-somos, editora, contato)')
 
-# abordagem robusta para todos: substitui o CONTEUDO dos spans por chave mapeada
-_MAPA_TITULOS = [
-    ('gravadora.html', 'O catálogo', 'grav_titulo'),
-    ('gravadora.html', 'Artistas que', 'artistas_titulo'),
-    ('projetos.html', 'Onde a tradição', 'projetos_titulo'),
-    ('audiovisual.html', 'Veja e', 'audio_titulo'),
-    ('blog.html', 'Novidades', 'noticias_titulo'),
-    ('quem-somos.html', 'Mais de 20 anos', 'quemsomos_titulo'),
-    ('index.html', 'Lançamentos', 'idx_vitrine_titulo'),
-]
+# ---------- Páginas de notícia ----------
+def gera_posts():
+    ATUAL_EH_HOME = False
+    os.makedirs(os.path.join(BASE_DIR, 'posts'), exist_ok=True)
+    n = 0
+    for p in posts:
+        partes = str(p.get('date','')).split('-')
+        data = '/'.join(reversed(partes)) if len(partes) == 3 else ''
+        img = ''
+        if p.get('imagem'):
+            im = p['imagem']
+            if isinstance(im, list): im = im[0] if im else ''
+            img = '<img src="' + BASE + im + '" alt="" style="width:100%;max-width:760px;border-radius:4px;margin:0 auto 2rem;display:block" loading="lazy">'
+        body = ('<header class="header" id="header">\n    <a href="' + BASE + '/site.html" class="logo">\n'
+                '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+                '        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n' + _nav() +
+                '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+                '<main class="album-page">\n    <div class="container">\n'
+                '        <div style="max-width:760px;margin:0 auto">\n'
+                '            <span class="album-kicker">Notícia · ' + data + '</span>\n'
+                '            <h1 class="album-titulo-grande" style="font-size:clamp(1.6rem,4vw,2.4rem)">' + esc(p.get('title','')) + '</h1>\n'
+                '            <div class="album-meta-info">' + esc(p.get('resumo','')) + '</div>\n'
+                '        </div>\n' + img + '\n'
+                '        <div style="max-width:680px;margin:0 auto;font-size:.98rem;line-height:2;color:var(--text-secondary)">\n'
+                + md_html(p.get('corpo','')) + '\n        </div>\n'
+                '        <div class="album-navegacao">\n            <span></span>\n'
+                '            <a class="album-nav-link" href="' + BASE + '/site.html#noticias">Todas as notícias</a>\n            <span></span>\n'
+                '        </div>\n    </div>\n</main>\n\n' + _footer() + _scripts())
+        with open(os.path.join(BASE_DIR, 'posts', slugify(p.get('title','post')) + '.html'), 'w', encoding='utf-8') as f:
+            f.write(_doc(p.get('title',''), str(p.get('resumo',''))[:155], body))
+        n += 1
+    print('✔ ' + str(n) + ' páginas de notícia geradas')
 
-# descricoes (textos simples, mais faceis)
-_MAPA_DESC = [
-    ('gravadora.html', 'Cada obra com página própria', 'grav_descricao'),
-    ('gravadora.html', 'Compositores, intérpretes e mestres', 'artistas_descricao'),
-    ('projetos.html', 'Séries audiovisuais, festivais e homenagens', 'projetos_descricao'),
-    ('audiovisual.html', 'A produção audiovisual do selo', 'audio_descricao'),
-    ('blog.html', 'Lançamentos, projetos e histórias do Por do Som', 'noticias_descricao'),
-]
+# ---------- catalogo.json ----------
+def gera_json():
+    def _n(a):
+        capa = a.get('capa','')
+        if isinstance(capa, list): capa = capa[0] if capa else ''
+        g = a.get('generos', [])
+        if isinstance(g, str): g = [x.strip() for x in g.replace('[','').replace(']','').split(',') if x.strip()]
+        return {'slug': a['slug'], 'titulo': str(a.get('titulo','')), 'artista': str(a.get('artista','')),
+                'ano': str(a.get('ano','')) if not isinstance(a.get('ano'), list) else str(a['ano'][0] if a['ano'] else ''),
+                'capa': str(capa or ''), 'generos': g, 'destaque': bool(a.get('destaque')),
+                'ordem': str(a.get('ordem','')) if not isinstance(a.get('ordem'), list) else str(a.get('ordem',[''])[0]),
+                'spotify': str(a.get('spotify','') or ''), 'youtube': str(a.get('youtube','') or '')}
+    posts_js = [{'title': str(p.get('title','')), 'resumo': str(p.get('resumo','')),
+                 'date': str(p.get('date','')), 'imagem': str(p.get('imagem','') or '')} for p in posts[:3]]
+    cat = {'base': BASE,
+           'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
+           'albuns': [_n(a) for a in albuns],
+           'posts': posts_js}
+    os.makedirs(os.path.join(BASE_DIR, 'data'), exist_ok=True)
+    with open(os.path.join(BASE_DIR, 'data', 'catalogo.json'), 'w', encoding='utf-8') as f:
+        json.dump(cat, f, ensure_ascii=False, indent=2)
+    print('✔ catalogo.json (' + str(len(albuns)) + ' álbuns, ' + str(len(posts_js)) + ' posts)')
 
-def _troca_desc(arquivo, inicio_antigo, chave):
-    caminho = os.path.join(BASE_DIR, arquivo)
-    if not os.path.exists(caminho):
-        return
-    with open(caminho, encoding='utf-8') as f:
-        h = f.read()
-    novo = SITE_CFG.get(chave, '')
-    if not novo or inicio_antigo not in h:
-        return
-    import re as _rd
-    # substitui o paragrafo de descricao que comeca com o texto antigo
-    h = _rd.sub(_rd.escape(inicio_antigo) + r'[^<]*', esc(str(novo)), h, count=1)
-    with open(caminho, 'w', encoding='utf-8') as f:
-        f.write(h)
+# ---------- Álbuns ----------
+def gera_albuns():
+    ATUAL_EH_HOME = False
+    os.makedirs(os.path.join(BASE_DIR, 'albuns'), exist_ok=True)
+    for i, a in enumerate(albuns):
+        prev = albuns[i-1] if i > 0 else None
+        nxt = albuns[i+1] if i < len(albuns)-1 else None
+        with open(os.path.join(BASE_DIR, 'albuns', a['slug'] + '.html'), 'w', encoding='utf-8') as f:
+            f.write(page_album(a, prev, nxt))
+    print('✔ ' + str(len(albuns)) + ' páginas de álbum geradas')
 
-for arq, ini, chave in _MAPA_DESC:
-    _troca_desc(arq, ini, chave)
-print('✔ teasers da home atualizados do config')
+# ---------- sitemap ----------
+def gera_sitemap():
+    urls = [DOMINIO + '/site.html'] + [DOMINIO + '/albuns/' + a['slug'] + '.html' for a in albuns] + \
+           [DOMINIO + '/posts/' + slugify(p.get('title','')) + '.html' for p in posts]
+    hoje = datetime.now().strftime('%Y-%m-%d')
+    sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    for u in urls:
+        sm += '  <url><loc>' + u + '</loc><lastmod>' + hoje + '</lastmod></url>\n'
+    sm += '</urlset>\n'
+    with open(os.path.join(BASE_DIR, 'sitemap.xml'), 'w', encoding='utf-8') as f:
+        f.write(sm)
+    print('✔ sitemap.xml (' + str(len(urls)) + ' URLs)')
 
-
-# ---------- TROCADOR DE TEXTOS (por ancora de conteudo — o fix definitivo) ----------
-def _troca_titulo(h, chave, trecho_antigo, tag='h2'):
-    """Substitui o <tag section-title> cujo texto CONTEM trecho_antigo."""
-    novo = SITE_CFG.get(chave, '')
-    if not novo or trecho_antigo not in h:
-        return h, False
-    # encontra o elemento especifico que contem o trecho antigo
-    pat = (r'<' + tag + r' class="section-title">([^<]*)<span class="gradient">([^<]*)</span></' + tag + r'>')
-    for m in re.finditer(pat, h):
-        conteudo = m.group(1) + m.group(2)
-        if trecho_antigo in conteudo:
-            partes = str(novo).rsplit(' ', 1)
-            if len(partes) != 2:
-                partes = [str(novo), '']
-            novo_html = ('<' + tag + ' class="section-title">' + esc(partes[0]) +
-                         (' <span class="gradient">' + esc(partes[1]) + '</span>' if partes[1] else '') +
-                         '</' + tag + '>')
-            h = h[:m.start()] + novo_html + h[m.end():]
-            return h, True
-    return h, False
-
-def _troca_texto(h, chave, inicio_antigo):
-    novo = SITE_CFG.get(chave, '')
-    if not novo or inicio_antigo not in h:
-        return h, False
-    h, n = re.subn(re.escape(inicio_antigo) + r'[^<]*', esc(str(novo)), h, count=1)
-    return h, n > 0
-
-def _processa(arquivo, operacoes, h1=False):
-    caminho = os.path.join(BASE_DIR, arquivo)
-    if not os.path.exists(caminho):
-        return
-    with open(caminho, encoding='utf-8') as f:
-        h = f.read()
-    mudou = False
-    for op in operacoes:
-        ok = False
-        if op[0] == 'texto_sem_gradient':
-            # troca o texto COMPLETO entre as tags do h2 (com ou sem gradient)
-            novo_v = SITE_CFG.get(op[1], '')
-            if novo_v and op[2] in h:
-                pat = r'<h2 class="section-title">[\s\S]*?</h2>'
-                for m2 in re.finditer(pat, h):
-                    if op[2] in m2.group(0):
-                        partes = str(novo_v).rsplit(' ', 1)
-                        novo_html = ('<h2 class="section-title">' + esc(partes[0]) +
-                                     (' <span class="gradient">' + esc(partes[1]) + '</span>' if len(partes) > 1 else '') +
-                                     '</h2>')
-                        h = h[:m2.start()] + novo_html + h[m2.end():]
-                        ok = True
-                        break
-        elif op[0] == 'titulo':
-            # op = ('titulo', chave, trecho_antigo_que_identifica_o_elemento)
-            h, ok = _troca_titulo(h, op[1], op[2], 'h1' if h1 else 'h2')
-        else:
-            # op = ('texto', chave, inicio_antigo)
-            h, ok = _troca_texto(h, op[1], op[2])
-        if ok: mudou = True
-    if mudou:
-        with open(caminho, 'w', encoding='utf-8') as f:
-            f.write(h)
-        print('  OK ' + arquivo)
-
-# HOME — cada titulo mira o SEU elemento (pela ancora do texto atual)
-_processa('index.html', [
-    ('texto_sem_gradient', 'home_vitrine_titulo', 'Lançamentos'),
-    ('texto', 'home_vitrine_descricao', 'Do samba de raiz'),
-    ('titulo', 'home_projetos_titulo', 'Onde a tradição'),
-    ('texto', 'home_projetos_descricao', 'Conheça as séries'),
-    ('titulo', 'home_audio_titulo', 'Veja e ouça'),
-    ('titulo', 'home_playlists_titulo', 'Curadoria'),
-])
-
-# GRAVADORA — titulo do catalogo e dos artistas (agora com ancoras proprias)
-_processa('gravadora.html', [
-    ('titulo', 'grav_titulo', 'O catálogo'),
-    ('texto', 'grav_descricao', 'Cada obra com página própria'),
-    ('titulo', 'artistas_titulo', 'Artistas que'),
-    ('texto', 'artistas_descricao', 'Compositores, intérpretes e mestres'),
-], h1=True)
-
-# PROJETOS
-_processa('projetos.html', [
-    ('titulo', 'projetos_titulo', 'Onde a tradição'),
-    ('texto', 'projetos_descricao', 'Séries audiovisuais, festivais e homenagens'),
-], h1=True)
-
-# BLOG
-_processa('blog.html', [
-    ('titulo', 'noticias_titulo', 'Novidades'),
-    ('texto', 'noticias_descricao', 'Lançamentos, projetos e histórias'),
-], h1=True)
-
-print('✔ ' + str(len(geradas)) + ' páginas de álbum geradas (BASE = ' + (BASE or '(raiz)') + ')')
-print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
-print('✔ audiovisual.html gerada com ' + str(len(clips)) + ' vídeos em ' + str(len(partes_pagina)) + ' grupos')
-print('✔ data/catalogo.json regenerado (base: ' + BASE + ')')
-print('✔ sitemap.xml com ' + str(len(urls)) + ' URLs → ' + DOMINIO)
-if not geradas:
-    print('⚠ NENHUM .md em content/albuns/!')
+# ---------- MAIN ----------
+if __name__ == '__main__':
+    gera_site()
+    gera_albuns()
+    gera_posts()
+    gera_json()
+    gera_sitemap()
+    print('\n🎉 RENDER v5 COMPLETO — uma fonte (content/), um autor (render.py)')
