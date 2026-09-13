@@ -1637,3 +1637,7 @@ section {
 .teaser-playlists { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 700px; margin: 0 auto; }
 .teaser-posts { display: grid; gap: 1rem; max-width: 640px; margin: 0 auto; }
 .teaser-contato { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+/* ===== NAVBAR equilibrada (sem CTA no menu) ===== */
+.header .nav { margin-left: auto; margin-right: 24px; }
+@media(max-width:800px){ .header .nav { margin-right: 0; } }
