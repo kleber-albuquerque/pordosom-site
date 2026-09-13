@@ -262,7 +262,7 @@ def page_album(a, prev, next_):
             '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
             '<main class="album-page">\n    <div class="container">\n        <div class="album-hero">\n'
             '            <div class="album-capa-grande">\n'
-            '                <img src="' + esc(str(a.get('capa',''))) + '" alt="Capa" loading="lazy" '
+            '                <img src="' + esc(BASE + str(a.get('capa','')) if str(a.get('capa','')).startswith('/') else str(a.get('capa',''))) + '" alt="Capa" loading="lazy" '
             'onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 600 600%22%3E%3Crect fill=%22%231a0e0e%22 width=%22600%22 height=%22600%22/%3E%3C/svg%3E\'">\n'
             '            </div>\n            <div>\n'
             '                <span class="album-kicker">Álbum · ' + esc(a.get('ano','')) + ' · ' + esc(generos_str) + '</span>\n'
@@ -274,7 +274,7 @@ def page_album(a, prev, next_):
             '                <div class="album-plataformas">' + plats + '</div>\n'
             '            </div>\n        </div>\n'
             '        <div class="album-navegacao">\n            ' + prev_h + '\n'
-            '            <a class="album-nav-link" href="' + BASE + '/site.html#gravadora">Voltar ao catálogo</a>\n'
+            '            <a class="album-nav-link" href="' + BASE + '/index.html">← Voltar para Home</a>\n'
             '            ' + next_h + '\n        </div>\n    </div>\n</main>\n\n' + _footer() + _scripts())
     d = _doc(a['titulo'] + ' — ' + a['artista'], (a.get('corpo') or a['titulo'])[:155], body, img_og=str(a.get('capa','')))
     return d.replace('</head>', '<script type="application/ld+json">\n' + json.dumps(schema, ensure_ascii=False) + '\n</script>\n</head>')
