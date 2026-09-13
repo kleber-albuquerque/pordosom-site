@@ -300,7 +300,7 @@ def gera_site():
 
     # --- PROJETOS ---
     cards_p = []
-    for p in projetos:
+    for p in projetos[:1]:  # Limitado a 1 na home
         img = p.get('imagem') or ''
         if isinstance(img, list): img = img[0] if img else ''
         st_cls = 'status-realizado' if str(p.get('status')) != 'captacao' else 'status-captacao'
@@ -315,7 +315,7 @@ def gera_site():
             '<a href="' + esc(link) + '" target="_blank" rel="noopener" class="teaser-link" style="margin-top:14px">Ver projeto →</a>'
             '</div></div>')
     sec_proj = _sec('projetos', 'Projetos & Festivais', 'projetos_titulo', 'projetos_descricao',
-                    '\n'.join(cards_p), alt=True)
+                    '\n'.join(cards_p) + ('\n        <div style="text-align:center;margin-top:2.5rem"><a href="' + BASE + '/projetos.html" class="btn btn-outline" style="text-decoration:none">Ver todos os projetos (' + str(len(projetos)) + ') →</a></div>' if len(projetos) > 1 else ''), alt=True)
 
     # --- AUDIOVISUAL (clips por grupo) ---
     _clips_home = clips[:4]
@@ -541,6 +541,42 @@ def gera_albuns():
     print('✔ ' + str(len(albuns)) + ' páginas de álbum geradas')
 
 # ---------- sitemap ----------
+
+# ---------- Página de projetos completos ----------
+def gera_projetos():
+    ATUAL_EH_HOME = False
+    cards = []
+    for p in projetos:
+        img = p.get('imagem') or ''
+        if isinstance(img, list): img = img[0] if img else ''
+        st_cls = 'status-realizado' if str(p.get('status')) != 'captacao' else 'status-captacao'
+        st_lbl = '✓ Realizado' if str(p.get('status')) != 'captacao' else '★ Em captação'
+        link = p.get('link') or '#'
+        cards.append(
+            '<div class="projeto-card"><div class="galeria">'
+            '<img src="' + BASE + (img or '/pordosom-profile.jpg') + '" alt="' + esc(p['titulo']) + '" loading="lazy" onerror="this.style.display=\'none\'"></div>'
+            '<div class="projeto-corpo"><span class="projeto-badge ' + st_cls + '">' + st_lbl + '</span>'
+            '<h3>' + esc(p['titulo']) + '</h3>'
+            '<p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">' + esc(p.get('corpo','')) + '</p>'
+            '<a href="' + esc(link) + '" target="_blank" rel="noopener" class="teaser-link" style="margin-top:14px">Ver projeto →</a>'
+            '</div></div>')
+    
+    body = ('<header class="header" id="header">\n    <a href="' + BASE + '/index.html" class="logo">\n'
+            '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '        <span class="logo-text">PÔR DO SOM</span>\n    </a>\n' + _nav('Projetos') +
+            '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+            '<header class="page-header">\n    <div class="container">\n'
+            '        <span class="section-subtitle">Projetos & Festivais</span>\n'
+            '        <h1 class="section-title">' + esc(cfg_str('projetos_titulo')) + '</h1>\n'
+            '        <p class="section-description">' + esc(cfg_str('projetos_descricao')) + '</p>\n'
+            '    </div>\n</header>\n'
+            '<section style="padding:3rem 0">\n    <div class="container">\n'
+            + '\n'.join(cards) + '\n    </div>\n</section>\n\n' + _footer() + _scripts())
+    
+    with open(os.path.join(BASE_DIR, 'projetos.html'), 'w', encoding='utf-8') as f:
+        f.write(_doc('Projetos & Festivais', cfg_str('projetos_descricao')[:155], body))
+    print('✔ projetos.html gerada (' + str(len(projetos)) + ' projetos)')
+
 def gera_sitemap():
     urls = [DOMINIO + '/site.html'] + [DOMINIO + '/albuns/' + a['slug'] + '.html' for a in albuns] + \
            [DOMINIO + '/posts/' + slugify(p.get('title','')) + '.html' for p in posts]
@@ -672,6 +708,7 @@ if __name__ == '__main__':
     gera_site()
     gera_catalogo()
     gera_audiovisual()
+    gera_projetos()
     gera_albuns()
     gera_posts()
     gera_json()
