@@ -275,7 +275,7 @@ def gera_site():
     slog_html = esc(sp[0]) + (' <span class="gradient">' + esc(sp[1]) + '</span>' if len(sp) > 1 else '')
     hero = ('<section class="hero">\n    <div class="hero-bg"></div>\n    <div class="hero-bg-overlay"></div>\n'
             '    <div class="hero-noise"></div>\n    <div class="hero-content">\n'
-            '        <p class="hero-subtitle">Selo Independente · Produtora Cultural</p>\n'
+            '        <img src="' + BASE + '/pordosom-profile.jpg" alt="Logo Pôr do Som" class="hero-logo" style="max-width:180px;height:auto;margin-bottom:1.5rem;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4)">\n'
             '        <h1 class="hero-title">' + slog_html + '</h1>\n'
             '        <p class="hero-description">' + esc(cfg_str('hero_texto')) + '</p>\n'
             '    </div>\n    <div class="hero-scroll">\n        <span>Role para descobrir</span>\n'
@@ -516,7 +516,8 @@ def gera_json():
     artistas_js = [{'nome': str(a.get('nome','')), 'role': str(a.get('role','')),
                    'img': str(a.get('img','') or '')} for a in artistas]
     posts_js = [{'title': str(p.get('title','')), 'resumo': str(p.get('resumo','')),
-                 'date': str(p.get('date','')), 'imagem': str(p.get('imagem','') or '')} for p in posts[:3]]
+                 'date': str(p.get('date','')), 'imagem': str(p.get('imagem','') or ''),
+                 'slug': slugify(p.get('title','post'))} for p in posts[:3]]
     cat = {'base': BASE,
            'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
            'albuns': [_n(a) for a in albuns],
