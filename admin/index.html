@@ -169,7 +169,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <button class="side-item" data-pagina="noticias"><span class="icone">📰</span> Notícias</button>
     <button class="side-item" data-pagina="projetos"><span class="icone">🎬</span> Projetos</button>
     <button class="side-item" data-pagina="audiovisual"><span class="icone">🎵</span> Audiovisual</button>
-    <button class="side-item" data-pagina="config"><span class="icone">⚙️</span> Configurações</button>
+    <button class="side-item" data-pagina="config"><span class="icone">⚙️</span> Textos do Site</button>
     <div class="side-footer">
       <div class="side-user" id="side-user">—</div>
       <button class="side-sair" onclick="sair()">Sair do painel</button>
@@ -200,7 +200,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <div id="pagina-config" class="hidden">
       <div class="toolbar">
         <div>
-          <h1 class="page-title">Configurações</h1>
+          <h1 class="page-title">Textos do Site</h1>
           <p class="page-sub" style="margin-bottom:0">Os textos e a identidade do site — edite e publique</p>
         </div>
       </div>
@@ -1591,7 +1591,7 @@ async function salvarConfig() {
       await _subirImagemRepo("img/hero-bg.jpg", heroSiteNova, "Atualiza imagem da home");
       heroSiteNova = null;
     }
-    toast("Configurações salvas! O site atualiza em ~2 min.");
+    toast("Textos do Site salvas! O site atualiza em ~2 min.");
   } catch (e) {
     toast("Erro ao salvar: " + e.message);
   } finally {
