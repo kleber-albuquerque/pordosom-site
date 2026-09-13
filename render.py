@@ -191,7 +191,14 @@ def _doc(title, desc, body):
             '<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
             '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
             '<link rel="stylesheet" href="' + BASE + '/css/style.css">\n'
-            '</head>\n<body>\n' + body + '</body>\n</html>\n')
+            '</head>\n<body>\n'
+            '<canvas id="bg"></canvas>\n<div class="grain"></div>\n'
+            '<style>\n'
+            '#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}\n'
+            '.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'2\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E");}\n'
+            'main,section,header.header,footer.footer{position:relative;z-index:2}\n'
+            '</style>\n'
+            + body + '</body>\n</html>\n')
 
 # ---------- Página de álbum ----------
 def page_album(a, prev, next_):
