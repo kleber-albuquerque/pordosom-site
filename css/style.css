@@ -164,7 +164,7 @@ img { display: block; max-width: 100%; }
     background-size: cover;
     background-position: center;
     z-index: 0;
-    filter: brightness(0.35) saturate(1.1);
+    filter: brightness(0.55) saturate(1.15);
 }
 .hero-bg-overlay {
     position: absolute;
