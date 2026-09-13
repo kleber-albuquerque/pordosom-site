@@ -10,7 +10,7 @@ O Por do Som agora está de casa nova digital.
 
 São mais de vinte anos de música brasileira de raiz — e até hoje, essa história vivia espalhada: discos no Spotify, vídeos no YouTube, memórias no Instagram. O novo site reúne tudo sob o mesmo teto.
 
-## O que você encontra
+## O que você encontra:
 
 **O catálogo completo** — 31 obras gravadas e lançadas pelo selo, de "Coisa Alguma" (2005) aos lançamentos mais recentes. Cada disco com capa, história e players para ouvir na hora.
 
