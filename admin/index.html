@@ -244,7 +244,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">6 · HOME — Seção Playlists</h2>
         <div class="f-grid">
-          <div class="f-field full"><label>Título</label><input id="cfg-playlists_titulo" type="text"></div>
+          <div class="f-field full"><label>Título da seção (Padrão no site: "Curadoria do selo")</label><input id="cfg-playlists_titulo" type="text"></div>
           <div class="f-field"><label>Playlist 1 — nome</label><input id="cfg-playlist1_nome" type="text"></div>
           <div class="f-field"><label>Playlist 1 — ID Spotify</label><input id="cfg-playlist1_id" type="text" placeholder="ex: 2lgoPMSE9e7lxEumGbBaGn"></div>
           <div class="f-field"><label>Playlist 2 — nome</label><input id="cfg-playlist2_nome" type="text"></div>
@@ -279,22 +279,8 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         
         <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
           
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">11 · SEO e Redes Sociais (Google, WhatsApp, Facebook)</h2>
-        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
-            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
-                 <strong>Como o Google e o WhatsApp veem sua Home.</strong> Preencha para aparecer bonito nas buscas e compartilhamentos.
-                Álbuns e Notícias têm SEO automático.
-            </p>
-        </div>
-        <div class="f-grid">
-            <div class="f-field full"><label>Título SEO (máx. 60 caracteres - aparece na aba do navegador e no Google)</label><input id="cfg-seo_title" type="text" maxlength="60" placeholder="Ex: Pôr do Som — Selo Independente de Brasilidades"></div>
-            <div class="f-field full"><label>Descrição SEO (máx. 155 caracteres - o texto cinza abaixo do link no Google)</label><textarea id="cfg-seo_description" style="min-height:80px" maxlength="155" placeholder="Ex: Selo independente dedicado a samba de raiz, MPB e brasilidades. Catálogo, projetos culturais e artistas."></textarea></div>
-            <div class="f-field full"><label>Palavras-chave (separadas por vírgula)</label><input id="cfg-seo_keywords" type="text" placeholder="samba de raiz, MPB, brasilidades, selo independente"></div>
-            <div class="f-field full"><label>URL da Imagem de Destaque (1200x630px - aparece no WhatsApp/Facebook). Deixe vazio para usar a logo.</label><input id="cfg-seo_og_image" type="url" placeholder="https://... ou /img/og-home.jpg"></div>
-        </div>
-
-        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
-          <button class="btn-salvar" id="btn-salvar-config" onclick="salvarConfig()">💾 Salvar Textos do Site</button>
+        
+        <button class="btn-salvar" id="btn-salvar-config" onclick="salvarConfig()">💾 Salvar Textos do Site</button>
         </div>
         </div>
       </div>
@@ -429,6 +415,24 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Configurações de SEO</button>
         </div>
       </div>
+          <!-- SEÇÃO AGÊNCIA E RODAPÉ (Escalabilidade) -->
+          <div style="margin-bottom:3rem; border-bottom:1px solid var(--border-light); padding-bottom:2rem">
+            <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🏢 Configurações da Agência e Rodapé</h2>
+            <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
+                <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
+                    <strong>Personalize a assinatura da KA e o rodapé jurídico.</strong>
+                    Isso permite que você replique este template para outros clientes mudando apenas estes campos.
+                </p>
+            </div>
+            <div class="f-grid">
+                <div class="f-field"><label>Nome da Agência</label><input id="cfg-agencia_nome" type="text" value="KA. Agência Criativa."></div>
+                <div class="f-field"><label>Link da Agência</label><input id="cfg-agencia_link" type="url" value="https://kaagenciacriativa.com.br/"></div>
+                <div class="f-field full"><label>Slogan da Agência</label><input id="cfg-agencia_slogan" type="text" value="Presença digital sem ruído"></div>
+                <div class="f-field full"><label>Texto Jurídico do Rodapé</label><input id="cfg-rodape_direitos" type="text" placeholder="Ex: Todos os direitos autorais das obras pertencem aos seus respectivos artistas."></div>
+                <div class="f-field full"><label>Texto do Banner LGPD</label><input id="cfg-lgpd_texto" type="text" value="Este site utiliza cookies para melhorar sua experiência de navegação."></div>
+            </div>
+          </div>
+
       <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:8px;padding:1.5rem;margin-bottom:2rem">
         <h3 style="margin:0 0 0.5rem;color:#FFD700;font-size:1.1rem">💡 Dica de Ouro do Selo</h3>
         <p style="margin:0;font-size:0.9rem;color:#ccc;line-height:1.6">
