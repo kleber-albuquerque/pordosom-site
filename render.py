@@ -275,7 +275,7 @@ def gera_site():
     slog_html = esc(sp[0]) + (' <span class="gradient">' + esc(sp[1]) + '</span>' if len(sp) > 1 else '')
     hero = ('<section class="hero">\n    <div class="hero-bg"></div>\n    <div class="hero-bg-overlay"></div>\n'
             '    <div class="hero-noise"></div>\n    <div class="hero-content">\n'
-            '        <img src="' + BASE + '/pordosom-profile.jpg" alt="Logo Pôr do Som" class="hero-logo" style="max-width:180px;height:auto;margin-bottom:1.5rem;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4)">\n'
+'        <p class="hero-subtitle">Selo Pôr do Som</p>\n'
             '        <h1 class="hero-title">' + slog_html + '</h1>\n'
             '        <p class="hero-description">' + esc(cfg_str('hero_texto')) + '</p>\n'
             '    </div>\n    <div class="hero-scroll">\n        <span>Role para descobrir</span>\n'
