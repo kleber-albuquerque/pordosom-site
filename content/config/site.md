@@ -21,16 +21,14 @@ contato_titulo: "Entre em contato"
 contato_descricao: ""
 email_contato: ""
 whatsapp_contato: ""
-idx_vitrine_titulo: "Lançamentos & clássicos do selo"
-idx_vitrine_descricao: "Uma seleção do catálogo — 31 obras de samba de raiz a afro-brasileira."
+idx_vitrine_titulo: "Conheça o nosso catálogo"
+idx_vitrine_descricao: "Do samba de raiz à música afro-brasileira, o Pôr do Som traz o melhor da nossa música."
 idx_projetos_titulo: "Onde a tradição encontra palco"
 idx_projetos_descricao: "Séries audiovisuais e festivais que o Por do Som realiza pelo Brasil afora."
 idx_audio_titulo: "Veja e ouça agora"
 idx_playlists_titulo: "Curadoria do selo"
-
 playlist1_nome: "Samba Raiz e Partido Alto"
 playlist1_id: "2lgoPMSE9e7lxEumGbBaGn"
 playlist2_nome: "Tambores do Brasil"
 playlist2_id: "2cyXUj8Qhe3nZ0rbng87nR"
-
 ---
