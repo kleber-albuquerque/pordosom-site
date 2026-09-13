@@ -207,6 +207,35 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
       <div class="loading" id="cfg-loading">Carregando configurações…</div>
       <div class="table-wrap" id="cfg-form-wrap" style="padding:2rem;display:none">
         
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🏠 PÁGINA HOME (na ordem em que aparece)</h2>
+        <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:16px">1. Topo da página:</p>
+        <div class="f-grid">
+          <div class="f-field full"><label>Slogan (título grande)</label><input id="cfg-hero_slogan" type="text"></div>
+          <div class="f-field full"><label>Texto de apresentação</label><textarea id="cfg-hero_texto" style="min-height:90px"></textarea></div>
+        </div>
+        <p style="font-size:.7rem;color:var(--text-muted);margin:16px 0 4px">2. Seção do catálogo:</p>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título da vitrine</label><input id="cfg-home_vitrine_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição da vitrine</label><input id="cfg-home_vitrine_descricao" type="text"></div>
+        </div>
+        <p style="font-size:.7rem;color:var(--text-muted);margin:16px 0 4px">3. Seção de projetos:</p>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título</label><input id="cfg-home_projetos_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição</label><input id="cfg-home_projetos_descricao" type="text"></div>
+        </div>
+        <p style="font-size:.7rem;color:var(--text-muted);margin:16px 0 4px">4. Áudio e playlists:</p>
+        <div class="f-grid">
+          <div class="f-field"><label>Título audiovisual</label><input id="cfg-home_audio_titulo" type="text"></div>
+          <div class="f-field"><label>Título playlists</label><input id="cfg-home_playlists_titulo" type="text"></div>
+        </div>
+        <p style="font-size:.7rem;color:var(--text-muted);margin:16px 0 4px">5. As duas playlists em destaque:</p>
+        <div class="f-grid">
+          <div class="f-field"><label>Playlist 1 — nome</label><input id="cfg-playlist1_nome" type="text"></div>
+          <div class="f-field"><label>Playlist 1 — ID do Spotify</label><input id="cfg-playlist1_id" type="text" placeholder="ex: 2lgoPMSE9e7lxEumGbBaGn"></div>
+          <div class="f-field"><label>Playlist 2 — nome</label><input id="cfg-playlist2_nome" type="text"></div>
+          <div class="f-field"><label>Playlist 2 — ID do Spotify</label><input id="cfg-playlist2_id" type="text" placeholder="ex: 2cyXUj8Qhe3nZ0rbng87nR"></div>
+        <div class="f-field" style="display:none"><label>.</label><input type="text"></div>
+        </div>
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">📜 MANIFESTO</h2>
         <div class="f-grid">
           <div class="f-field full"><label>Parágrafo 1</label><textarea id="cfg-manifesto_texto1" style="min-height:100px"></textarea></div>
@@ -253,27 +282,6 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           <div class="f-field full"><label>Descrição</label><textarea id="cfg-contato_descricao" style="min-height:70px"></textarea></div>
           <div class="f-field"><label>E-mail de contato</label><input id="cfg-email_contato" type="email"></div>
           <div class="f-field"><label>WhatsApp (com DDI/DDD)</label><input id="cfg-whatsapp_contato" type="text" placeholder="55 11 9..."></div>
-        </div>
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🏠 PÁGINA HOME (na ordem em que aparece)</h2>
-        <p style="font-size:.7rem;color:var(--text-muted);margin-bottom:16px">1. Topo da página:</p>
-        <div class="f-grid">
-          <div class="f-field full"><label>Slogan (título grande)</label><input id="cfg-hero_slogan" type="text"></div>
-          <div class="f-field full"><label>Texto de apresentação</label><textarea id="cfg-hero_texto" style="min-height:90px"></textarea></div>
-        </div>
-        <p style="font-size:.7rem;color:var(--text-muted);margin:16px 0 4px">2. Seção do catálogo:</p>
-        <div class="f-grid">
-          <div class="f-field full"><label>Título da vitrine</label><input id="cfg-home_vitrine_titulo" type="text"></div>
-          <div class="f-field full"><label>Descrição da vitrine</label><input id="cfg-home_vitrine_descricao" type="text"></div>
-        </div>
-        <p style="font-size:.7rem;color:var(--text-muted);margin:16px 0 4px">3. Seção de projetos:</p>
-        <div class="f-grid">
-          <div class="f-field full"><label>Título</label><input id="cfg-home_projetos_titulo" type="text"></div>
-          <div class="f-field full"><label>Descrição</label><input id="cfg-home_projetos_descricao" type="text"></div>
-        </div>
-        <p style="font-size:.7rem;color:var(--text-muted);margin:16px 0 4px">4. Áudio e playlists:</p>
-        <div class="f-grid">
-          <div class="f-field"><label>Título audiovisual</label><input id="cfg-home_audio_titulo" type="text"></div>
-          <div class="f-field"><label>Título playlists</label><input id="cfg-home_playlists_titulo" type="text"></div>
         </div>
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">🖼️ IMAGENS DO SITE</h2>
         <div class="f-grid">

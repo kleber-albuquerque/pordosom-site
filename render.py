@@ -824,28 +824,28 @@ for arq, ini, chave in _MAPA_DESC:
 print('✔ teasers da home atualizados do config')
 
 
-# ---------- TROCADOR DE TEXTOS (home e paginas, por contexto) ----------
-def _set_titulo_com_gradient(h, chave, tag='h2'):
-    """Troca o conteudo de <tag class="section-title">...<span gradient>X</span></tag>
-       preservando o gradient na ultima palavra do novo texto."""
+# ---------- TROCADOR DE TEXTOS (por ancora de conteudo — o fix definitivo) ----------
+def _troca_titulo(h, chave, trecho_antigo, tag='h2'):
+    """Substitui o <tag section-title> cujo texto CONTEM trecho_antigo."""
     novo = SITE_CFG.get(chave, '')
-    if not novo:
+    if not novo or trecho_antigo not in h:
         return h, False
-    pat = r'<' + tag + r' class="section-title">([^<]*)<span class="gradient">([^<]*)</span></' + tag + r'>'
-    m = re.search(pat, h)
-    if not m:
-        return h, False
-    partes = str(novo).rsplit(' ', 1)
-    if len(partes) != 2:
-        partes = [str(novo), '']
-    novo_html = ('<' + tag + ' class="section-title">' + esc(partes[0]) +
-                 (' <span class="gradient">' + esc(partes[1]) + '</span>' if partes[1] else '') +
-                 '</' + tag + '>')
-    h = h[:m.start()] + novo_html + h[m.end():]
-    return h, True
+    # encontra o elemento especifico que contem o trecho antigo
+    pat = (r'<' + tag + r' class="section-title">([^<]*)<span class="gradient">([^<]*)</span></' + tag + r'>')
+    for m in re.finditer(pat, h):
+        conteudo = m.group(1) + m.group(2)
+        if trecho_antigo in conteudo:
+            partes = str(novo).rsplit(' ', 1)
+            if len(partes) != 2:
+                partes = [str(novo), '']
+            novo_html = ('<' + tag + ' class="section-title">' + esc(partes[0]) +
+                         (' <span class="gradient">' + esc(partes[1]) + '</span>' if partes[1] else '') +
+                         '</' + tag + '>')
+            h = h[:m.start()] + novo_html + h[m.end():]
+            return h, True
+    return h, False
 
-def _set_texto(h, chave, inicio_antigo):
-    """Troca o texto que comeca com inicio_antigo ate a proxima tag <."""
+def _troca_texto(h, chave, inicio_antigo):
     novo = SITE_CFG.get(chave, '')
     if not novo or inicio_antigo not in h:
         return h, False
@@ -861,44 +861,46 @@ def _processa(arquivo, operacoes, h1=False):
     mudou = False
     for op in operacoes:
         if op[0] == 'titulo':
-            h, ok = _set_titulo_com_gradient(h, op[1], 'h1' if h1 else 'h2')
+            # op = ('titulo', chave, trecho_antigo_que_identifica_o_elemento)
+            h, ok = _troca_titulo(h, op[1], op[2], 'h1' if h1 else 'h2')
         else:
-            h, ok = _set_texto(h, op[1], op[2])
+            # op = ('texto', chave, inicio_antigo)
+            h, ok = _troca_texto(h, op[1], op[2])
         if ok: mudou = True
     if mudou:
         with open(caminho, 'w', encoding='utf-8') as f:
             f.write(h)
-        print('  ✔ ' + arquivo)
+        print('  OK ' + arquivo)
 
-# HOME — os teasers na ordem em que aparecem ao rolar
+# HOME — cada titulo mira o SEU elemento (pela ancora do texto atual)
 _processa('index.html', [
-    ('titulo', 'home_vitrine_titulo'),
+    ('titulo', 'home_vitrine_titulo', 'Lançamentos'),
     ('texto', 'home_vitrine_descricao', 'Uma seleção do catálogo'),
-    ('titulo', 'home_projetos_titulo'),
+    ('titulo', 'home_projetos_titulo', 'Onde a tradição'),
     ('texto', 'home_projetos_descricao', 'Séries audiovisuais e festivais'),
-    ('titulo', 'home_audio_titulo'),
-    ('titulo', 'home_playlists_titulo'),
+    ('titulo', 'home_audio_titulo', 'Veja e ouça'),
+    ('titulo', 'home_playlists_titulo', 'Curadoria'),
 ])
 
-# GRAVADORA (a pagina)
+# GRAVADORA — titulo do catalogo e dos artistas (agora com ancoras proprias)
 _processa('gravadora.html', [
-    ('titulo', 'grav_titulo'),
+    ('titulo', 'grav_titulo', 'O catálogo'),
     ('texto', 'grav_descricao', 'Cada obra com página própria'),
-    ('titulo', 'artistas_titulo'),
+    ('titulo', 'artistas_titulo', 'Artistas que'),
     ('texto', 'artistas_descricao', 'Compositores, intérpretes e mestres'),
-])
+], h1=True)
 
 # PROJETOS
 _processa('projetos.html', [
-    ('titulo', 'projetos_titulo'),
+    ('titulo', 'projetos_titulo', 'Onde a tradição'),
     ('texto', 'projetos_descricao', 'Séries audiovisuais, festivais e homenagens'),
-])
+], h1=True)
 
 # BLOG
 _processa('blog.html', [
-    ('titulo', 'noticias_titulo'),
+    ('titulo', 'noticias_titulo', 'Novidades'),
     ('texto', 'noticias_descricao', 'Lançamentos, projetos e histórias'),
-])
+], h1=True)
 
 print('✔ ' + str(len(geradas)) + ' páginas de álbum geradas (BASE = ' + (BASE or '(raiz)') + ')')
 print('✔ blog.html gerado com ' + str(len(posts)) + ' notícias')
