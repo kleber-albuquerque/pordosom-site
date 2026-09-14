@@ -1,7 +1,7 @@
 ---
-seo_title: ""
-seo_description: ""
-seo_keywords: ""
+seo_title: "Pôr do Som | Selo Independente e Produtora Cultural"
+seo_description: "Selo independente e produtora cultural dedicado ao samba de raiz, MPB e brasilidades. Conheça nosso catálogo de artistas, projetos e lançamentos."
+seo_keywords: "samba de raiz, MPB, brasilidades, selo independente, música brasileira, produtora cultural, artistas brasileiros"
 seo_og_image: ""
 agencia_nome: ""
 agencia_link: ""
