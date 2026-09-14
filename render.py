@@ -357,8 +357,8 @@ def gera_site():
     p1id = cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn').split('?')[0].strip().split('?')[0].strip()
     p2id = cfg_str('playlist2_id', '2cyXUj8Qhe3nZ0rbng87nR').split('?')[0].strip().split('?')[0].strip()
     playlists_html = ('<div class="teaser-playlists">\n'
-                     '            <iframe src="https://open.spotify.com/embed/playlist/\' + p1id + \'?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 1"></iframe>\n'
-                     '            <iframe src="https://open.spotify.com/embed/playlist/\' + p2id + \'?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 2"></iframe>\n'
+                     '            <iframe src="https://open.spotify.com/embed/playlist/' + p1id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 1"></iframe>\n'
+                     '            <iframe src="https://open.spotify.com/embed/playlist/' + p2id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 2"></iframe>\n'
                      '        </div>')
     sec_pl = _sec('playlists', 'Playlists', 'home_playlists_titulo', None, playlists_html, alt=True)
 
@@ -719,8 +719,8 @@ def gera_audiovisual():
                  '            <span class="section-subtitle">Playlists</span>\n'
                  '            <h2 class="section-title">' + esc(cfg_str('playlists_titulo', 'Curadoria do selo')) + '</h2>\n'
                  '        </div>\n        <div class="teaser-playlists">\n'
-                 '            <iframe src="https://open.spotify.com/embed/playlist/\' + p1id + \'?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 1"></iframe>\n'
-                 '            <iframe src="https://open.spotify.com/embed/playlist/\' + p2id + \'?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 2"></iframe>\n'
+                     '            <iframe src="https://open.spotify.com/embed/playlist/' + p1id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 1"></iframe>\n'
+                     '            <iframe src="https://open.spotify.com/embed/playlist/' + p2id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 2"></iframe>\n'
                  '        </div>\n    </div>\n</section>\n')
     body = ('<header class="header" id="header">\n    <a href="' + BASE + '/index.html" class="logo">\n'
             '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
