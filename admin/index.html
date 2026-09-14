@@ -14,6 +14,8 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Montserrat',system-ui,sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh}
 .hidden{display:none!important}
+
+/* ===== LOGIN ===== */
 .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
 .login-box{background:var(--bg-card);border:1px solid var(--border);padding:2.5rem;border-radius:8px;max-width:420px;width:100%}
 .login-logo{display:flex;align-items:center;gap:.8rem;justify-content:center;margin-bottom:.5rem}
@@ -28,6 +30,8 @@ body{font-family:'Montserrat',system-ui,sans-serif;background:var(--bg-dark);col
 .btn-primary{width:100%;margin-top:1.5rem;background:var(--brand-primary);color:#f5ede0;border:1px solid var(--brand-primary-light);padding:.95rem;border-radius:4px;font-family:inherit;font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.3s}
 .btn-primary:hover{background:var(--brand-primary-light)}
 .login-error{margin-top:1rem;padding:.8rem;background:rgba(168,48,48,.15);border:1px solid var(--border);color:#f0b0b0;font-size:.8rem;border-radius:4px;display:none}
+
+/* ===== LAYOUT ===== */
 .layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
 .sidebar{background:var(--bg-darker);border-right:1px solid var(--border);padding:1.5rem 1rem;display:flex;flex-direction:column;gap:.4rem;position:sticky;top:0;height:100vh}
 .sidebar-brand{display:flex;align-items:center;gap:.6rem;padding:.5rem;margin-bottom:1.5rem}
@@ -44,62 +48,95 @@ body{font-family:'Montserrat',system-ui,sans-serif;background:var(--bg-dark);col
 .main{padding:2rem;max-width:1100px}
 .page-title{font-size:1.3rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:.4rem}
 .page-sub{font-size:.8rem;color:var(--text-muted);margin-bottom:2rem}
+
+/* ===== STATS ===== */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2.5rem}
 .stat-card{background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;padding:1.2rem 1.4rem}
 .stat-num{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,var(--brand-primary-light),var(--brand-accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
 .stat-label{font-size:.62rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-top:.3rem}
+
+/* ===== TABELA ===== */
 .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:1rem;flex-wrap:wrap}
 .btn-novo{background:var(--brand-primary);color:#f5ede0;border:1px solid var(--brand-primary-light);padding:.7rem 1.3rem;border-radius:4px;font-family:inherit;font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:.3s}
 .btn-novo:hover{background:var(--brand-primary-light)}
 .table-wrap{background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;overflow:hidden}
 table{width:100%;border-collapse:collapse}
 th{font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);text-align:left;padding:.9rem 1.1rem;border-bottom:1px solid var(--border-light)}
+th.ordenavel{cursor:pointer;user-select:none;transition:color .2s}
+th.ordenavel:hover{color:var(--text-secondary)}
+th.ordenavel .seta{font-size:.6rem;margin-left:.3rem;opacity:.7}
 td{padding:.8rem 1.1rem;border-bottom:1px solid var(--border-light);font-size:.82rem;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg-card-hover)}
 td img.capa-mini{width:42px;height:42px;border-radius:3px;object-fit:cover;background:var(--bg-darker)}
 .sem-capa{width:42px;height:42px;border-radius:3px;background:var(--bg-darker);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-muted)}
 td .titulo-cell{font-weight:700;color:var(--text-primary)}
+td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 .tag-genero{display:inline-block;font-size:.55rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:.2rem .5rem;margin-right:.25rem;border:1px solid var(--border);color:var(--brand-accent);border-radius:2px}
+.destaque-star{color:var(--brand-accent);font-size:.9rem}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px}
+.status-ok{background:#5d9871}
+.status-publicado{color:#8dbf9f;font-size:.68rem}
+
+/* ===== EDITORES ===== */
 .editor-overlay{position:fixed;inset:0;background:rgba(6,3,3,.85);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
 .editor-box{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;max-width:860px;width:100%;padding:2rem;margin-bottom:2rem}
 .editor-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid var(--border-light)}
 .editor-header h2{font-size:1.1rem;font-weight:800;letter-spacing:1px;text-transform:uppercase}
 .editor-fechar{background:none;border:none;color:var(--text-muted);font-size:1.4rem;cursor:pointer}
+.editor-fechar:hover{color:var(--text-primary)}
 .editor-grid{display:grid;grid-template-columns:220px 1fr;gap:2rem}
 @media(max-width:700px){.editor-grid{grid-template-columns:1fr}}
 .capa-editor{width:220px;aspect-ratio:1;border-radius:6px;border:2px dashed var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg-darker);cursor:pointer;position:relative}
 .capa-editor img{width:100%;height:100%;object-fit:cover}
 .capa-editor .capa-hint{font-size:.7rem;color:var(--text-muted);text-align:center;padding:1rem;line-height:1.5}
+.capa-editor:hover{border-color:var(--brand-primary-light)}
 .btn-capa{margin-top:.8rem;width:100%;background:var(--bg-dark);border:1px solid var(--border);color:var(--text-secondary);padding:.6rem;border-radius:4px;font-family:inherit;font-size:.68rem;font-weight:600;letter-spacing:1px;cursor:pointer}
 .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.f-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+@media(max-width:700px){.f-grid,.f-grid-3{grid-template-columns:1fr}}
 .f-field{display:flex;flex-direction:column;gap:.4rem}
 .f-field.full{grid-column:1/-1}
 .f-field label{font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-secondary)}
-.f-field input,.f-field textarea{background:var(--bg-dark);border:1px solid var(--border-light);color:var(--text-primary);padding:.75rem .9rem;border-radius:4px;font-family:inherit;font-size:.88rem;outline:none}
+.f-field input,.f-field textarea{background:var(--bg-dark);border:1px solid var(--border-light);color:var(--text-primary);padding:.75rem .9rem;border-radius:4px;font-family:inherit;font-size:.88rem;outline:none;transition:border-color .2s}
+.f-field input:focus,.f-field textarea:focus{border-color:var(--brand-primary-light)}
 .f-field textarea{min-height:140px;resize:vertical;line-height:1.7}
+.f-field .hint{font-size:.65rem;color:var(--text-muted)}
 .f-checks{display:flex;flex-wrap:wrap;gap:.5rem}
-.f-check{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .9rem;border:1px solid var(--border-light);border-radius:4px;font-size:.75rem;cursor:pointer;color:var(--text-secondary)}
+.f-check{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .9rem;border:1px solid var(--border-light);border-radius:4px;font-size:.75rem;cursor:pointer;color:var(--text-secondary);transition:.2s;user-select:none}
+.f-check input{display:none}
 .f-check.marcado{background:var(--brand-primary);border-color:var(--brand-primary-light);color:#f5ede0}
-.f-toggle{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer}
+.f-toggle{display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;user-select:none}
 .f-toggle input{display:none}
-.f-toggle .trilha{width:44px;height:24px;border-radius:12px;background:var(--bg-darker);border:1px solid var(--border);position:relative}
+.f-toggle .trilha{width:44px;height:24px;border-radius:12px;background:var(--bg-darker);border:1px solid var(--border);position:relative;transition:.2s}
 .f-toggle .bolinha{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--text-muted);transition:.2s}
 .f-toggle input:checked + .trilha{background:var(--brand-primary);border-color:var(--brand-primary-light)}
 .f-toggle input:checked + .trilha .bolinha{left:22px;background:#f5ede0}
 .editor-rodape{display:flex;justify-content:flex-end;gap:1rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-light)}
 .btn-cancelar{background:none;border:1px solid var(--border);color:var(--text-secondary);padding:.8rem 1.6rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
-.btn-salvar{background:var(--brand-primary);border:1px solid var(--brand-primary-light);color:#f5ede0;padding:.8rem 1.8rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
-.loading{text-align:center;padding:3rem;color:var(--text-muted)}
+.btn-salvar{background:var(--brand-primary);border:1px solid var(--brand-primary-light);color:#f5ede0;padding:.8rem 1.8rem;border-radius:4px;font-family:inherit;font-size:.75rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.btn-salvar:hover{background:var(--brand-primary-light)}
+.btn-salvar:disabled{opacity:.5;cursor:wait}
+
+/* ===== ESTADOS ===== */
+.loading{text-align:center;padding:3rem;color:var(--text-muted);font-size:.85rem}
 .vazio{text-align:center;padding:3rem;color:var(--text-muted)}
 .vazio .icone{font-size:2.5rem;display:block;margin-bottom:1rem;opacity:.5}
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg-card);border:1px solid var(--brand-primary-light);color:var(--text-primary);padding:1rem 1.5rem;border-radius:6px;font-size:.82rem;z-index:9999}
-@media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap}.side-footer{display:none}.main{padding:1.2rem}}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg-card);border:1px solid var(--brand-primary-light);color:var(--text-primary);padding:1rem 1.5rem;border-radius:6px;font-size:.82rem;z-index:9999;animation:toastIn .3s ease}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+@media(max-width:800px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:.4rem}
+  .sidebar-brand{width:100%}
+  .side-footer{display:none}
+  .main{padding:1.2rem}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ===== LOGIN ===== -->
 <div class="login-screen" id="login-screen">
   <div class="login-box">
     <div class="login-logo">
@@ -120,7 +157,7 @@ td .titulo-cell{font-weight:700;color:var(--text-primary)}
   </div>
 </div>
 
-<!-- PAINEL -->
+<!-- ===== PAINEL ===== -->
 <div class="layout hidden" id="painel">
   <aside class="sidebar">
     <div class="sidebar-brand">
@@ -129,10 +166,10 @@ td .titulo-cell{font-weight:700;color:var(--text-primary)}
     </div>
     <button class="side-item ativo" data-pagina="inicio"><span class="icone">🏠</span> Início</button>
     <button class="side-item" data-pagina="albuns"><span class="icone">💿</span> Álbuns</button>
-    <button class="side-item" data-pagina="noticias"><span class="icone"></span> Notícias</button>
-    <button class="side-item" data-pagina="projetos"><span class="icone"></span> Projetos</button>
+    <button class="side-item" data-pagina="noticias"><span class="icone">📰</span> Notícias</button>
+    <button class="side-item" data-pagina="projetos"><span class="icone">🎬</span> Projetos</button>
     <button class="side-item" data-pagina="audiovisual"><span class="icone">🎵</span> Audiovisual</button>
-    <button class="side-item" data-pagina="config"><span class="icone">⚙️</span> Textos do Site</button>
+    <button class="side-item" data-pagina="config"><span class="icone">️</span> Textos do Site</button>
     <button class="side-item" data-pagina="analytics"><span class="icone">📊</span> Analytics & Ferramentas</button>
     <div class="side-footer">
       <div class="side-user" id="side-user">—</div>
@@ -153,14 +190,14 @@ td .titulo-cell{font-weight:700;color:var(--text-primary)}
       </div>
       <div class="table-wrap" style="padding:1.5rem">
         <p style="font-size:.85rem;color:var(--text-secondary);line-height:1.8">
-           <strong>Como funciona:</strong> tudo o que você edita aqui é salvo direto no repositório do seu site.
+          💡 <strong>Como funciona:</strong> tudo o que você edita aqui é salvo direto no repositório do seu site.
           Após salvar, o site se atualiza sozinho em 1–2 minutos.
           Na barra lateral, clique em <strong>Álbuns</strong> ou <strong>Notícias</strong> para começar.
         </p>
       </div>
     </div>
 
-    <!-- TEXTOS DO SITE -->
+    <!-- CONFIGURACOES -->
     <div id="pagina-config" class="hidden">
       <div class="toolbar">
         <div>
@@ -170,7 +207,8 @@ td .titulo-cell{font-weight:700;color:var(--text-primary)}
       </div>
       <div class="loading" id="cfg-loading">Carregando configurações…</div>
       <div class="table-wrap" id="cfg-form-wrap" style="padding:2rem;display:none">
-        <p style="font-size:.75rem;color:var(--text-muted);margin-bottom:20px;line-height:1.5">
+
+        <p style="font-size:.75rem;color:var(--muted);margin-bottom:20px;line-height:1.5">
           Os textos na <strong>mesma ordem em que aparecem no site</strong>. Ao salvar, o site atualiza em ~2 minutos.
         </p>
 
@@ -206,7 +244,7 @@ td .titulo-cell{font-weight:700;color:var(--text-primary)}
 
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">6 · HOME — Seção Playlists</h2>
         <div class="f-grid">
-          <div class="f-field full"><label>Título da seção (Padrão: "Curadoria do selo")</label><input id="cfg-playlists_titulo" type="text"></div>
+          <div class="f-field full"><label>Título</label><input id="cfg-playlists_titulo" type="text"></div>
           <div class="f-field"><label>Playlist 1 — nome</label><input id="cfg-playlist1_nome" type="text"></div>
           <div class="f-field"><label>Playlist 1 — ID Spotify</label><input id="cfg-playlist1_id" type="text" placeholder="ex: 2lgoPMSE9e7lxEumGbBaGn"></div>
           <div class="f-field"><label>Playlist 2 — nome</label><input id="cfg-playlist2_nome" type="text"></div>
@@ -245,7 +283,109 @@ td .titulo-cell{font-weight:700;color:var(--text-primary)}
       </div>
     </div>
 
-    <!-- ANALYTICS & FERRAMENTAS -->
+    <!-- AUDIOVISUAL -->
+    <div id="pagina-audiovisual" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Audiovisual</h1>
+          <p class="page-sub" style="margin-bottom:0">Os vídeos do canal — por festival e série</p>
+        </div>
+        <button class="btn-novo" onclick="abrirNovoVideo()">＋ Novo Vídeo</button>
+      </div>
+      <div class="loading" id="av-loading">Carregando vídeos…</div>
+      <div class="table-wrap hidden" id="av-table-wrap">
+        <table>
+          <thead><tr><th>Grupo</th><th>Título</th><th>Artista</th><th>Ano</th><th></th></tr></thead>
+          <tbody id="av-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="av-vazio">
+        <span class="icone">🎵</span>
+        Nenhum vídeo cadastrado.
+      </div>
+    </div>
+
+    <!-- PROJETOS -->
+    <div id="pagina-projetos" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Projetos</h1>
+          <p class="page-sub" style="margin-bottom:0">Realizações e projetos em captação — sua vitrine de autoridade</p>
+        </div>
+        <button class="btn-novo" onclick='abrirNovoProjeto()'>＋ Novo Projeto</button>
+      </div>
+      <div class="loading" id="projetos-loading">Carregando projetos…</div>
+      <div class="table-wrap hidden" id="projetos-table-wrap">
+        <table>
+          <thead><tr><th>Status</th><th>Título</th><th>Tipo</th><th>Ano</th><th></th></tr></thead>
+          <tbody id="projetos-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="projetos-vazio">
+        <span class="icone">🎬</span>
+        Nenhum projeto cadastrado ainda.
+      </div>
+    </div>
+
+    <!-- ÁLBUNS -->
+    <div id="pagina-albuns" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Álbuns</h1>
+          <p class="page-sub" style="margin-bottom:0">O catálogo completo — clique nas colunas para ordenar</p>
+        </div>
+        <button class="btn-novo" onclick='abrirNovoAlbum()'>＋ Novo Álbum</button>
+      </div>
+      <div class="loading" id="albuns-loading">Carregando álbuns do repositório…</div>
+      <div class="table-wrap hidden" id="albuns-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Capa</th>
+              <th class="ordenavel" onclick="ordenarPor('titulo')">Álbum <span class="seta" id="seta-titulo"></span></th>
+              <th class="ordenavel" onclick="ordenarPor('artista')">Artista</th>
+              <th class="ordenavel" onclick="ordenarPor('generos')">Gêneros</th>
+              <th class="ordenavel" onclick="ordenarPor('ano')">Ano <span class="seta" id="seta-ano"></span></th>
+              <th>Home</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="albuns-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="albuns-vazio">
+        <span class="icone">💿</span>
+        Nenhum álbum cadastrado ainda.
+      </div>
+    </div>
+
+    <!-- NOTÍCIAS -->
+    <div id="pagina-noticias" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Notícias</h1>
+          <p class="page-sub" style="margin-bottom:0">Lançamentos, projetos e novidades do selo</p>
+        </div>
+        <button class="btn-novo" onclick='abrirNovaNoticia()'>＋ Nova Notícia</button>
+      </div>
+      <div class="loading" id="noticias-loading">Carregando notícias…</div>
+      <div class="table-wrap hidden" id="noticias-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Data</th><th>Título</th><th>Resumo</th><th></th></tr>
+          </thead>
+          <tbody id="noticias-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="noticias-vazio">
+        <span class="icone">📰</span>
+        Nenhuma notícia publicada ainda.<br>
+        <small>Clique em "＋ Nova Notícia" para o primeiro lançamento.</small>
+      </div>
+    </div>
+  
+    <!-- ABA ANALYTICS & FERRAMENTAS -->
     <div id="pagina-analytics" class="hidden">
       <div class="toolbar">
         <div>
@@ -256,23 +396,18 @@ td .titulo-cell{font-weight:700;color:var(--text-primary)}
 
       <!-- SEO -->
       <div style="margin-bottom:3rem; border-bottom:1px solid var(--border-light); padding-bottom:2rem">
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🎯 SEO e Redes Sociais (Google, WhatsApp)</h2>
-        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
-            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
-                <strong>Como o Google e o WhatsApp veem sua Home.</strong> Preencha para aparecer bonito nas buscas.
-            </p>
-        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🎯 SEO e Redes Sociais</h2>
         <div class="f-grid">
-            <div class="f-field full"><label>Título SEO (máx. 60 caracteres)</label><input id="cfg-seo_title" type="text" maxlength="60" placeholder="Ex: Pôr do Som — Selo Independente"></div>
-            <div class="f-field full"><label>Descrição SEO (máx. 155 caracteres)</label><textarea id="cfg-seo_description" style="min-height:80px" maxlength="155" placeholder="Ex: Selo independente de brasilidades."></textarea></div>
-            <div class="f-field full"><label>Palavras-chave (separadas por vírgula)</label><input id="cfg-seo_keywords" type="text" placeholder="samba, MPB, brasilidades"></div>
-            <div class="f-field full"><label>URL da Imagem de Destaque (1200x630px)</label><input id="cfg-seo_og_image" type="url" placeholder="https://... ou deixe vazio"></div>
+            <div class="f-field full"><label>Título SEO (máx. 60 caracteres)</label><input id="cfg-seo_title" type="text" maxlength="60"></div>
+            <div class="f-field full"><label>Descrição SEO (máx. 155 caracteres)</label><textarea id="cfg-seo_description" style="min-height:80px" maxlength="155"></textarea></div>
+            <div class="f-field full"><label>Palavras-chave</label><input id="cfg-seo_keywords" type="text"></div>
+            <div class="f-field full"><label>URL da Imagem de Destaque (1200x630px)</label><input id="cfg-seo_og_image" type="url"></div>
         </div>
       </div>
 
       <!-- FERRAMENTAS -->
       <div style="margin-bottom:3rem; border-bottom:1px solid var(--border-light); padding-bottom:2rem">
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem"> Ferramentas Externas</h2>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🔗 Ferramentas Externas</h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:1rem">
             <a href="https://search.google.com/search-console" target="_blank" style="text-decoration:none;color:inherit">
                 <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;padding:1rem;text-align:center">
@@ -303,66 +438,219 @@ td .titulo-cell{font-weight:700;color:var(--text-primary)}
 
       <!-- AGÊNCIA -->
       <div style="margin-bottom:2rem">
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🏢 Configurações da Agência (Template KA)</h2>
-        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
-            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
-                <strong>Personalize a assinatura da agência e o rodapé.</strong>
-                Permite replicar este template para outros clientes.
-            </p>
-        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🏢 Configurações da Agência</h2>
         <div class="f-grid">
             <div class="f-field"><label>Nome da Agência</label><input id="cfg-agencia_nome" type="text" value="KA. Agência Criativa."></div>
             <div class="f-field"><label>Link da Agência</label><input id="cfg-agencia_link" type="url" value="https://kaagenciacriativa.com.br/"></div>
             <div class="f-field full"><label>Slogan da Agência</label><input id="cfg-agencia_slogan" type="text" value="Presença digital sem ruído"></div>
-            <div class="f-field full"><label>Texto Jurídico do Rodapé</label><input id="cfg-rodape_direitos" type="text" placeholder="Ex: Direitos autorais reservados aos artistas."></div>
+            <div class="f-field full"><label>Texto Jurídico do Rodapé</label><input id="cfg-rodape_direitos" type="text"></div>
             <div class="f-field full"><label>Texto do Banner LGPD</label><input id="cfg-lgpd_texto" type="text" value="Este site utiliza cookies para melhorar sua experiência."></div>
+        </div>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
+          <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Configurações</button>
         </div>
       </div>
     </div>
-
-    <!-- AUDIOVISUAL, PROJETOS, ÁLBUNS, NOTÍCIAS (placeholders) -->
-    <div id="pagina-audiovisual" class="hidden">
-      <div class="toolbar">
-        <div><h1 class="page-title">Audiovisual</h1><p class="page-sub">Os vídeos do canal</p></div>
-        <button class="btn-novo">+ Novo Vídeo</button>
-      </div>
-      <div class="loading">Carregando...</div>
-    </div>
-
-    <div id="pagina-projetos" class="hidden">
-      <div class="toolbar">
-        <div><h1 class="page-title">Projetos</h1><p class="page-sub">Realizações e projetos</p></div>
-        <button class="btn-novo">+ Novo Projeto</button>
-      </div>
-      <div class="loading">Carregando...</div>
-    </div>
-
-    <div id="pagina-albuns" class="hidden">
-      <div class="toolbar">
-        <div><h1 class="page-title">Álbuns</h1><p class="page-sub">Catálogo completo</p></div>
-        <button class="btn-novo">+ Novo Álbum</button>
-      </div>
-      <div class="loading">Carregando...</div>
-    </div>
-
-    <div id="pagina-noticias" class="hidden">
-      <div class="toolbar">
-        <div><h1 class="page-title">Notícias</h1><p class="page-sub">Lançamentos e novidades</p></div>
-        <button class="btn-novo">+ Nova Notícia</button>
-      </div>
-      <div class="loading">Carregando...</div>
-    </div>
+    
   </main>
 </div>
+<!-- ===== EDITOR DE ÁLBUM ===== -->
+  <!-- ===== EDITOR DE VIDEO (simplificado) ===== -->
+  <div class="editor-overlay hidden" id="editor-video-overlay">
+    <div class="editor-box" style="max-width:560px">
+      <div class="editor-header">
+        <h2 id="editor-video-titulo">Novo Vídeo</h2>
+        <button class="editor-fechar" onclick="fecharEditorVideo()">X</button>
+      </div>
+      <div class="f-grid">
+        <div class="f-field full"><label>Título do vídeo</label><input id="fv-titulo" type="text"></div>
+        <div class="f-field full"><label>Link do YouTube (cole a URL)</label><input id="fv-link" type="url" placeholder="https://youtube.com/watch?v=..." oninput="previewVideo()"></div>
+        <div class="f-field full" id="fv-preview-wrap" style="display:none"><label>Prévia</label><div style="border-radius:4px;overflow:hidden;border:1px solid var(--border-light)"><iframe id="fv-preview" style="width:100%;aspect-ratio:16/9;border:0" title="Prévia"></iframe></div></div>
+        <div class="f-field">
+          <label>Grupo</label>
+          <select id="fv-grupo" style="background:var(--bg-dark);border:1px solid var(--border-light);color:var(--text-primary);padding:.75rem .9rem;border-radius:4px;font-family:inherit">
+            <option value="sotaques">Série Sotaques do Brasil</option>
+            <option value="malungo">Festival Malungo</option>
+            <option value="mestres">Festival Mestres dos Saberes</option>
+            <option value="outros">Outros vídeos</option>
+          </select>
+        </div>
+        <div class="f-field"><label>Ano</label><input id="fv-ano" type="number" min="2010" max="2035"></div>
+        <div class="f-field full"><label>Artista</label><input id="fv-artista" type="text"></div>
+      </div>
+      <div class="editor-rodape">
+        <button class="btn-cancelar" onclick="fecharEditorVideo()">Cancelar</button>
+        <button class="btn-salvar" id="btn-salvar-video" onclick="salvarVideo()">Salvar Vídeo</button>
+      </div>
+    </div>
+  </div>
+  <!-- ===== EDITOR DE PROJETO (overlay) ===== -->
+  <div class="editor-overlay hidden" id="editor-projeto-overlay">
+    <div class="editor-box">
+      <div class="editor-header">
+        <h2 id="editor-projeto-titulo">Novo Projeto</h2>
+        <button class="editor-fechar" onclick="fecharEditorProjeto()">X</button>
+      </div>
+      <div class="editor-grid">
+        <div>
+          <div class="capa-editor" id="projeto-img-preview" onclick="subirImagemProjeto()">
+            <span class="capa-hint">Imagem<br>de destaque<br>(clique)</span>
+          </div>
+          <input type="file" id="projeto-img-input" accept="image/jpeg,image/png" class="hidden" onchange="imagemProjetoEscolhida(event)">
+          <button class="btn-capa" onclick="subirImagemProjeto()">Imagem</button>
+        </div>
+        <div>
+          <div class="f-grid">
+            <div class="f-field full"><label>Titulo</label><input id="fp-titulo" type="text"></div>
+            <div class="f-field">
+              <label>Status</label>
+              <label class="f-toggle">
+                <input type="checkbox" id="fp-captacao">
+                <span class="trilha"><span class="bolinha"></span></span>
+                <span style="font-size:.75rem;color:var(--text-secondary)">Em captacao</span>
+              </label>
+            </div>
+            <div class="f-field"><label>Ano</label><input id="fp-ano" type="number" min="2000" max="2035"></div>
+            <div class="f-field full"><label>Tipo / Badge</label><input id="fp-badge" type="text" placeholder="Festival, Serie..."></div>
+            <div class="f-field full"><label>Link</label><input id="fp-link" type="url" placeholder="https://..."></div>
+            <div class="f-field full"><label>Relatorio (PDF)</label><input id="fp-relatorio" type="url" placeholder="https://..."></div>
+            <div class="f-field full"><label>Tags (virgulas)</label><input id="fp-tags" type="text" placeholder="Festival, Cultura"></div>
+            <div class="f-field full"><label>Descricao</label><textarea id="fp-corpo" style="min-height:140px"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-rodape">
+        <button class="btn-cancelar" onclick="fecharEditorProjeto()">Cancelar</button>
+        <button class="btn-salvar" id="btn-salvar-projeto" onclick="salvarProjeto()">Salvar Projeto</button>
+      </div>
+    </div>
+  </div>
 
+<div class="editor-overlay hidden" id="editor-overlay">
+  <div class="editor-box">
+    <div class="editor-header">
+      <h2 id="editor-titulo">Editar Álbum</h2>
+      <button class="editor-fechar" onclick="fecharEditor()">✕</button>
+    </div>
+    <div class="editor-grid">
+      <div>
+        <div class="capa-editor" id="capa-preview" onclick="subirCapa()">
+          <span class="capa-hint">💿<br>Clique para escolher<br>a capa do álbum</span>
+        </div>
+        <input type="file" id="capa-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="capaEscolhida(event)">
+        <button class="btn-capa" onclick="subirCapa()">📷 Subir nova capa</button>
+        <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
+          Dica: imagem quadrada, até 500KB.<br>Comprimida em tinypng.com fica perfeita.
+        </p>
+      </div>
+      <div>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título do Álbum</label><input id="f-titulo" type="text"></div>
+          <div class="f-field"><label>Artista</label><input id="f-artista" type="text"></div>
+          <div class="f-field"><label>Ano</label><input id="f-ano" type="number" min="1990" max="2030"></div>
+          <div class="f-field full">
+            <label>Gêneros</label>
+            <div class="f-checks" id="f-generos"></div>
+          </div>
+          <div class="f-field"><label>Nº de faixas</label><input id="f-faixas" type="number" min="1" max="100"></div>
+            <div class="f-field"><label>⭐ Posição no catálogo (opcional)</label><input id="f-ordem" type="number" min="1" placeholder="vazio = ordem por ano"></div>
+          <div class="f-field">
+            <label>Destaque na home</label>
+            <label class="f-toggle">
+              <input type="checkbox" id="f-destaque">
+              <span class="trilha"><span class="bolinha"></span></span>
+              <span style="font-size:.75rem;color:var(--text-secondary)">Mostrar na vitrine</span>
+            </label>
+          </div>
+          <div class="f-field full"><label>Link do Spotify</label><input id="f-spotify" type="url" placeholder="https://open.spotify.com/album/..."></div>
+          <div class="f-field full"><label>Link do YouTube</label><input id="f-youtube" type="url" placeholder="https://youtube.com/watch?v=..."></div>
+          <div class="f-grid-3" style="grid-column:1/-1">
+            <div class="f-field"><label>Apple Music</label><input id="f-apple" type="url"></div>
+            <div class="f-field"><label>Deezer</label><input id="f-deezer" type="url"></div>
+          </div>
+          <div class="f-field full"><label>Texto do álbum (português)</label><textarea id="f-texto-pt"></textarea></div>
+          <div class="f-field full"><label>Texto em inglês (opcional - melhora busca internacional)</label><textarea id="f-texto-en" style="min-height:90px"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="editor-rodape">
+      <button class="btn-cancelar" onclick="fecharEditor()">Cancelar</button>
+      <button class="btn-salvar" id="btn-salvar" onclick="salvarAlbum()">💾 Salvar e Publicar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EDITOR DE NOTÍCIA ===== -->
+<div class="editor-overlay hidden" id="editor-noticia-overlay">
+  <div class="editor-box">
+    <div class="editor-header">
+      <h2 id="editor-noticia-titulo">Nova Notícia</h2>
+      <button class="editor-fechar" onclick="fecharEditorNoticia()">✕</button>
+    </div>
+    <div class="editor-grid">
+      <div>
+        <div class="capa-editor" id="noticia-img-preview" onclick="subirImagemNoticia()">
+          <span class="capa-hint">🖼️<br>Clique para escolher<br>imagem de destaque<br>(opcional)</span>
+        </div>
+        <input type="file" id="noticia-img-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="imagemNoticiaEscolhida(event)">
+        <button class="btn-capa" onclick="subirImagemNoticia()">📷 Imagem de destaque</button>
+        <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
+          Aparece na notícia publicada.<br>Até 500KB — comprima em tinypng.com.
+        </p>
+      </div>
+      <div>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título da notícia</label><input id="fn-titulo" type="text"></div>
+          <div class="f-field"><label>Data de publicação</label><input id="fn-data" type="date"></div>
+          <div class="f-field">
+            <label>Rascunho</label>
+            <label class="f-toggle">
+              <input type="checkbox" id="fn-rascunho">
+              <span class="trilha"><span class="bolinha"></span></span>
+              <span style="font-size:.75rem;color:var(--text-secondary)">Não publicar ainda</span>
+            </label>
+          </div>
+          <div class="f-field full"><label>Resumo (aparece na lista)</label><textarea id="fn-resumo" style="min-height:70px"></textarea></div>
+          <div class="f-field full"><label>Conteúdo da notícia</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fn-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdLink('fn-corpo')" title="Link">🔗</button></div><textarea id="fn-corpo" style="min-height:220px"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="editor-rodape">
+      <button class="btn-cancelar" onclick="fecharEditorNoticia()">Cancelar</button>
+      <button class="btn-salvar" id="btn-salvar-noticia" onclick="salvarNoticia()">💾 Salvar Notícia</button>
+    </div>
+  </div>
+</div>
 <script>
+// ==========================================================
+// PAINEL PDS — consolidado v2
+// Login + Álbuns (listar/editar/criar/excluir/ordenar) + Notícias
+// ==========================================================
 const REPO = 'kleber-albuquerque/pordosom-site';
-const BASE = '/pordosom-site';
+const BASE = '/pordosom-site';   // '' no dia do domínio próprio
 const API = 'https://api.github.com';
-let TOKEN = localStorage.getItem('pds_token') || '';
-const CFG_CAMPOS = ["seo_title","seo_description","seo_keywords","seo_og_image","agencia_nome","agencia_link","agencia_slogan","rodape_direitos","lgpd_texto","hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
-let cfgSha = null;
 
+let TOKEN = localStorage.getItem('pds_token') || '';
+let ALBUNS = [];
+let NOTICIAS = [];
+let albumAtual = null;
+let capaNova = null;
+let noticiaAtual = null;
+let imagemNoticiaNova = null;
+let ordemCol = 'ano';
+let ordemDir = 'desc';
+
+const GENEROS_PAINEL = [
+  {id:'samba-de-raiz', nome:'Samba de Raiz'},
+  {id:'instrumental', nome:'Instrumental'},
+  {id:'mpb', nome:'MPB/Nova MPB'},
+  {id:'brasilidades', nome:'Brasilidades'},
+  {id:'cultura-popular', nome:'Cultura Popular'},
+  {id:'afro-brasileira', nome:'Afro-brasileira'},
+  {id:'infantil', nome:'Infantil'}
+];
+
+// ---------- API GitHub ----------
 async function gh(caminho, opts = {}) {
   const res = await fetch(API + caminho, {
     ...opts,
@@ -373,92 +661,1068 @@ async function gh(caminho, opts = {}) {
       ...(opts.headers || {})
     }
   });
-  if (!res.ok) throw new Error('Erro: ' + res.status);
+  if (res.status === 401) throw new Error('Token inválido ou expirado');
+  if (res.status === 403) throw new Error('Sem permissão no repositório (verifique o token)');
+  if (!res.ok) throw new Error('Erro GitHub API: ' + res.status);
   return res.json();
 }
 
+// ---------- Login ----------
 async function entrar() {
   const t = document.getElementById('token').value.trim();
-  if (!t) { alert('Cole o token'); return; }
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
+  if (!t) { err.textContent = 'Cole o token para entrar.'; err.style.display = 'block'; return; }
   TOKEN = t;
-  localStorage.setItem('pds_token', TOKEN);
-  document.getElementById('side-user').textContent = 'Conectado';
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('painel').classList.remove('hidden');
+  try {
+    const user = await gh('/user');
+    localStorage.setItem('pds_token', TOKEN);
+    document.getElementById('side-user').textContent = 'Conectado: ' + (user.login || user.name);
+    abrirPainel();
+    await carregarAlbuns();
+    carregarNoticias();
+  } catch (e) {
+    TOKEN = '';
+    err.textContent = '❌ ' + e.message;
+    err.style.display = 'block';
+  }
 }
-
+document.getElementById('token').addEventListener('keypress', e => {
+  if (e.key === 'Enter') entrar();
+});
 function sair() {
   localStorage.removeItem('pds_token');
   location.reload();
 }
 
+// ---------- Navegação ----------
 document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.side-item').forEach(b => b.classList.remove('ativo'));
     btn.classList.add('ativo');
     ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual', 'config', 'analytics'].forEach(p =>
       document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
+    if (btn.dataset.pagina === 'audiovisual' && VIDEOS && !VIDEOS.length) carregarVideos();
   });
 });
+function emBreve(nome) {
+  toast(nome + ': disponível na próxima parte do painel 😉');
+}
+function abrirPainel() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('painel').classList.remove('hidden');
+}
+
+// ---------- Parser do frontmatter ----------
+function parseMd(texto) {
+  const m = texto.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
+  if (!m) return { meta: {}, corpo: texto };
+  const meta = {}; let lista = null;
+  for (const linha of m[1].split('\n')) {
+    const mi = linha.match(/^\s+-\s+(\S+)\s*$/);
+    if (mi && lista) {
+      if (!Array.isArray(meta[lista])) {
+        // blindagem: item orfao nao quebra o painel
+        if (meta[lista] !== undefined) {
+          meta[lista] = [meta[lista]];
+        } else {
+          meta[lista] = [];
+        }
+      }
+      meta[lista].push(mi[1]);
+      continue;
+    }
+    const mk = linha.match(/^([\w-]+):\s*(.*)$/);
+    if (mk) {
+      const k = mk[1], v = mk[2].trim(); lista = k;
+      const ms = v.match(/^"(.*)"$/) || v.match(/^'(.*)'$/);
+      if (ms) meta[k] = ms[1];
+      else if (v === '') meta[k] = [];
+      else if (v === 'true') meta[k] = true;
+      else if (v === 'false') meta[k] = false;
+      else if (/^\d+$/.test(v)) meta[k] = parseInt(v);
+      else meta[k] = v;
+    }
+  }
+  return { meta, corpo: m[2].trim() };
+}
+
+// ---------- Carregar álbuns ----------
+async function carregarAlbuns() {
+  const loading = document.getElementById('albuns-loading');
+  const wrap = document.getElementById('albuns-table-wrap');
+  const vazio = document.getElementById('albuns-vazio');
+  try {
+    const lista = await gh('/repos/' + REPO + '/contents/content/albuns');
+    const mds = lista.filter(f => f.name.endsWith('.md'));
+
+    ALBUNS = [];
+    for (const f of mds) {
+      const blob = await gh('/repos/' + REPO + '/contents/content/albuns/' + f.name);
+      const texto = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ''))));
+      const { meta, corpo } = parseMd(texto);
+      meta.corpo = corpo;
+      if (Array.isArray(meta.capa)) meta.capa = meta.capa[0] || '';
+      if (Array.isArray(meta.ordem)) meta.ordem = meta.ordem[0] || '';
+      if (typeof meta.capa !== 'string') meta.capa = String(meta.capa || '');
+      if (typeof meta.generos === 'string') {
+        meta.generos = meta.generos.replace(/[\[\]]/g, '').split(',').map(s => s.trim()).filter(Boolean);
+      }
+      meta._arquivo = f.name;
+      meta._sha = blob.sha;
+      ALBUNS.push(meta);
+    }
+    ALBUNS.sort((a, b) => (b.ano || 0) - (a.ano || 0));
+
+    document.getElementById('stat-albuns').textContent = ALBUNS.length;
+    document.getElementById('stat-destaques').textContent = ALBUNS.filter(a => a.destaque).length;
+    const generos = new Set(); ALBUNS.forEach(a => (a.generos || []).forEach(g => generos.add(g)));
+    document.getElementById('stat-generos').textContent = generos.size;
+
+    renderTabelaAlbuns();
+    loading.classList.add('hidden');
+    if (ALBUNS.length) wrap.classList.remove('hidden'); else vazio.classList.remove('hidden');
+  } catch (e) {
+    loading.textContent = '❌ ' + e.message;
+    loading.style.color = '#f0b0b0';
+  }
+}
+
+// ---------- Ordenação ----------
+function ordenarPor(col) {
+  if (ordemCol === col) {
+    ordemDir = ordemDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    ordemCol = col;
+    ordemDir = col === 'ano' ? 'desc' : 'asc';
+  }
+  renderTabelaAlbuns();
+}
+
+function renderTabelaAlbuns() {
+  const tbody = document.getElementById('albuns-tbody');
+  if (!tbody || !ALBUNS.length) return;
+
+  // normaliza acentos so para comparacao (dados intactos)
+  const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+  const lista = [...ALBUNS];
+  lista.sort((x, y) => {
+    let a, b;
+    if (ordemCol === 'generos') {
+      a = (x.generos || []).join(', ');
+      b = (y.generos || []).join(', ');
+    } else if (ordemCol === 'ano') {
+      a = Number(x.ano) || 0;
+      b = Number(y.ano) || 0;
+    } else {
+      a = norm(x[ordemCol]);
+      b = norm(y[ordemCol]);
+    }
+    const cmp = a < b ? -1 : a > b ? 1 : 0;
+    return ordemDir === 'asc' ? cmp : -cmp;
+  });
+
+  document.querySelectorAll('th.ordenavel .seta').forEach(s => s.textContent = '');
+  const seta = document.getElementById('seta-' + ordemCol);
+  if (seta) seta.textContent = ordemDir === 'asc' ? '▲' : '▼';
+
+  tbody.innerHTML = lista.map(a => `
+    <tr>
+      <td>${a.capa
+          ? `<img class="capa-mini" src="${a.capa.startsWith('/') ? BASE + a.capa : a.capa}" alt="" loading="lazy"
+                 onerror="this.outerHTML='<div class=\\'sem-capa\\'>💿</div>'">`
+          : `<div class="sem-capa">💿</div>`}</td>
+      <td>
+        <div class="titulo-cell">${a.titulo || a._arquivo}</div>
+      </td>
+      <td>${a.artista || '—'}</td>
+      <td>${(a.generos || []).map(g => `<span class="tag-genero">${g}</span>`).join('')}</td>
+      <td>${a.ano || '—'}</td>
+      <td>${a.destaque ? '<span class="destaque-star">★</span>' : '—'}</td>
+      <td><span class="status-publicado"><span class="status-dot status-ok"></span>Publicado</span></td>
+      <td><button class="side-item" style="padding:.4rem .7rem" title="Editar álbum" onclick='abrirEditor(ALBUNS[${ALBUNS.indexOf(a)}])'>✏️</button> <button class="side-item" style="padding:.4rem .7rem" title="Excluir álbum" onclick='excluirAlbum(ALBUNS[${ALBUNS.indexOf(a)}])'>🗑️</button></td>
+    </tr>`).join('');
+}
+// ---------- Editor de álbum ----------
+function abrirEditor(album) {
+  // normalizacao na ENTRADA: capa sempre string (imune a lista vinda da API)
+  if (Array.isArray(album.capa)) album.capa = album.capa[0] || '';
+  if (typeof album.capa !== 'string') album.capa = String(album.capa || '');
+  albumAtual = album;
+  capaNova = null;
+  document.getElementById('f-titulo').value = album.titulo || '';
+  document.getElementById('f-artista').value = album.artista || '';
+  document.getElementById('f-ano').value = album.ano || '';
+  document.getElementById('f-faixas').value = album.faixas || '';
+  document.getElementById('f-ordem').value = album.ordem || '';
+  document.getElementById('f-spotify').value = album.spotify || '';
+  document.getElementById('f-youtube').value = album.youtube || '';
+  document.getElementById('f-apple').value = album.apple || '';
+  document.getElementById('f-deezer').value = album.deezer || '';
+  document.getElementById('f-texto-pt').value = album.corpo || '';
+  document.getElementById('f-texto-en').value = album.texto_en || '';
+  document.getElementById('f-destaque').checked = !!album.destaque;
+
+  const marcados = album.generos || [];
+  document.getElementById('f-generos').innerHTML = GENEROS_PAINEL.map(g => `
+    <label class="f-check ${marcados.includes(g.id) ? 'marcado' : ''}">
+      <input type="checkbox" value="${g.id}" ${marcados.includes(g.id) ? 'checked' : ''}
+             onchange="this.closest('.f-check').classList.toggle('marcado', this.checked)">
+      ${g.nome}
+    </label>`).join('');
+
+  const preview = document.getElementById('capa-preview');
+  if (album.capa) {
+    const src = album.capa.startsWith('/') ? BASE + album.capa : album.capa;
+    preview.innerHTML = `<img src="${src}" alt="" onerror="this.outerHTML='<span class=\\'capa-hint\\'>💿<br>Clique para escolher<br>a capa do álbum</span>'">`;
+  } else {
+    preview.innerHTML = '<span class="capa-hint">💿<br>Clique para escolher<br>a capa do álbum</span>';
+  }
+
+  document.getElementById('editor-titulo').textContent = 'Editar: ' + (album.titulo || 'Álbum');
+  document.getElementById('editor-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function fecharEditor() {
+  document.getElementById('editor-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  albumAtual = null; capaNova = null;
+}
+
+// ---------- Capa do álbum ----------
+function subirCapa() { document.getElementById('capa-input').click(); }
+function capaEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 600, 0.82, (b64, kb) => {
+    capaNova = { arquivo, base64: b64 };
+    document.getElementById('capa-preview').innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="">';
+    toast('Capa otimizada: ' + kb + 'KB');
+  });
+}
+function comprimirImagem(arquivo, maxLado, qualidade, callback) {
+  const leitor = new FileReader();
+  leitor.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const escala = Math.min(1, maxLado / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * escala);
+      canvas.height = Math.round(img.height * escala);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      const b64 = canvas.toDataURL('image/jpeg', qualidade).split(',')[1];
+      callback(b64, Math.round((b64.length * 3) / 4 / 1024));
+    };
+    img.src = ev.target.result;
+  };
+  leitor.readAsDataURL(arquivo);
+}
+
+// ---------- Montar .md do álbum ----------
+function montarMd() {
+  const val = id => (document.getElementById(id).value || '').trim();
+  const generos = [...document.querySelectorAll('#f-generos input:checked')].map(c => c.value);
+  const gLinhas = generos.length
+    ? 'generos:\n' + generos.map(g => `  - ${g}`).join('\n')
+    : 'generos:';
+  const q = s => `"${(s || '').replace(/"/g, '\\"')}"`;
+
+  return `---
+titulo: ${q(val('f-titulo'))}
+artista: ${q(val('f-artista'))}
+ano: ${val('f-ano') || '""'}
+capa: ${q(albumAtual.capa || '')}
+ ${gLinhas}
+destaque: ${document.getElementById('f-destaque').checked}
+faixas: ${val('f-faixas') || '1'}\nordem: ${q(val('f-ordem'))}
+spotify: ${q(val('f-spotify'))}
+youtube: ${q(val('f-youtube'))}
+apple: ${q(val('f-apple'))}
+deezer: ${q(val('f-deezer'))}
+texto_en: ${q(val('f-texto-en'))}
+---
+
+ ${val('f-texto-pt')}
+`;
+}
+
+// ---------- Salvar álbum ----------
+async function salvarAlbum() {
+  if (!albumAtual) return;
+  const btn = document.getElementById('btn-salvar');
+  if (!document.getElementById('f-titulo').value.trim()) {
+    toast('⚠️ O título é obrigatório'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Salvando…';
+  try {
+    if (capaNova) {
+      const baseNome = albumAtual._arquivo
+        ? albumAtual._arquivo.replace('.md', '')
+        : slugify(document.getElementById('f-titulo').value);
+      const nomeImg = 'images/uploads/' + baseNome + '.jpg';
+      const caminhoImg = '/repos/' + REPO + '/contents/' + nomeImg;
+      let shaImg = null;
+      try { const atual = await gh(caminhoImg); shaImg = atual.sha; } catch (e) {}
+      await gh(caminhoImg, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          message: 'Atualiza capa: ' + document.getElementById('f-titulo').value,
+          content: capaNova.base64,
+          ...(shaImg ? {sha: shaImg} : {})
+        })
+      });
+      albumAtual.capa = '/' + nomeImg;
+    }
+
+    const conteudo = btoa(unescape(encodeURIComponent(montarMd())));
+    const ehNovo = !albumAtual._sha;
+    const nomeArquivo = ehNovo
+      ? slugify(document.getElementById('f-titulo').value) + '.md'
+      : albumAtual._arquivo;
+
+    const bodySalvar = {
+      message: (ehNovo ? 'Novo álbum: ' : 'Edita álbum: ') + document.getElementById('f-titulo').value,
+      content: conteudo
+    };
+    if (!ehNovo) bodySalvar.sha = albumAtual._sha;
+
+    await gh('/repos/' + REPO + '/contents/content/albuns/' + nomeArquivo, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(bodySalvar)
+    });
+
+    toast('✓ Álbum salvo! O site atualiza em ~2 min (Ctrl+Shift+R se não mudar na hora).');
+    fecharEditor();
+    await carregarAlbuns();
+  } catch (e) {
+    toast('❌ Erro ao salvar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Salvar e Publicar';
+  }
+}
+
+// ---------- Criar e excluir álbum ----------
+function slugify(texto) {
+  return (texto || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/[\s-]+/g, '-');
+}
+
+function abrirNovoAlbum() {
+  albumAtual = { _arquivo: '', _sha: null, titulo: '', artista: '', ano: '',
+                 generos: [], destaque: false, faixas: '', spotify: '',
+                 youtube: '', apple: '', deezer: '', capa: '', texto_en: '',
+                 corpo: '' };
+  abrirEditor(albumAtual);
+  document.getElementById('editor-titulo').textContent = 'Novo Álbum';
+}
+
+async function excluirAlbum(album) {
+  if (!confirm('Excluir o álbum "' + (album.titulo || album._arquivo) + '"?\n\nIsso apaga a página do site e o arquivo do catálogo.')) return;
+  try {
+    await gh('/repos/' + REPO + '/contents/content/albuns/' + album._arquivo, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        message: 'Exclui álbum: ' + album.titulo,
+        sha: album._sha
+      })
+    });
+    toast('✓ Álbum excluído. O site atualiza em ~2 minutos.');
+    await carregarAlbuns();
+  } catch (e) {
+    toast('❌ Erro ao excluir: ' + e.message);
+  }
+}
+
+// ==========================================================
+// NOTÍCIAS
+// ==========================================================
+async function carregarNoticias() {
+  const loading = document.getElementById('noticias-loading');
+  const wrap = document.getElementById('noticias-table-wrap');
+  const vazio = document.getElementById('noticias-vazio');
+  try {
+    const lista = await gh('/repos/' + REPO + '/contents/content/posts');
+    const mds = Array.isArray(lista) ? lista.filter(f => f.name.endsWith('.md')) : [];
+
+    NOTICIAS = [];
+    for (const f of mds) {
+      const blob = await gh('/repos/' + REPO + '/contents/content/posts/' + f.name);
+      const textoUtf8 = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ''))));
+      const { meta, corpo } = parseMd(textoUtf8);
+      meta.corpo = corpo;
+      meta._arquivo = f.name;
+      meta._sha = blob.sha;
+      NOTICIAS.push(meta);
+    }
+    NOTICIAS.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+
+    const st = document.getElementById('stat-noticias');
+    if (st) st.textContent = NOTICIAS.filter(x => !x.rascunho).length;
+
+    const tbody = document.getElementById('noticias-tbody');
+    tbody.innerHTML = NOTICIAS.map(x => {
+      const data = (x.date || '').split('-').reverse().join('/');
+      return '<tr><td style="white-space:nowrap">' + data + '</td>'
+        + '<td><div class="titulo-cell">' + (x.title || x._arquivo) + '</div>'
+        + (x.rascunho ? '<span class="tag-genero" style="color:var(--brand-accent)">rascunho</span>' : '') + '</td>'
+        + '<td style="color:var(--text-muted);font-size:.75rem;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (x.resumo || '—') + '</td>'
+        + '<td><button class="side-item" style="padding:.4rem .7rem" title="Editar" onclick="abrirEditorNoticia(NOTICIAS[' + NOTICIAS.indexOf(x) + '])">✏️</button>'
+        + ' <button class="side-item" style="padding:.4rem .7rem" title="Excluir" onclick="excluirNoticia(NOTICIAS[' + NOTICIAS.indexOf(x) + '])">🗑️</button></td></tr>';
+    }).join('');
+
+    loading.classList.add('hidden');
+    if (NOTICIAS.length) wrap.classList.remove('hidden'); else vazio.classList.remove('hidden');
+  } catch (e) {
+    loading.classList.add('hidden');
+    vazio.classList.remove('hidden');
+    const st = document.getElementById('stat-noticias');
+    if (st) st.textContent = '0';
+  }
+}
+
+function abrirNovaNoticia() {
+  noticiaAtual = { _arquivo: '', _sha: null, title: '', date: new Date().toISOString().slice(0, 10),
+                   resumo: '', rascunho: false, imagem: '', corpo: '' };
+  imagemNoticiaNova = null;
+  preencherEditorNoticia();
+  document.getElementById('editor-noticia-titulo').textContent = 'Nova Notícia';
+  document.getElementById('editor-noticia-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function abrirEditorNoticia(x) {
+  noticiaAtual = x;
+  imagemNoticiaNova = null;
+  preencherEditorNoticia();
+  document.getElementById('editor-noticia-titulo').textContent = 'Editar: ' + (x.title || 'notícia');
+  document.getElementById('editor-noticia-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function preencherEditorNoticia() {
+  document.getElementById('fn-titulo').value = noticiaAtual.title || '';
+  document.getElementById('fn-data').value = noticiaAtual.date || '';
+  document.getElementById('fn-resumo').value = noticiaAtual.resumo || '';
+  document.getElementById('fn-corpo').value = noticiaAtual.corpo || '';
+  document.getElementById('fn-rascunho').checked = !!noticiaAtual.rascunho;
+  const prev = document.getElementById('noticia-img-preview');
+  if (noticiaAtual.imagem) {
+    const src = noticiaAtual.imagem.startsWith('/') ? BASE + noticiaAtual.imagem : noticiaAtual.imagem;
+    prev.innerHTML = '<img src="' + src + '" alt="">';
+  } else {
+    prev.innerHTML = '<span class="capa-hint">🖼️<br>Clique para escolher<br>imagem de destaque<br>(opcional)</span>';
+  }
+}
+
+function fecharEditorNoticia() {
+  document.getElementById('editor-noticia-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  noticiaAtual = null; imagemNoticiaNova = null;
+}
+
+function subirImagemNoticia() { document.getElementById('noticia-img-input').click(); }
+function imagemNoticiaEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 1000, 0.82, (b64, kb) => {
+    imagemNoticiaNova = b64;
+    document.getElementById('noticia-img-preview').innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="">';
+    toast('Imagem otimizada: ' + kb + 'KB');
+  });
+}
+
+function montarMdNoticia() {
+  const val = id => (document.getElementById(id).value || '').trim();
+  const q = s => '"' + (s || '').replace(/"/g, '\\"') + '"';
+  return '---\n'
+    + 'title: ' + q(val('fn-titulo')) + '\n'
+    + 'date: ' + val('fn-data') + '\n'
+    + 'resumo: ' + q(val('fn-resumo')) + '\n'
+    + 'rascunho: ' + document.getElementById('fn-rascunho').checked + '\n'
+    + 'imagem: ' + q(noticiaAtual.imagem || '') + '\n'
+    + '---\n\n'
+    + val('fn-corpo') + '\n';
+}
+
+async function salvarNoticia() {
+  if (!noticiaAtual) return;
+  const btn = document.getElementById('btn-salvar-noticia');
+  if (!document.getElementById('fn-titulo').value.trim()) {
+    toast('⚠️ O título é obrigatório'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Salvando…';
+  try {
+    if (imagemNoticiaNova) {
+      const baseNome = new Date().toISOString().slice(0,10) + '-' + slugify(document.getElementById('fn-titulo').value);
+      const nomeImg = 'images/uploads/' + baseNome + '.jpg';
+      const caminhoImg = '/repos/' + REPO + '/contents/' + nomeImg;
+      let shaImg = null;
+      try { const atual = await gh(caminhoImg); shaImg = atual.sha; } catch (e) {}
+      await gh(caminhoImg, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          message: 'Imagem da notícia',
+          content: imagemNoticiaNova,
+          ...(shaImg ? {sha: shaImg} : {})
+        })
+      });
+      noticiaAtual.imagem = '/' + nomeImg;
+    }
+    const conteudo = btoa(unescape(encodeURIComponent(montarMdNoticia())));
+    const ehNovo = !noticiaAtual._sha;
+    const nomeArquivo = ehNovo
+      ? new Date().toISOString().slice(0,10) + '-' + slugify(document.getElementById('fn-titulo').value) + '.md'
+      : noticiaAtual._arquivo;
+    const bodySalvar = {
+      message: (ehNovo ? 'Nova notícia: ' : 'Edita notícia: ') + document.getElementById('fn-titulo').value,
+      content: conteudo
+    };
+    if (!ehNovo) bodySalvar.sha = noticiaAtual._sha;
+    await gh('/repos/' + REPO + '/contents/content/posts/' + nomeArquivo, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(bodySalvar)
+    });
+    toast('✓ Notícia salva! O blog atualiza em ~2 min.');
+    fecharEditorNoticia();
+    await carregarNoticias();
+  } catch (e) {
+    toast('❌ Erro ao salvar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Salvar Notícia';
+  }
+}
+
+async function excluirNoticia(x) {
+  if (!confirm('Excluir a notícia "' + (x.title || x._arquivo) + '"?')) return;
+  try {
+    await gh('/repos/' + REPO + '/contents/content/posts/' + x._arquivo, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ message: 'Exclui notícia: ' + x.title, sha: x._sha })
+    });
+    toast('✓ Notícia excluída.');
+    await carregarNoticias();
+  } catch (e) {
+    toast('❌ Erro ao excluir: ' + e.message);
+  }
+}
+
+// ---------- Toast ----------
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+// ---------- Init ----------
+(async function init() {
+  if (TOKEN) {
+    try {
+      const user = await gh('/user');
+      document.getElementById('side-user').textContent = 'Conectado: ' + (user.login || user.name);
+      abrirPainel();
+      carregarAlbuns();
+      carregarNoticias();
+      carregarProjetos();
+    } catch (e) {
+      localStorage.removeItem('pds_token');
+      TOKEN = '';
+    }
+  }
+})();
+
+function mdWrap(id, antes, depois) {
+  const ta = document.getElementById(id);
+  const ini = ta.selectionStart, fim = ta.selectionEnd;
+  const sel = ta.value.substring(ini, fim);
+  const novo = antes + (sel || "texto") + depois;
+  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(fim);
+  ta.focus();
+  ta.setSelectionRange(ini + antes.length, ini + antes.length + (sel || "texto").length);
+}
+function mdTitulo(id) {
+  const ta = document.getElementById(id);
+  const ini = ta.selectionStart;
+  const linhaIni = ta.value.lastIndexOf("\n", ini - 1) + 1;
+  ta.value = ta.value.substring(0, linhaIni) + "## " + ta.value.substring(linhaIni);
+  ta.focus();
+  ta.setSelectionRange(ini + 3, ini + 3);
+}
+function mdLink(id) {
+  const ta = document.getElementById(id);
+  const ini = ta.selectionStart, fim = ta.selectionEnd;
+  const sel = ta.value.substring(ini, fim) || "texto do link";
+  const url = prompt("URL do link:", "https://");
+  if (!url || url === "https://") return;
+  const novo = "[" + sel + "](" + url + ")";
+  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(fim);
+  ta.focus();
+}
+
+// ==========================================================
+// PARTE 5 - PROJETOS
+// ==========================================================
+let PROJETOS = [];
+let projetoAtual = null;
+let imagemProjetoNova = null;
+
+async function carregarProjetos() {
+  const loading = document.getElementById('projetos-loading');
+  const wrap = document.getElementById('projetos-table-wrap');
+  const vazio = document.getElementById('projetos-vazio');
+  try {
+    const lista = await gh('/repos/' + REPO + '/contents/content/projetos');
+    const mds = Array.isArray(lista) ? lista.filter(f => f.name.endsWith('.md')) : [];
+    PROJETOS = [];
+    for (const f of mds) {
+      const blob = await gh('/repos/' + REPO + '/contents/content/projetos/' + f.name);
+      const textoUtf8 = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ''))));
+      const { meta, corpo } = parseMd(textoUtf8);
+      meta.corpo = corpo;
+      if (typeof meta.tags === 'string') {
+        meta.tags = meta.tags.split(',').map(s => s.trim()).filter(Boolean);
+      }
+      if (!Array.isArray(meta.tags)) meta.tags = [];
+      meta._arquivo = f.name;
+      meta._sha = blob.sha;
+      PROJETOS.push(meta);
+    }
+    PROJETOS.sort((a, b) => String(b.ano || '').localeCompare(String(a.ano || '')));
+
+    const tbody = document.getElementById('projetos-tbody');
+    tbody.innerHTML = PROJETOS.map(x => {
+      const realizado = String(x.status) !== 'captacao';
+      const stCls = realizado ? 'badge-realizado' : 'badge-captacao';
+      const stLbl = realizado ? '✓ Realizado' : '★ Captação';
+      return '<tr><td><span class="badge-st ' + stCls + '">' + stLbl + '</span></td>'
+        + '<td><div class="titulo-cell">' + (x.titulo || x._arquivo) + '</div></td>'
+        + '<td style="color:var(--text-muted)">' + (x.badge || '—') + '</td>'
+        + '<td>' + (x.ano || '—') + '</td>'
+        + '<td><button class="side-item" style="padding:.4rem .7rem" title="Editar" onclick="abrirEditorProjeto(PROJETOS[' + PROJETOS.indexOf(x) + '])">✏️</button>'
+        + ' <button class="side-item" style="padding:.4rem .7rem" title="Excluir" onclick="excluirProjeto(PROJETOS[' + PROJETOS.indexOf(x) + '])">🗑️</button></td></tr>';
+    }).join('');
+    loading.classList.add('hidden');
+    if (PROJETOS.length) wrap.classList.remove('hidden'); else vazio.classList.remove('hidden');
+  } catch (e) {
+    loading.classList.add('hidden');
+    vazio.classList.remove('hidden');
+  }
+}
+
+function preencherEditorProjeto() {
+  document.getElementById('fp-titulo').value = projetoAtual.titulo || '';
+  document.getElementById('fp-ano').value = projetoAtual.ano || '';
+  document.getElementById('fp-badge').value = projetoAtual.badge || '';
+  document.getElementById('fp-link').value = projetoAtual.link || '';
+  document.getElementById('fp-relatorio').value = projetoAtual.relatorio || '';
+  document.getElementById('fp-tags').value = (projetoAtual.tags || []).join(', ');
+  document.getElementById('fp-corpo').value = projetoAtual.corpo || '';
+  document.getElementById('fp-captacao').checked = String(projetoAtual.status) === 'captacao';
+  const prev = document.getElementById('projeto-img-preview');
+  if (projetoAtual.imagem && String(projetoAtual.imagem).startsWith('/')) {
+    const srcImg = BASE + projetoAtual.imagem;
+    prev.innerHTML = '<img src="' + srcImg + '" alt="" onerror="this.outerHTML=\'<span class=\'capa-hint\'>🖼️<br>Clique para escolher<br>imagem de destaque</span>\'">';
+  } else {
+    prev.innerHTML = '<span class="capa-hint">🖼️<br>Clique para escolher<br>imagem de destaque</span>';
+  }
+}
+
+function abrirNovoProjeto() {
+  projetoAtual = { _arquivo: '', _sha: null, titulo: '', status: 'realizado', badge: '',
+                   ano: new Date().getFullYear(), imagem: '', link: '', relatorio: '',
+                   tags: [], corpo: '' };
+  imagemProjetoNova = null;
+  preencherEditorProjeto();
+  document.getElementById('editor-projeto-titulo').textContent = 'Novo Projeto';
+  document.getElementById('editor-projeto-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function abrirEditorProjeto(x) {
+  projetoAtual = x;
+  imagemProjetoNova = null;
+  preencherEditorProjeto();
+  document.getElementById('editor-projeto-titulo').textContent = 'Editar: ' + (x.titulo || 'projeto');
+  document.getElementById('editor-projeto-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharEditorProjeto() {
+  document.getElementById('editor-projeto-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+  projetoAtual = null; imagemProjetoNova = null;
+}
+
+function subirImagemProjeto() { document.getElementById('projeto-img-input').click(); }
+function imagemProjetoEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 900, 0.82, (b64, kb) => {
+    imagemProjetoNova = b64;
+    document.getElementById('projeto-img-preview').innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="">';
+    toast('Imagem otimizada: ' + kb + 'KB');
+  });
+}
+
+function montarMdProjeto() {
+  const val = id => (document.getElementById(id).value || '').trim();
+  const q = s => '"' + (s || '').replace(/"/g, '\\"') + '"';
+  const tags = val('fp-tags').split(',').map(s => s.trim()).filter(Boolean);
+  const status = document.getElementById('fp-captacao').checked ? 'captacao' : 'realizado';
+  const tagsLinhas = tags.length ? 'tags:\n' + tags.map(t => '  - ' + t).join('\n') : 'tags:';
+  return '---\n'
+    + 'titulo: ' + q(val('fp-titulo')) + '\n'
+    + 'status: "' + status + '"\n'
+    + 'badge: ' + q(val('fp-badge')) + '\n'
+    + 'ano: ' + (val('fp-ano') || '""') + '\n'
+    + 'imagem: ' + q(projetoAtual.imagem || '') + '\n'
+    + 'link: ' + q(val('fp-link')) + '\n'
+    + 'relatorio: ' + q(val('fp-relatorio')) + '\n'
+    + tagsLinhas + '\n'
+    + '---\n\n'
+    + val('fp-corpo') + '\n';
+}
+
+async function salvarProjeto() {
+  if (!projetoAtual) return;
+  const btn = document.getElementById('btn-salvar-projeto');
+  if (!document.getElementById('fp-titulo').value.trim()) {
+    toast('O título é obrigatório'); return;
+  }
+  btn.disabled = true; btn.textContent = 'Salvando…';
+  try {
+    if (imagemProjetoNova) {
+      const baseNome = projetoAtual._arquivo
+        ? projetoAtual._arquivo.replace('.md', '')
+        : slugify(document.getElementById('fp-titulo').value);
+      const nomeImg = 'images/uploads/projeto-' + baseNome + '.jpg';
+      const caminhoImg = '/repos/' + REPO + '/contents/' + nomeImg;
+      let shaImg = null;
+      try { const atual = await gh(caminhoImg); shaImg = atual.sha; } catch (e) {}
+      await gh(caminhoImg, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          message: 'Imagem do projeto: ' + document.getElementById('fp-titulo').value,
+          content: imagemProjetoNova,
+          ...(shaImg ? {sha: shaImg} : {})
+        })
+      });
+      projetoAtual.imagem = '/' + nomeImg;
+    }
+    const conteudo = btoa(unescape(encodeURIComponent(montarMdProjeto())));
+    const ehNovo = !projetoAtual._sha;
+    const nomeArquivo = ehNovo
+      ? slugify(document.getElementById('fp-titulo').value) + '.md'
+      : projetoAtual._arquivo;
+    const bodySalvar = {
+      message: (ehNovo ? 'Novo projeto: ' : 'Edita projeto: ') + document.getElementById('fp-titulo').value,
+      content: conteudo
+    };
+    if (!ehNovo) bodySalvar.sha = projetoAtual._sha;
+    await gh('/repos/' + REPO + '/contents/content/projetos/' + nomeArquivo, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(bodySalvar)
+    });
+    toast('✓ Projeto salvo! O site atualiza em ~2 min.');
+    fecharEditorProjeto();
+    await carregarProjetos();
+  } catch (e) {
+    toast('❌ Erro ao salvar: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Salvar Projeto';
+  }
+}
+
+async function excluirProjeto(x) {
+  if (!confirm('Excluir o projeto "' + (x.titulo || x._arquivo) + '"?')) return;
+  try {
+    await gh('/repos/' + REPO + '/contents/content/projetos/' + x._arquivo, {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ message: 'Exclui projeto: ' + x.titulo, sha: x._sha })
+    });
+    toast('✓ Projeto excluído.');
+    await carregarProjetos();
+  } catch (e) {
+    toast('❌ Erro ao excluir: ' + e.message);
+  }
+}
+
+
+// ==========================================================
+// PARTE 6 - AUDIOVISUAL (videos)
+// ==========================================================
+let VIDEOS = [];
+let videoAtual = null;
+
+const GRUPOS_AV = {sotaques:"Sotaques do Brasil", malungo:"Festival Malungo", mestres:"Mestres dos Saberes", outros:"Outros"};
+
+async function carregarVideos() {
+  const loading = document.getElementById("av-loading");
+  const wrap = document.getElementById("av-table-wrap");
+  const vazio = document.getElementById("av-vazio");
+  try {
+    const lista = await gh("/repos/" + REPO + "/contents/content/audiovisual");
+    const mds = Array.isArray(lista) ? lista.filter(f => f.name.endsWith(".md")) : [];
+    VIDEOS = [];
+    for (const f of mds) {
+      const blob = await gh("/repos/" + REPO + "/contents/content/audiovisual/" + f.name);
+      const txt = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ""))));
+      const { meta } = parseMd(txt);
+      meta._arquivo = f.name;
+      meta._sha = blob.sha;
+      VIDEOS.push(meta);
+    }
+    VIDEOS.sort((a,b) => String(b.ano||"").localeCompare(String(a.ano||"")));
+    const tbody = document.getElementById("av-tbody");
+    tbody.innerHTML = VIDEOS.map(x => {
+      const g = GRUPOS_AV[String(x.grupo)] || x.grupo || "—";
+      return "<tr><td><span class=\"tag-genero\">" + g + "</span></td>"
+        + "<td><div class=\"titulo-cell\">" + (x.titulo || x._arquivo) + "</div></td>"
+        + "<td style=\"color:var(--text-muted)\">" + (x.artista || "—") + "</td>"
+        + "<td>" + (x.ano || "—") + "</td>"
+        + "<td><button class=\"side-item\" style=\"padding:.4rem .7rem\" onclick=\"abrirEditorVideo(VIDEOS[" + VIDEOS.indexOf(x) + "])\">✏️</button>"
+        + " <button class=\"side-item\" style=\"padding:.4rem .7rem\" onclick=\"excluirVideo(VIDEOS[" + VIDEOS.indexOf(x) + "])\">🗑️</button></td></tr>";
+    }).join("");
+    loading.classList.add("hidden");
+    if (VIDEOS.length) wrap.classList.remove("hidden"); else vazio.classList.remove("hidden");
+  } catch (e) {
+    loading.classList.add("hidden");
+    vazio.classList.remove("hidden");
+  }
+}
+
+function abrirNovoVideo() {
+  videoAtual = {_arquivo:"", _sha:null, titulo:"", grupo:"outros", ano:new Date().getFullYear(), artista:"", yt_id:""};
+  document.getElementById("fv-titulo").value = "";
+  document.getElementById("fv-link").value = "";
+  document.getElementById("fv-ano").value = new Date().getFullYear();
+  document.getElementById("fv-artista").value = "";
+  document.getElementById("fv-grupo").value = "outros";
+  document.getElementById("fv-preview-wrap").style.display = "none";
+  document.getElementById("editor-video-titulo").textContent = "Novo Video";
+  document.getElementById("editor-video-overlay").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function abrirEditorVideo(x) {
+  videoAtual = x;
+  document.getElementById("fv-titulo").value = x.titulo || "";
+  document.getElementById("fv-link").value = x.yt_id ? "https://www.youtube.com/watch?v=" + x.yt_id : "";
+  document.getElementById("fv-ano").value = x.ano || "";
+  document.getElementById("fv-artista").value = x.artista || "";
+  document.getElementById("fv-grupo").value = String(x.grupo || "outros");
+  previewVideo();
+  document.getElementById("editor-video-titulo").textContent = "Editar: " + (x.titulo || "video");
+  document.getElementById("editor-video-overlay").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function fecharEditorVideo() {
+  document.getElementById("editor-video-overlay").classList.add("hidden");
+  document.body.style.overflow = "";
+  videoAtual = null;
+}
+
+function extrairYtId(url) {
+  const m = String(url||"").match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/);
+  return m ? m[1] : "";
+}
+
+function previewVideo() {
+  const id = extrairYtId(document.getElementById("fv-link").value);
+  const wrap = document.getElementById("fv-preview-wrap");
+  const iframe = document.getElementById("fv-preview");
+  if (id) { iframe.src = "https://www.youtube.com/embed/" + id; wrap.style.display = "block"; }
+  else { iframe.src = ""; wrap.style.display = "none"; }
+}
+
+async function salvarVideo() {
+  if (!videoAtual) return;
+  const btn = document.getElementById("btn-salvar-video");
+  const titulo = document.getElementById("fv-titulo").value.trim();
+  if (!titulo) { toast("O titulo e obrigatorio"); return; }
+  const ytId = extrairYtId(document.getElementById("fv-link").value);
+  if (!ytId) { toast("Cole um link valido do YouTube"); return; }
+  btn.disabled = true; btn.textContent = "Salvando…";
+  try {
+    const q = s => '"' + (s||"").replace(/"/g, '\\"') + '"';
+    const md = "---\n"
+      + "titulo: " + q(titulo) + "\n"
+      + "grupo: \"" + document.getElementById("fv-grupo").value + "\"\n"
+      + "ano: " + (document.getElementById("fv-ano").value || '\"\"') + "\n"
+      + "artista: " + q(document.getElementById("fv-artista").value) + "\n"
+      + "yt_id: \"" + ytId + "\"\n"
+      + "---\n\n[descricao]\n";
+    const conteudo = btoa(unescape(encodeURIComponent(md)));
+    const ehNovo = !videoAtual._sha;
+    const nomeArquivo = ehNovo ? slugify(titulo) + ".md" : videoAtual._arquivo;
+    const bodySalvar = {
+      message: (ehNovo ? "Novo video: " : "Edita video: ") + titulo,
+      content: conteudo
+    };
+    if (!ehNovo) bodySalvar.sha = videoAtual._sha;
+    await gh("/repos/" + REPO + "/contents/content/audiovisual/" + nomeArquivo, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(bodySalvar)
+    });
+    toast("Video salvo! A pagina atualiza em ~2 min.");
+    fecharEditorVideo();
+    await carregarVideos();
+  } catch (e) {
+    toast("Erro ao salvar: " + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "Salvar Video";
+  }
+}
+
+async function excluirVideo(x) {
+  if (!confirm("Excluir o video \"" + (x.titulo || x._arquivo) + "\"?")) return;
+  try {
+    await gh("/repos/" + REPO + "/contents/content/audiovisual/" + x._arquivo, {
+      method: "DELETE",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: "Exclui video: " + x.titulo, sha: x._sha })
+    });
+    toast("Video excluido.");
+    await carregarVideos();
+  } catch (e) {
+    toast("Erro: " + e.message);
+  }
+}
+
+
+// ==========================================================
+// PARTE 7 - CONFIGURACOES DO SITE
+// ==========================================================
+const CFG_CAMPOS = ["seo_title","seo_description","seo_keywords","seo_og_image","agencia_nome","agencia_link","agencia_slogan","rodape_direitos","lgpd_texto","hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
+let cfgSha = null;
 
 async function carregarConfig() {
-  const loading = document.getElementById('cfg-loading');
-  const wrap = document.getElementById('cfg-form-wrap');
+  const loading = document.getElementById("cfg-loading");
+  const wrap = document.getElementById("cfg-form-wrap");
   try {
-    const blob = await gh('/repos/' + REPO + '/contents/content/config/site.md');
-    const txt = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ''))));
-    const meta = {};
-    txt.split('\n').forEach(l => {
-      const m = l.match(/^([\w-]+):\s*"?(.*?)"?$/);
-      if (m) meta[m[1]] = m[2];
-    });
+    const blob = await gh("/repos/" + REPO + "/contents/content/config/site.md");
+    const txt = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ""))));
+    const { meta } = parseMd(txt);
     cfgSha = blob.sha;
     CFG_CAMPOS.forEach(c => {
-      const el = document.getElementById('cfg-' + c);
-      if (el) el.value = meta[c] || '';
+      const el = document.getElementById("cfg-" + c);
+      if (el) el.value = meta[c] || "";
     });
-    loading.style.display = 'none';
-    wrap.style.display = 'block';
+    loading.style.display = "none";
+    wrap.style.display = "block";
   } catch (e) {
-    loading.textContent = 'Erro: ' + e.message;
+    loading.textContent = "Erro: " + e.message;
   }
 }
 
 async function salvarConfig() {
-  const btn = document.getElementById('btn-salvar-config');
-  btn.disabled = true;
-  let md = '---\n';
-  CFG_CAMPOS.forEach(c => {
-    const el = document.getElementById('cfg-' + c);
-    if (el) md += c + ': "' + (el.value || '').replace(/"/g, '\\"') + '"\n';
-  });
-  md += '---\n';
-  const conteudo = btoa(unescape(encodeURIComponent(md)));
-  const body = { message: 'Atualiza configurações', content: conteudo };
-  if (cfgSha) body.sha = cfgSha;
+  const btn = document.getElementById("btn-salvar-config");
+  btn.disabled = true; btn.textContent = "Salvando…";
   try {
-    const resp = await gh('/repos/' + REPO + '/contents/content/config/site.md', {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(body)
+    const q = s => '"' + (s||"").replace(/"/g, '\\\"').replace(/\n/g, " ") + '"';
+    let md = "---\n";
+    CFG_CAMPOS.forEach(c => {
+      const el = document.getElementById("cfg-" + c);
+      md += c + ": " + q(el ? el.value : "") + "\n";
     });
-    cfgSha = resp.content.sha;
-    alert('Configurações salvas! O site atualiza em ~2 min.');
+    md += "---\n";
+    const conteudo = btoa(unescape(encodeURIComponent(md)));
+    const bodySalvar = { message: "Edita configurações do site", content: conteudo };
+    if (cfgSha) bodySalvar.sha = cfgSha;
+    const resp = await gh("/repos/" + REPO + "/contents/content/config/site.md", {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(bodySalvar)
+    });
+    cfgSha = resp.content ? resp.content.sha : cfgSha;
+    if (logoSiteNova) {
+      await _subirImagemRepo("pordosom-profile.jpg", logoSiteNova, "Atualiza logo do selo");
+      logoSiteNova = null;
+    }
+    if (heroSiteNova) {
+      await _subirImagemRepo("img/hero-bg.jpg", heroSiteNova, "Atualiza imagem da home");
+      heroSiteNova = null;
+    }
+    toast("Configurações salvas! O site atualiza em ~2 min.");
   } catch (e) {
-    alert('Erro: ' + e.message);
+    toast("Erro ao salvar: " + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "Salvar Textos do Site";
   }
-  btn.disabled = false;
 }
 
+// carregamento lazy da aba config
 document.querySelectorAll('.side-item[data-pagina="config"]').forEach(btn => {
-  btn.addEventListener('click', () => { if (!cfgSha) carregarConfig(); });
+  btn.addEventListener('click', () => {
+    if (!cfgSha) carregarConfig();
+  });
 });
 
-if (TOKEN) {
-  document.getElementById('side-user').textContent = 'Conectado';
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('painel').classList.remove('hidden');
+
+// ---------- Upload de imagens institucionais ----------
+let logoSiteNova = null;
+let heroSiteNova = null;
+
+function subirLogoSite() { document.getElementById("cfg-logo-file").click(); }
+function subirHeroSite() { document.getElementById("cfg-hero-file").click(); }
+
+function logoSiteEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 300, 0.85, (b64, kb) => {
+    logoSiteNova = b64;
+    document.getElementById("cfg-logo-preview").innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="Logo" style="width:100%;height:100%;object-fit:cover">';
+    toast("Logo pronta: " + kb + "KB — enviada ao salvar textos");
+  });
 }
+
+function heroSiteEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 1600, 0.78, (b64, kb) => {
+    heroSiteNova = b64;
+    document.getElementById("cfg-hero-preview").innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="Hero" style="width:100%;height:100%;object-fit:cover">';
+    toast("Imagem pronta: " + kb + "KB — enviada ao salvar textos");
+  });
+}
+
+async function _subirImagemRepo(caminho, b64, msg) {
+  const url = "/repos/" + REPO + "/contents/" + caminho;
+  let sha = null;
+  try { const atual = await gh(url); sha = atual.sha; } catch (e) {}
+  await gh(url, {
+    method: "PUT",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ message: msg, content: b64, ...(sha ? {sha: sha} : {}) })
+  });
+}
+
 </script>
 </body>
 </html>
+<style>
+.btn-md{background:var(--bg-dark);border:1px solid var(--border);color:var(--text-secondary);padding:.45rem .8rem;border-radius:4px;font-family:inherit;font-size:.78rem;cursor:pointer;transition:.2s;width:auto}
+.btn-md:hover{border-color:var(--brand-primary-light);color:var(--text-primary)}
+</style>
+<style>
+.badge-st{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.3rem .7rem;border-radius:3px}
+.badge-realizado{background:rgba(93,152,113,.18);color:#8dbf9f;border:1px solid rgba(93,152,113,.4)}
+.badge-captacao{background:rgba(232,160,74,.15);color:var(--brand-accent);border:1px solid rgba(232,160,74,.4)}
+</style>
