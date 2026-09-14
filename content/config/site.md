@@ -38,7 +38,7 @@ home_projetos_descricao: ""
 home_audio_titulo: ""
 home_playlists_titulo: ""
 playlist1_nome: "Quintal da Cultura"
-playlist1_id: "6sAavHyk7s27TaXji0vxzF?si=13Zc7tDSSrKYQKgvRo0LKQ"
+playlist1_id: "6sAavHyk7s27TaXji0vxzF?si"
 playlist2_nome: ""
 playlist2_id: "2lgoPMSE9e7lxEumGbBaGn?si=Ddo7L98nRoqi7jBHnhaTAQ"
 ---
