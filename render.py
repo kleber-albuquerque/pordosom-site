@@ -233,7 +233,7 @@ def _doc(title, desc, body, img_og=None):
             '<link rel="icon" type="image/jpeg" href="' + BASE + '/pordosom-profile.jpg">\n'
             '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">\n'
             '<link rel="stylesheet" href="' + BASE + '/css/style.css">\n'
-            '</head>\n<body>\n' + body +
+            '<script src="https://unpkg.com/lucide@latest"></script>\n</head>\n<body>\n' + body +
             '\n<script type="application/ld+json">\n{"@context":"https://schema.org","@type":"MusicGroup","name":"Por do Som","genre":["Samba de Raiz","MPB","Brasilidades","Instrumental"],"url":"' + DOMINIO + BASE + '/site.html","description":"Selo independente e produtora cultural dedicado às brasilidades."}</script>\n' +
             '</body>\n</html>\n')
 
