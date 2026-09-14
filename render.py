@@ -78,6 +78,11 @@ def yt_id(url):
     m = re.search(r'(?:v=|youtu\.be/|embed/)([\w-]{11})', str(url or ''))
     return m.group(1) if m else ''
 
+def _sp_id(val):
+    """Extrai o ID puro (22 chars) de qualquer formato de link Spotify."""
+    m = re.search(r'([A-Za-z0-9]{22})', str(val or ''))
+    return m.group(1) if m else str(val or '')
+
 def sp_embed(url):
     u = str(url or '').strip()
     # aceita link completo, com /intl-pt/ ou com ?si=... — extrai o padrão real:
