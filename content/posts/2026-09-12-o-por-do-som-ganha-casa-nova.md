@@ -1,12 +1,12 @@
 ---
-title: "O Por do Som ganha casa nova"
+title: "O Pôr do Som ganha casa nova"
 date: 2026-09-12
 resumo: "O novo site do selo reúne o catálogo completo, os festivais e toda a produção audiovisual em um só lugar."
 rascunho: false
 imagem: "/images/uploads/2026-09-12-o-por-do-som-ganha-casa-nova.jpg"
 ---
 
-O Por do Som agora está de casa nova digital.
+O Pôr do Som agora está de casa nova digital.
 
 São mais de vinte anos de música brasileira de raiz — e até hoje, essa história vivia espalhada: discos no Spotify, vídeos no YouTube, memórias no Instagram. O novo site reúne tudo sob o mesmo teto.
 
