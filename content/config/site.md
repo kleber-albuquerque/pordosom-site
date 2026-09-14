@@ -39,5 +39,5 @@ home_playlists_titulo: ""
 playlist1_nome: "Quintal da Cultura"
 playlist1_id: "open.spotify.com/playlist/6sAavHyk7s27TaXji0vxzF?si=13Zc7tDSSrKYQKgvRo0LKQ"
 playlist2_nome: ""
-playlist2_id: ""
+playlist2_id: "https://open.spotify.com/playlist/2lgoPMSE9e7lxEumGbBaGn?si=Ddo7L98nRoqi7jBHnhaTAQ"
 ---
