@@ -79,7 +79,12 @@ def yt_id(url):
     return m.group(1) if m else ''
 
 def sp_embed(url):
-    return str(url or '').replace('open.spotify.com/', 'open.spotify.com/embed/')
+    u = str(url or '').strip()
+    # aceita link completo, com /intl-pt/ ou com ?si=... — extrai o padrão real:
+    m = re.search(r'spotify\.com/(?:intl-\w+/)?(?:embed/)?(track|album|playlist|artist)/([A-Za-z0-9]{22})', u)
+    if m:
+        return 'https://open.spotify.com/embed/' + m.group(1) + '/' + m.group(2)
+    return u.replace('open.spotify.com/', 'open.spotify.com/embed/')
 
 def md_html(texto):
     c = esc(texto)
