@@ -1,5 +1,4 @@
 ---
-hero_imagem: ""
 seo_title: ""
 seo_description: ""
 seo_keywords: ""
@@ -38,7 +37,7 @@ home_projetos_descricao: ""
 home_audio_titulo: ""
 home_playlists_titulo: ""
 playlist1_nome: "Quintal da Cultura"
-playlist1_id: "6sAavHyk7s27TaXji0vxzF?si"
+playlist1_id: "2cyXUj8Qhe3nZ0rbng87nR"
 playlist2_nome: ""
-playlist2_id: "2lgoPMSE9e7lxEumGbBaGn?si=Ddo7L98nRoqi7jBHnhaTAQ"
+playlist2_id: "6sAavHyk7s27TaXji0vxzF"
 ---
