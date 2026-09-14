@@ -7,7 +7,7 @@ capa: "/images/uploads/frevo-da-ilusao.jpg"
 destaque: true
 faixas: 1
 ordem: "1"
-spotify: "https://open.spotify.com/intl-pt/track/1x89A38tyQf7FPrMYvMnxR?si=f2d03678b3864e49"
+spotify: "https://open.spotify.com/intl-pt/track/1x89A38tyQf7FPrMYvMnxR"
 youtube: ""
 apple: ""
 deezer: ""
