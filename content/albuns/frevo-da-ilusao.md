@@ -4,12 +4,10 @@ artista: "Tião Carvalho"
 ano: 2006
 capa: "/images/uploads/frevo-da-ilusao.jpg"
  generos:
-  - cultura-popular
-  - afro-brasileira
 destaque: true
 faixas: 14
 ordem: "1"
-spotify: "https://open.spotify.com/intl-pt/track/1x89A38tyQf7FPrMYvMnxR?si=7b1649214b88460b"
+spotify: "https://open.spotify.com/intl-pt/album/5lyCKv8CQ7ZSKKs0yvxP4H?si=HzVbV4pvQ16l3CrJpIMkAA"
 youtube: "https://www.youtube.com/watch?v=Rsvx9MaICak&list=RDRsvx9MaICak&start_radio=1"
 apple: ""
 deezer: ""
