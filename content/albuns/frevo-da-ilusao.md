@@ -1,19 +1,23 @@
 ---
-titulo: "Frevo da Ilusão"
+titulo: "Tião Carvalho Canta João do Vale"
 artista: "Tião Carvalho"
-ano: 2026
+ano: 2006
 capa: "/images/uploads/frevo-da-ilusao.jpg"
  generos:
+  - cultura-popular
+  - afro-brasileira
 destaque: true
-faixas: 1
+faixas: 14
 ordem: "1"
 spotify: "https://open.spotify.com/intl-pt/track/1x89A38tyQf7FPrMYvMnxR?si=7b1649214b88460b"
-youtube: ""
+youtube: "https://www.youtube.com/watch?v=Rsvx9MaICak&list=RDRsvx9MaICak&start_radio=1"
 apple: ""
 deezer: ""
-texto_en: "Frevo as metaphor for the country: joy running atop fragile structure, standing through sheer inertia and stubbornness. Tião Carvalho composes with the craft of one who studied Maranhão tradition from inside — and the sharp irony of one who sees it from outside. A February 2026 single."
+texto_en: "Celebrating the legacy of the legendary João do Vale, Maranhão-born artist Tião Carvalho delivers a vibrant album that bridges roots folklore with timeless MPB (Musica Popular Brasileira). The record beautifully balances hidden gems like Baião de Viola, Os Óio de Anabela, and Todos Cantam sua Terra with explosive, household classics like Matuto Transviado (Coronel Antonio Bento), A Voz do Povo, Peba na Pimenta, and a powerful rendition of Carcará reimagined in the traditional Bumba meu Boi rhythm. Featuring stellar guest appearances by Zeca Baleiro, Trio Virgulino, and Divina Batucada, this album is a rich tapestry of Afro-Brazilian and Northeastern rhythms—weaving together xotes, baiões, sambas, bumba-meu-boi, and the deep, hypnotic groove of tambor de crioula. It is an essential listen for anyone looking to reconnect with the authentic, soulful heartbeat of Brazil."
 ---
 
- O frevo como metáfora do país: alegria que corre por cima de estrutura frágil, em pé por pura inércia e teimosia. Tião Carvalho compõe com o ofício de quem estudou a tradição maranhense por dentro — e a ironia afiada de quem a vê de fora.
+ Cantando a obra de João do Vale, o maranhense Tião Carvalho, apresenta no disco um repertório que mescla canções pouco conhecidas, como Baião de Viola, Os Óio de Anabela, Todos Cantam sua Terra; juntamente com as já consagradas Matuto Transviado (Coronel Antonio Bento), A Voz do Povo, Peba na Pimenta, Carcará (gravada no ritmo de Bumba meu Boi), entre outras. O disco contou ainda com as participações especiais de Zeca Baleiro, Trio Virgulino e Divina Batucada.
+No repertório a diversidade de ritmos que abrangem a carreira dos dois artistas, xotes, baiões, sambas, bumba-meu-boi e tambor de crioula.
+
 
 Single de fevereiro de 2026, mais um capítulo da parceria de décadas entre o mestre e o selo.
