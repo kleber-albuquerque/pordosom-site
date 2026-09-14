@@ -412,18 +412,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         </div>
         <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🔗 Ferramentas Externas</h2>
         <p style="margin-bottom:2rem">Acesse: <a href="https://search.google.com/search-console" target="_blank">Search Console</a>, <a href="https://analytics.google.com" target="_blank">Analytics</a>, <a href="https://artists.spotify.com" target="_blank">Spotify</a>, <a href="https://studio.youtube.com" target="_blank">YouTube</a>.</p>
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🏢 Configurações da Agência</h2>
-        <div class="f-grid">
-            <div class="f-field"><label>Nome da Agência</label><input id="cfg-agencia_nome" type="text" value="KA. Agência Criativa."></div>
-            <div class="f-field"><label>Link da Agência</label><input id="cfg-agencia_link" type="url" value="https://kaagenciacriativa.com.br/"></div>
-            <div class="f-field full"><label>Slogan</label><input id="cfg-agencia_slogan" type="text" value="Presença digital sem ruído"></div>
-            <div class="f-field full"><label>Texto Jurídico do Rodapé</label><input id="cfg-rodape_direitos" type="text"></div>
-            <div class="f-field full"><label>Texto do Banner LGPD</label><input id="cfg-lgpd_texto" type="text" value="Este site utiliza cookies para melhorar sua experiência."></div>
-        </div>
-        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
-          <button class="btn-salvar" onclick="salvarConfig()">💾 Salvar Configurações</button>
-        </div>
-      </div>
+        
     </div>
 
   </main>
@@ -1584,7 +1573,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","agencia_nome","agencia_link","agencia_slogan","rodape_direitos","lgpd_texto","hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
+const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
 let cfgSha = null;
 
 async function carregarConfig() {
