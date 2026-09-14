@@ -359,8 +359,8 @@ def gera_site():
                   '<div class="teaser-videos">\n' + vids_home + '\n        </div>' + btn_av)
 
     # --- PLAYLISTS ---
-    p1id = cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn').split('?')[0].strip().split('?')[0].strip()
-    p2id = cfg_str('playlist2_id', '2cyXUj8Qhe3nZ0rbng87nR').split('?')[0].strip().split('?')[0].strip()
+    p1id = _sp_id(cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn'))
+    p2id = _sp_id(cfg_str('playlist2_id', '2cyXUj8Qhe3nZ0rbng87nR'))
     playlists_html = ('<div class="teaser-playlists">\n'
                      '            <iframe src="https://open.spotify.com/embed/playlist/' + p1id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 1"></iframe>\n'
                      '            <iframe src="https://open.spotify.com/embed/playlist/' + p2id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 2"></iframe>\n'
@@ -717,8 +717,8 @@ def gera_audiovisual():
                          '" loading="lazy" allowfullscreen title="' + esc(c.get('titulo','')) + '"></iframe>' for c in do_g)
         grupos_html.append('<h2 class="section-title" style="font-size:1.3rem;margin-top:3rem">' + esc(gname) + '</h2>\n'
                           '<div class="teaser-videos">\n' + vids + '\n        </div>')
-    p1id = cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn').split('?')[0].strip().split('?')[0].strip()
-    p2id = cfg_str('playlist2_id', '2cyXUj8Qhe3nZ0rbng87nR').split('?')[0].strip().split('?')[0].strip()
+    p1id = _sp_id(cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn'))
+    p2id = _sp_id(cfg_str('playlist2_id', '2cyXUj8Qhe3nZ0rbng87nR'))
     playlists = ('<section class="teaser teaser-alt">\n    <div class="container">\n'
                  '        <div class="teaser-head">\n'
                  '            <span class="section-subtitle">Playlists</span>\n'
