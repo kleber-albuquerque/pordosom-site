@@ -16,6 +16,3 @@ texto_en: "Celebrating the legacy of the legendary João do Vale, Maranhão-born
 
  Cantando a obra de João do Vale, o maranhense Tião Carvalho, apresenta no disco um repertório que mescla canções pouco conhecidas, como Baião de Viola, Os Óio de Anabela, Todos Cantam sua Terra; juntamente com as já consagradas Matuto Transviado (Coronel Antonio Bento), A Voz do Povo, Peba na Pimenta, Carcará (gravada no ritmo de Bumba meu Boi), entre outras. O disco contou ainda com as participações especiais de Zeca Baleiro, Trio Virgulino e Divina Batucada.
 No repertório a diversidade de ritmos que abrangem a carreira dos dois artistas, xotes, baiões, sambas, bumba-meu-boi e tambor de crioula.
-
-
-Single de fevereiro de 2026, mais um capítulo da parceria de décadas entre o mestre e o selo.
