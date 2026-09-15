@@ -4,8 +4,7 @@ artista: "Cia Cabelo de Maria"
 ano: 2009
 capa: "/images/uploads/cia-cabelo-de-maria-sao-joao-do-carneirinho.jpg"
  generos:
-  - infantil
-destaque: false
+destaque: true
 faixas: 14
 ordem: ""
 spotify: "https://open.spotify.com/intl-pt/album/11BpQi0890QRsBxUtFJmYZ?si=ywOEDAwcSr-RiA-pedo8PA"
