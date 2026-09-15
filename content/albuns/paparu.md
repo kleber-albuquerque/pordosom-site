@@ -4,14 +4,13 @@ artista: "Ana Maria Carvalho"
 ano: 2012
 capa: "/images/uploads/paparu.jpg"
  generos:
-  - cultura-popular
 destaque: false
 faixas: 14
 ordem: ""
 spotify: "https://open.spotify.com/intl-pt/album/69IfgGBFDr2XFWeVAcpI7P?si=dySJBOqnQq22pg1btHSOBw"
 youtube: "https://www.youtube.com/watch?v=xlPVIA1bkB8&list=RDxlPVIA1bkB8&start_radio=1"
 apple: ""
-deezer: ""
+deezer: "https://link.deezer.com/s/34oXPA4KCz0PVM9QMEniZ"
 texto_en: "Ana is a singer, songwriter, educator and traditional culture performer from Maranhão, Brazil, with deep roots in Brazilian popular culture. A member of Grupo Cupuaçu for over 20 years and a singer and actress with Teatro Ventoforte for 25 years, her music draws from Maranhão’s rich traditions, including Bumba Meu Boi, Ciranda, Forró, Cacuriá, Samba and traditional Brazilian songs. Her compositions have been recorded by various artists. In 2023, she received the Profissionais da Música Award as Master of Popular Culture."
 ---
 
