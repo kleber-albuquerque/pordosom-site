@@ -3,14 +3,15 @@ titulo: "Abebe"
 artista: "Luana Bayo"
 ano: 2024
 capa: "/images/uploads/abebe.jpg"
-generos:
+ generos:
   - afro-brasileira
 destaque: true
 faixas: 1
-spotify: "https://open.spotify.com/intl-pt/album/23cWEkvUmwLFkCeHPqb9p4?si=8f0xPpQvRQOdNvdCEYczQA"
-youtube: ""
+ordem: ""
+spotify: "https://open.spotify.com/intl-pt/album/555copAVGEIxXZHR5J5NyM?si=FsrG1kvLTzav9X3cclJFNQ"
+youtube: "https://www.youtube.com/watch?v=ROw_9h76OS4"
 apple: ""
-deezer: ""
+deezer: "https://link.deezer.com/s/34oXbecEGhAxECEMffoZf"
 texto_en: "The abebé is Oxum's sacred instrument — and the name Luana Bayô chose for this moment. Afro-Brazilian references run through the work: rhythms from the terreiro, melody soaring above, a voice carrying ancestry without the weight of a museum. Tradition sung in the present tense."
 ---
 
