@@ -110,6 +110,7 @@ def md_html_v2(texto):
         m_img = re.match(r'^!\[(.*)\]\((.+?)\)\s*$', t)
         m_yt = re.match(r'^(?:https?://)?(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]{11})', t)
         m_sp = re.match(r'^\{\{spotify:\s*(.+?)\}\}\s*$', t)
+        m_gal = re.match(r'^\{\{galeria:\s*(.+?)\}\}\s*$', t)
         if m_img:
             legenda, url = m_img.group(1), m_img.group(2)
             cred = ''
@@ -130,6 +131,13 @@ def md_html_v2(texto):
             out.append('<div style="margin:2rem 0"><iframe src="https://www.youtube.com/embed/' + m_yt.group(1) + '" style="aspect-ratio:16/9;width:100%;border:0;border-radius:4px" loading="lazy" allowfullscreen title="Vídeo"></iframe></div>')
         elif m_sp:
             out.append('<iframe src="' + esc(sp_embed(m_sp.group(1))) + '?utm_source=generator" style="width:100%;border:0;border-radius:12px;margin:2rem 0" height="152" loading="lazy" title="Ouvir no Spotify"></iframe>')
+        elif m_gal:
+            caminhos = [c.strip() for c in m_gal.group(1).split('|') if c.strip()]
+            imgs = ''
+            for c in caminhos:
+                src = (BASE + c) if c.startswith('/') else c
+                imgs += '<img src="' + esc(src) + '" alt="" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px" loading="lazy">'
+            out.append('<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.6rem;margin:2rem 0">' + imgs + '</div>')
         elif t.startswith('### '):
             out.append('<h3 style="font-size:1.05rem;text-transform:uppercase;letter-spacing:.5px;color:var(--brand-accent);margin:2rem 0 .8rem">' + inline(t[4:]) + '</h3>')
         elif t.startswith('## '):

@@ -505,7 +505,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             <div class="f-field full"><label>Link</label><input id="fp-link" type="url" placeholder="https://..."></div>
             <div class="f-field full"><label>Relatorio (PDF)</label><input id="fp-relatorio" type="url" placeholder="https://..."></div>
             <div class="f-field full"><label>Tags (virgulas)</label><input id="fp-tags" type="text" placeholder="Festival, Cultura"></div>
-            <div class="f-field full"><label>Descricao</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fp-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fp-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fp-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdH3('fp-corpo')" title="Subtítulo menor">H3</button><button type="button" class="btn-md" onclick="mdLink('fp-corpo')" title="Link">🔗</button><button type="button" class="btn-md" onclick="mdImagemUpload('fp-corpo')" title="Imagem com legenda">🖼️</button><button type="button" class="btn-md" onclick="mdYoutube('fp-corpo')" title="Vídeo do YouTube">▶</button><button type="button" class="btn-md" onclick="mdSpotify('fp-corpo')" title="Embed Spotify">🎵</button><button type="button" class="btn-md" onclick="mdCitacao('fp-corpo')" title="Citação">❝</button></div><textarea id="fp-corpo" style="min-height:220px"></textarea></div>
+            <div class="f-field full"><label>Descricao</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fp-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fp-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fp-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdH3('fp-corpo')" title="Subtítulo menor">H3</button><button type="button" class="btn-md" onclick="mdLink('fp-corpo')" title="Link">🔗</button><button type="button" class="btn-md" onclick="mdImagemUpload('fp-corpo')" title="Imagem com legenda">🖼️</button><button type="button" class="btn-md" onclick="mdGaleriaUpload('fp-corpo')" title="Galeria de fotos (grade)">🎞️</button><button type="button" class="btn-md" onclick="mdYoutube('fp-corpo')" title="Vídeo do YouTube">▶</button><button type="button" class="btn-md" onclick="mdSpotify('fp-corpo')" title="Embed Spotify">🎵</button><button type="button" class="btn-md" onclick="mdCitacao('fp-corpo')" title="Citação">❝</button></div><textarea id="fp-corpo" style="min-height:220px"></textarea></div>
           </div>
         </div>
       </div>
@@ -572,6 +572,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 
 <!-- ===== EDITOR DE NOTÍCIA ===== -->
 <input type="file" id="input-img-corpo" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="imgCorpoEscolhida(event)">
+<input type="file" id="input-galeria" accept="image/jpeg,image/png,image/webp" multiple class="hidden" onchange="galeriaEscolhida(event)">
 <div class="editor-overlay hidden" id="editor-noticia-overlay">
   <div class="editor-box">
     <div class="editor-header">
@@ -602,7 +603,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             </label>
           </div>
           <div class="f-field full"><label>Resumo (aparece na lista)</label><textarea id="fn-resumo" style="min-height:70px"></textarea></div>
-          <div class="f-field full"><label>Conteúdo da notícia</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fn-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdH3('fn-corpo')" title="Subtítulo menor">H3</button><button type="button" class="btn-md" onclick="mdLink('fn-corpo')" title="Link">🔗</button><button type="button" class="btn-md" onclick="mdImagemUpload('fn-corpo')" title="Imagem com legenda">🖼️</button><button type="button" class="btn-md" onclick="mdYoutube('fn-corpo')" title="Vídeo do YouTube">▶</button><button type="button" class="btn-md" onclick="mdSpotify('fn-corpo')" title="Embed Spotify">🎵</button><button type="button" class="btn-md" onclick="mdCitacao('fn-corpo')" title="Citação">❝</button></div><textarea id="fn-corpo" style="min-height:220px"></textarea>
+          <div class="f-field full"><label>Conteúdo da notícia</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fn-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdH3('fn-corpo')" title="Subtítulo menor">H3</button><button type="button" class="btn-md" onclick="mdLink('fn-corpo')" title="Link">🔗</button><button type="button" class="btn-md" onclick="mdImagemUpload('fn-corpo')" title="Imagem com legenda">🖼️</button><button type="button" class="btn-md" onclick="mdGaleriaUpload('fn-corpo')" title="Galeria de fotos (grade)">🎞️</button><button type="button" class="btn-md" onclick="mdYoutube('fn-corpo')" title="Vídeo do YouTube">▶</button><button type="button" class="btn-md" onclick="mdSpotify('fn-corpo')" title="Embed Spotify">🎵</button><button type="button" class="btn-md" onclick="mdCitacao('fn-corpo')" title="Citação">❝</button></div><textarea id="fn-corpo" style="min-height:220px"></textarea>
         </div>
       </div>
     </div>
@@ -1292,6 +1293,39 @@ async function imgCorpoEscolhida(ev) {
     toast('✅ Imagem enviada e inserida no texto!');
   } catch (e) {
     toast('❌ Erro ao enviar imagem: ' + e.message);
+  }
+}
+
+var galeriaAlvo = null;
+function mdGaleriaUpload(idTa) {
+  galeriaAlvo = idTa;
+  document.getElementById('input-galeria').click();
+}
+async function galeriaEscolhida(ev) {
+  var files = Array.from(ev.target.files || []);
+  ev.target.value = '';
+  if (!files.length || !galeriaAlvo) return;
+  try {
+    toast('⏳ Enviando ' + files.length + ' imagens da galeria…');
+    var caminhos = [];
+    for (var i = 0; i < files.length; i++) {
+      var blob = files[i];
+      if (typeof imageCompression !== 'undefined') {
+        blob = await imageCompression(files[i], { maxSizeMB: 0.4, maxWidthOrHeight: 1600, useWebWorker: true });
+      }
+      var b64 = await new Promise(function(res, rej){ var r = new FileReader(); r.onload = function(){ res(r.result.split(',')[1]); }; r.onerror = rej; r.readAsDataURL(blob); });
+      var nome = new Date().toISOString().slice(0,10) + '-gal-' + Math.random().toString(36).slice(2,7) + '.jpg';
+      await _subirImagemRepo('images/uploads/' + nome, b64, 'Imagem de galeria: ' + nome);
+      caminhos.push('/images/uploads/' + nome);
+    }
+    var ta = document.getElementById(galeriaAlvo);
+    var ini = ta.selectionStart;
+    var snippet = '\n\n{{galeria: ' + caminhos.join(' | ') + '}}\n\n';
+    ta.value = ta.value.substring(0, ini) + snippet + ta.value.substring(ini);
+    ta.focus();
+    toast('✅ ' + caminhos.length + ' imagens inseridas como galeria!');
+  } catch (e) {
+    toast('❌ Erro ao enviar galeria: ' + e.message);
   }
 }
 
