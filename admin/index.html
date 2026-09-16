@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel — Por do Som</title>
 <style>
+
+/* ===== KA SIGNATURE (reforço de visibilidade) ===== */
+.ka-footer-signature { text-align:center; padding:2rem 0 1rem; border-top:1px solid var(--border-light, rgba(168,48,48,.12)); margin-top:2rem; display:block !important; visibility:visible !important; opacity:1 !important; }
+.ka-footer-signature a { text-decoration:none; display:inline-block; }
+.ka-footer-signature .ka-logo-circle { width:60px; height:60px; margin:0 auto .8rem; background:linear-gradient(135deg,#111 0%,#222 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,.3); border:2px solid #d4af37; }
+.ka-footer-signature .ka-logo-circle span { color:#d4af37; font-weight:900; font-size:1.4rem; letter-spacing:1px; }
+.ka-footer-signature .ka-text-main { color:#e0e0e0; font-size:.75rem; text-align:center; font-weight:600; letter-spacing:.5px; margin-bottom:.2rem; }
+.ka-footer-signature .ka-text-sub { color:#888; font-size:.65rem; text-align:center; font-style:italic; letter-spacing:.5px; }
 :root{
   --brand-primary:#a83030;--brand-primary-light:#c84545;--brand-accent:#e8a04a;
   --bg-dark:#0d0707;--bg-darker:#060303;--bg-card:#1a0e0e;--bg-card-hover:#251515;
@@ -1724,16 +1732,13 @@ async function _subirImagemRepo(caminho, b64, msg) {
 
 </script>
 
-    <!-- KA Agência Criativa - Assinatura no Painel -->
-    <div style="text-align:center;padding:2rem 0 1rem;border-top:1px solid var(--border-light);margin-top:2rem">
-        <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">
-            <div style="width:60px;height:60px;margin:0 auto 0.8rem;background:linear-gradient(135deg,#111 0%,#222 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid #d4af37">
-                <span style="color:#d4af37;font-weight:900;font-size:1.4rem;letter-spacing:1px">KA</span>
-            </div>
-            <div style="color:#e0e0e0;font-size:0.75rem;text-align:center;font-weight:600;letter-spacing:0.5px;margin-bottom:0.2rem">KA. Agência Criativa.</div>
-            <div style="color:#888;font-size:0.65rem;text-align:center;font-style:italic;letter-spacing:0.5px">Presença digital sem ruído</div>
+    <footer class="ka-footer-signature">
+        <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener">
+            <div class="ka-logo-circle"><span>KA</span></div>
+            <div class="ka-text-main">KA. Agência Criativa.</div>
+            <div class="ka-text-sub">Presença digital sem ruído</div>
         </a>
-    </div>
+    </footer>
 
 </body>
 </html>
