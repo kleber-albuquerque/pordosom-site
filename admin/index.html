@@ -6,13 +6,15 @@
 <title>Painel — Por do Som</title>
 <style>
 
-/* ===== KA SIGNATURE (reforço de visibilidade) ===== */
-.ka-footer-signature { text-align:center; padding:2rem 0 1rem; border-top:1px solid var(--border-light, rgba(168,48,48,.12)); margin-top:2rem; display:block !important; visibility:visible !important; opacity:1 !important; }
-.ka-footer-signature a { text-decoration:none; display:inline-block; }
-.ka-footer-signature .ka-logo-circle { width:60px; height:60px; margin:0 auto .8rem; background:linear-gradient(135deg,#111 0%,#222 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(0,0,0,.3); border:2px solid #d4af37; }
-.ka-footer-signature .ka-logo-circle span { color:#d4af37; font-weight:900; font-size:1.4rem; letter-spacing:1px; }
-.ka-footer-signature .ka-text-main { color:#e0e0e0; font-size:.75rem; text-align:center; font-weight:600; letter-spacing:.5px; margin-bottom:.2rem; }
-.ka-footer-signature .ka-text-sub { color:#888; font-size:.65rem; text-align:center; font-style:italic; letter-spacing:.5px; }
+/* ===== KA SIGNATURE (Sidebar) ===== */
+.side-footer .ka-signature { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-light); text-align: center; }
+.side-footer .ka-signature a { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; opacity: 0.6; transition: opacity 0.3s; }
+.side-footer .ka-signature a:hover { opacity: 1; }
+.side-footer .ka-signature .ka-logo-circle { width: 32px; height: 32px; background: linear-gradient(135deg, #111 0%, #222 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #d4af37; }
+.side-footer .ka-signature .ka-logo-circle span { color: #d4af37; font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; }
+.side-footer .ka-signature .ka-text-main { color: var(--text-secondary); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.5px; line-height: 1; }
+.side-footer .ka-signature .ka-text-sub { color: var(--text-muted); font-size: 0.55rem; font-style: italic; letter-spacing: 0.5px; line-height: 1; }
+
 :root{
   --brand-primary:#a83030;--brand-primary-light:#c84545;--brand-accent:#e8a04a;
   --bg-dark:#0d0707;--bg-darker:#060303;--bg-card:#1a0e0e;--bg-card-hover:#251515;
@@ -183,6 +185,14 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <div class="side-footer">
       <div class="side-user" id="side-user">—</div>
       <button class="side-sair" onclick="sair()">Sair do painel</button>
+      <div class="ka-signature">
+          <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener">
+              <div class="ka-logo-circle"><span>KA</span></div>
+              <div class="ka-text-main">KA. Agência Criativa.</div>
+              <div class="ka-text-sub">Presença digital sem ruído</div>
+          </a>
+      </div>
+
     </div>
   </aside>
 
@@ -1731,14 +1741,6 @@ async function _subirImagemRepo(caminho, b64, msg) {
 }
 
 </script>
-
-    <footer class="ka-footer-signature">
-        <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener">
-            <div class="ka-logo-circle"><span>KA</span></div>
-            <div class="ka-text-main">KA. Agência Criativa.</div>
-            <div class="ka-text-sub">Presença digital sem ruído</div>
-        </a>
-    </footer>
 
 </body>
 </html>
