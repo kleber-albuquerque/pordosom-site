@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 # ==========================================================
-# POR DO SOM — render.py v6 (materias ricas + paginas de projeto)
-# A UNICA fonte: content/*.md -> gera TUDO:
-#   site.html / index.html (site inteiro, secoes por ancoras)
+# POR DO SOM — render.py v6 (matérias ricas + páginas de projeto)
+# A ÚNICA fonte: content/*.md → gera TUDO:
+#   site.html / index.html (site inteiro, seções por âncoras)
 #   catalogo.html / audiovisual.html
 #   albuns/*.html / posts/*.html / projetos/*.html (NOVO v6)
 #   data/catalogo.json + sitemap.xml + robots.txt
-# v6: md_html_v2 (figuras, embeds YT/Spotify, citacoes, H3),
-#     paginas individuais de projeto, hero_scroll_texto
-#     configuravel, tempo de leitura nas noticias.
+# v6: md_html_v2 (figuras, embeds YT/Spotify, citações, H3),
+#     páginas individuais de projeto, hero_scroll_texto
+#     configurável, tempo de leitura nas notícias.
 # ==========================================================
 import os, re, json, html
 from datetime import datetime
@@ -91,9 +91,9 @@ def sp_embed(url):
         return 'https://open.spotify.com/embed/' + m.group(1) + '/' + m.group(2)
     return u.replace('open.spotify.com/', 'open.spotify.com/embed/')
 
-# ---------- Markdown de materia (v2) ----------
+# ---------- Markdown de matéria (v2) ----------
 def inline(t):
-    """Markdown inline: negrito, italico, link — escape unico."""
+    """Markdown inline: negrito, itálico, link — escape único."""
     c = esc(t)
     c = re.sub(r'\*\*(.+?)\*\*', r'<strong style="color:var(--text-primary)">\1</strong>', c)
     c = re.sub(r'\*(.+?)\*', r'<em>\1</em>', c)
@@ -101,7 +101,7 @@ def inline(t):
     return c
 
 def md_html_v2(texto):
-    """Figuras c/ legenda+credito, embeds YT/Spotify, citacoes, H2/H3."""
+    """Figuras c/ legenda+crédito, embeds YT/Spotify, citações, H2/H3."""
     out = []
     for linha in str(texto or '').strip().split('\n'):
         t = linha.strip()
@@ -170,7 +170,7 @@ cfg_path = os.path.join(PASTA['config'], 'site.md')
 if os.path.exists(cfg_path):
     SITE_CFG, _ = parse_md(cfg_path)
 
-# normalizacoes (a blindagem herdada)
+# normalizações (a blindagem herdada)
 for a in albuns:
     if isinstance(a.get('capa'), list): a['capa'] = a['capa'][0] if a['capa'] else ''
     if isinstance(a.get('generos'), str):
@@ -182,7 +182,7 @@ for a in albuns:
 posts = [p for p in posts if str(p.get('rascunho')).lower() != 'true']
 posts.sort(key=lambda p: str(p.get('date', '')), reverse=True)
 
-# ordenacao do catalogo: com ordem: primeiro; sem: ano desc
+# ordenação do catálogo: com ordem: primeiro; sem: ano desc
 def _ordem(a):
     o = a.get('ordem')
     if isinstance(o, list): o = o[0] if o else None
@@ -297,9 +297,9 @@ def _doc(title, desc, body, img_og=None):
             '<script src="https://unpkg.com/lucide@latest"></script>\n</head>\n<body>\n' + body +
             '\n<script type="application/ld+json">\n{"@context":"https://schema.org","@type":"MusicGroup","name":"Por do Som","genre":["Samba de Raiz","MPB","Brasilidades","Instrumental"],"url":"' + DOMINIO + BASE + '/site.html","description":"Selo independente e produtora cultural dedicado às brasilidades."}</script>\n'
             '</body>\n</html>\n')
-
 # ---------- Página de álbum ----------
 def page_album(a, prev, next_):
+    global ATUAL_EH_HOME
     ATUAL_EH_HOME = False
     generos_str = ' · '.join(GENEROS.get(g, g) for g in a['generos'])
     schema = {"@context": "https://schema.org", "@type": "MusicAlbum",
@@ -340,6 +340,7 @@ def page_album(a, prev, next_):
             '            ' + next_h + '\n</div>\n</div>\n</main>\n' + _footer() + _scripts())
     d = _doc(a['titulo'] + ' — ' + a['artista'], (a.get('corpo') or a['titulo'])[:155], body, img_og=capa)
     return d.replace('</head>', '<script type="application/ld+json">\n' + json.dumps(schema, ensure_ascii=False) + '\n</script>\n</head>')
+
 # ---------- site.html (o site inteiro, seções por âncoras) ----------
 def _sec(id_, subtitulo, titulo_cfg, desc_cfg=None, conteudo='', alt=False):
     titulo = cfg_str(titulo_cfg)
@@ -546,6 +547,7 @@ def gera_site():
 
 # ---------- Páginas de notícia ----------
 def gera_posts():
+    global ATUAL_EH_HOME
     ATUAL_EH_HOME = False
     os.makedirs(os.path.join(BASE_DIR, 'posts'), exist_ok=True)
     n = 0
@@ -610,7 +612,6 @@ def gera_json():
     print('OK catalogo.json (' + str(len(albuns)) + ' albuns, ' + str(len(posts_js)) + ' posts, ' + str(len(artistas_js)) + ' artistas, ' + str(len(projetos_js)) + ' projetos)')
 
 def gera_albuns():
-    ATUAL_EH_HOME = False
     os.makedirs(os.path.join(BASE_DIR, 'albuns'), exist_ok=True)
     for i, a in enumerate(albuns):
         prev = albuns[i-1] if i > 0 else None
@@ -665,6 +666,7 @@ def page_projeto(p):
 
 # ---------- Página de projetos (lista) + páginas individuais ----------
 def gera_projetos():
+    global ATUAL_EH_HOME
     ATUAL_EH_HOME = False
     cards = []
     for p in projetos:
@@ -721,9 +723,9 @@ def gera_sitemap():
         f.write(sm)
     print('✔ sitemap.xml (' + str(len(urls)) + ' URLs)')
 
-# ---------- JS para paginas de dados (catalogo, etc.) ----------
+# ---------- JS para páginas de dados (catálogo, etc.) ----------
 def _js_dados():
-    """JS reutilizavel: filtros do catalogo + grade de artistas."""
+    """JS reutilizável: filtros do catálogo + grade de artistas."""
     return ('<script>\n'
             '(async function(){\n'
             '  const BASE = "' + BASE + '";\n'
@@ -768,8 +770,9 @@ def _js_dados():
             '})();\n'
             '</script>\n')
 
-# ---------- Página do catálogo completo (aprofundamento) ----------
+# ---------- Página do catálogo completo ----------
 def gera_catalogo():
+    global ATUAL_EH_HOME
     ATUAL_EH_HOME = False
     filtros_js = ('<div class="filtros" id="filtros"></div>\n<div class="catalogo-grid" id="catalogo-grid"></div>')
     body = ('<header class="header" id="header">\n<a href="' + BASE + '/index.html" class="logo">\n'
@@ -794,8 +797,9 @@ def gera_catalogo():
         f.write(_doc('Gravadora — Catálogo & Artistas', cfg_str('grav_descricao')[:155], body))
     print('✔ catalogo.html gerada (catálogo completo + artistas)')
 
-# ---------- Página audiovisual completa (aprofundamento) ----------
+# ---------- Página audiovisual completa ----------
 def gera_audiovisual():
+    global ATUAL_EH_HOME
     ATUAL_EH_HOME = False
     grupos_html = []
     for gid, gname in GRUPOS_AV.items():
