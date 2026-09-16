@@ -37,3 +37,11 @@ playlist1_id: "https://open.spotify.com/playlist/2lgoPMSE9e7lxEumGbBaGn?si=fa7e7
 playlist2_nome: "Música Afro Brasileira"
 playlist2_id: "https://open.spotify.com/playlist/3IeOpRI0JqG5tYkzaVazZu?si=ea8084ecf8484607"
 ---
+premios_titulo: "Reconhecimento nacional"
+premios_descricao: "Prêmios e indicações que avalizam 25 anos de curadoria e produção cultural."
+premio1: "2015/2016 · Melhor Gravadora Independente do Brasil — Prêmio Profissionais da Música"
+premio2: "2022/2023 · Melhor Programa de TV — Série Sotaques do Brasil (Prêmio Profissionais da Música)"
+premio3: "2022/2023 · Melhor Festival Online — Festival Malungo (Prêmio Profissionais da Música)"
+premio4: "2016 · Melhor Canal de YouTube e Websérie/TV (Prêmio Profissionais da Música)"
+premio5: "2021 · Projeto Musical de Entretenimento — Sotaques do Brasil 1ª temporada (Prêmio Profissionais da Música)"
+premio6: "Finalista e premiada também em: Prêmio TIM de Música, Prêmio da Música Brasileira, Prêmio Dynamite, Universidade FM, London Burning, Rival BR, Rumos Itaú Cultural e Funarte Festivais"

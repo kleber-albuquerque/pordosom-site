@@ -300,12 +300,23 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           <div class="f-field full"><label>Link do Portfolio (opcional)</label><input id="cfg-portfolio_link" type="url" placeholder="https://..."></div>
         </div>
 
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">9 · HOME — Seção Editora & Direitos</h2>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">9 · HOME — Reconhecimento (prêmios)</h2>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título da seção</label><input id="cfg-premios_titulo" type="text"></div>
+          <div class="f-field full"><label>Descrição da seção</label><input id="cfg-premios_descricao" type="text"></div>
+          <div class="f-field full"><label>Prêmio 1 — formato: ANO · conquista — premiação</label><input id="cfg-premio1" type="text"></div>
+          <div class="f-field full"><label>Prêmio 2</label><input id="cfg-premio2" type="text"></div>
+          <div class="f-field full"><label>Prêmio 3</label><input id="cfg-premio3" type="text"></div>
+          <div class="f-field full"><label>Prêmio 4</label><input id="cfg-premio4" type="text"></div>
+          <div class="f-field full"><label>Prêmio 5</label><input id="cfg-premio5" type="text"></div>
+          <div class="f-field full"><label>Prêmio 6 (ou frase-resumo de indicações)</label><input id="cfg-premio6" type="text"></div>
+        </div>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">10 · HOME — Seção Editora & Direitos</h2>
         <div class="f-grid">
           <div class="f-field full"><label>Texto</label><textarea id="cfg-editora_texto" style="min-height:110px"></textarea></div>
         </div>
 
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">10 · HOME — Seção Contato</h2>
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">11 · HOME — Seção Contato</h2>
         <div class="f-grid">
           <div class="f-field full"><label>Título</label><input id="cfg-contato_titulo" type="text"></div>
           <div class="f-field full"><label>Descrição</label><input id="cfg-contato_descricao" type="text"></div>
@@ -1740,7 +1751,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
+const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","premios_titulo","premios_descricao","premio1","premio2","premio3","premio4","premio5","premio6","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
 let cfgSha = null;
 
 async function carregarConfig() {

@@ -448,6 +448,19 @@ def gera_site():
               '            <h2 class="section-title">Mais de 20 anos <span class="gradient">cantando o Brasil</span></h2>\n'
               '            <p class="manifesto-text">' + esc(cfg_str('quemsomos_texto')) + '</p>\n'
               + port_html + '\n</div>\n</div>\n</section>\n')
+    # --- RECONHECIMENTO (prêmios do portfolio) ---
+    premios = [cfg_str('premio' + str(i)) for i in range(1, 7)]
+    premios = [p for p in premios if p]
+    sec_premios = ''
+    if premios and cfg_str('premios_titulo'):
+        cards_pr = []
+        for p in premios:
+            m = re.match(r'^(\d{4}(?:/\d{4})?)\s*[·\-–]\s*(.+)$', p)
+            if m:
+                cards_pr.append('<div class="fade-in" style="background:var(--bg-card);border:1px solid var(--border-color-light);border-radius:2px;padding:1.4rem"><div style="font-size:.7rem;font-weight:800;letter-spacing:2px;color:var(--brand-accent);margin-bottom:.6rem">' + esc(m.group(1)) + '</div><div style="font-size:.85rem;line-height:1.6;color:var(--text-secondary)">' + esc(m.group(2)) + '</div></div>')
+            else:
+                cards_pr.append('<div class="fade-in" style="grid-column:1/-1;background:var(--gradient-brand-soft);border:1px solid var(--border-color);border-radius:2px;padding:1.4rem;font-size:.85rem;line-height:1.7;color:var(--text-secondary)">' + esc(p) + '</div>')
+        sec_premios = _sec('premios', 'Reconhecimento', 'premios_titulo', 'premios_descricao', '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem">' + ''.join(cards_pr) + '</div>')
     # --- EDITORA ---
     sec_ed = ('<section class="teaser" id="editora">\n<div class="container">\n'
               '        <div class="manifesto-content">\n'
@@ -545,7 +558,7 @@ def gera_site():
             '        <span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav() +
             '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
             + hero + sec_noticias + sec_grav + sec_proj + sec_ed + sec_av + sec_pl
-            + sec_manif + sec_qs + sec_cont + '\n' + _footer() + _scripts() + js_site)
+            + sec_manif + sec_qs + sec_premios + sec_cont + '\n' + _footer() + _scripts() + js_site)
     _conteudo = _doc('Por do Som | Selo Independente & Produtora Cultural',
                      cfg_str('hero_texto', 'Selo dedicado às Brasilidades')[:155], body)
     for _alvo in ('site.html', 'index.html'):
