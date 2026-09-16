@@ -15,6 +15,14 @@
 .side-footer .ka-signature .ka-text-main { color: var(--text-secondary); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.5px; line-height: 1; }
 .side-footer .ka-signature .ka-text-sub { color: var(--text-muted); font-size: 0.55rem; font-style: italic; letter-spacing: 0.5px; line-height: 1; }
 
+
+/* ===== BUSCA NAS TABELAS ===== */
+.search-box { position: relative; margin-bottom: 1rem; }
+.search-box input { width: 100%; background: var(--bg-dark); border: 1px solid var(--border-light); color: var(--text-primary); padding: .75rem 1rem .75rem 2.5rem; border-radius: 4px; font-family: inherit; font-size: .85rem; outline: none; transition: border-color .2s; }
+.search-box input:focus { border-color: var(--brand-primary-light); }
+.search-box::before { content: '🔍'; position: absolute; left: .8rem; top: 50%; transform: translateY(-50%); font-size: .9rem; opacity: .5; pointer-events: none; }
+.search-box input::placeholder { color: var(--text-muted); }
+
 :root{
   --brand-primary:#a83030;--brand-primary-light:#c84545;--brand-accent:#e8a04a;
   --bg-dark:#0d0707;--bg-darker:#060303;--bg-card:#1a0e0e;--bg-card-hover:#251515;
@@ -315,7 +323,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <div id="pagina-audiovisual" class="hidden">
       <div class="toolbar">
         <div>
-          <h1 class="page-title">Audiovisual</h1>
+          <h1 class="page-title">Audiovisual</h1><div class="search-box"><input type="text" id="search-audiovisual" placeholder="Buscar vídeos..." onkeyup="filtrarTabela('audiovisual')"></div>
           <p class="page-sub" style="margin-bottom:0">Os vídeos do canal — por festival e série</p>
         </div>
         <button class="btn-novo" onclick="abrirNovoVideo()">＋ Novo Vídeo</button>
@@ -337,7 +345,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <div id="pagina-projetos" class="hidden">
       <div class="toolbar">
         <div>
-          <h1 class="page-title">Projetos</h1>
+          <h1 class="page-title">Projetos</h1><div class="search-box"><input type="text" id="search-projetos" placeholder="Buscar projetos..." onkeyup="filtrarTabela('projetos')"></div>
           <p class="page-sub" style="margin-bottom:0">Realizações e projetos em captação — sua vitrine de autoridade</p>
         </div>
         <button class="btn-novo" onclick='abrirNovoProjeto()'>＋ Novo Projeto</button>
@@ -359,7 +367,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <div id="pagina-albuns" class="hidden">
       <div class="toolbar">
         <div>
-          <h1 class="page-title">Álbuns</h1>
+          <h1 class="page-title">Álbuns</h1><div class="search-box"><input type="text" id="search-albuns" placeholder="Buscar álbuns, artistas, gêneros..." onkeyup="filtrarTabela('albuns')"></div>
           <p class="page-sub" style="margin-bottom:0">O catálogo completo — clique nas colunas para ordenar</p>
         </div>
         <button class="btn-novo" onclick='abrirNovoAlbum()'>＋ Novo Álbum</button>
@@ -392,7 +400,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <div id="pagina-noticias" class="hidden">
       <div class="toolbar">
         <div>
-          <h1 class="page-title">Notícias</h1>
+          <h1 class="page-title">Notícias</h1><div class="search-box"><input type="text" id="search-noticias" placeholder="Buscar notícias..." onkeyup="filtrarTabela('noticias')"></div>
           <p class="page-sub" style="margin-bottom:0">Lançamentos, projetos e novidades do selo</p>
         </div>
         <button class="btn-novo" onclick='abrirNovaNoticia()'>＋ Nova Notícia</button>
@@ -604,6 +612,20 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
   </div>
 </div>
 <script>
+
+function filtrarTabela(tipo) {
+  const input = document.getElementById('search-' + tipo);
+  if (!input) return;
+  const filtro = input.value.toLowerCase();
+  const tbody = document.getElementById(tipo + '-tbody');
+  if (!tbody) return;
+  const linhas = tbody.querySelectorAll('tr');
+  linhas.forEach(linha => {
+    const texto = linha.textContent.toLowerCase();
+    linha.style.display = texto.includes(filtro) ? '' : 'none';
+  });
+}
+
 // ==========================================================
 // PAINEL PDS — consolidado v2
 // Login + Álbuns (listar/editar/criar/excluir/ordenar) + Notícias
