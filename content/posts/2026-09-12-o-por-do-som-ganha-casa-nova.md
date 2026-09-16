@@ -26,4 +26,4 @@ Nada de layout genérico: as cores, a tipografia e o clima das páginas nascem d
 
 O site também nasce com um compromisso: estar sempre vivo. Notícias, lançamentos e projetos novos entram por aqui primeiro. Como esta casa é nossa, a porta fica aberta: **passe, explore o catálogo, assista aos vídeos — e volte sempre**.
 Por do Som, setembro de 2026*https://www.youtube.com/watch?v=XXXXXXXXXXX
-https://www.youtube.com/watch?v=U3gtfO-bcuQ
+![Legenda da foto](/images/uploads/exemplo.jpg)
