@@ -133,7 +133,6 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
   .main{padding:1.2rem}
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
 </head>
 <body>
 
@@ -170,8 +169,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <button class="side-item" data-pagina="noticias"><span class="icone">📰</span> Notícias</button>
     <button class="side-item" data-pagina="projetos"><span class="icone">🎬</span> Projetos</button>
     <button class="side-item" data-pagina="audiovisual"><span class="icone">🎵</span> Audiovisual</button>
-    <button class="side-item" data-pagina="config"><span class="icone">⚙️</span> Textos do Site</button>
-    <button class="side-item" data-pagina="analytics"><span class="icone">📊</span> Analytics & Ferramentas</button>
+    <button class="side-item" data-pagina="config"><span class="icone">️</span> Textos do Site</button>
     <div class="side-footer">
       <div class="side-user" id="side-user">—</div>
       <button class="side-sair" onclick="sair()">Sair do painel</button>
@@ -217,15 +215,6 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         <div class="f-grid">
           <div class="f-field full"><label>Slogan (título grande)</label><input id="cfg-hero_slogan" type="text"></div>
           <div class="f-field full"><label>Texto de apresentação</label><textarea id="cfg-hero_texto" style="min-height:90px"></textarea></div>
-          <div class="f-field full"><label>Texto do indicador de rolagem (opcional)</label><input id="cfg-hero_scroll_texto" type="text" placeholder="Ex: Role para descobrir (ou deixe vazio)"></div>
-            <div class="f-field full" style="margin-top:1rem; padding-top:1rem; border-top:1px dashed var(--border)">
-                <label>🖼️ Imagem de Fundo do Hero (Caminho ou URL)</label>
-                <input id="cfg-hero_imagem" type="text" placeholder="Ex: /img/hero-nova.jpg ou https://...">
-                <p class="hint" style="font-size:0.7rem; color:var(--text-muted); margin-top:0.3rem">
-                    💡 Dica: Suba a imagem na pasta <code>img/</code> do seu GitHub e cole o caminho aqui (ex: <code>/img/hero.jpg</code>).
-                </p>
-            </div>
-
         </div>
 
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">2 · HOME — Seção Gravadora (vitrine)</h2>
@@ -254,11 +243,11 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
 
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">6 · HOME — Seção Playlists</h2>
         <div class="f-grid">
-          <div class="f-field full"><label>Título</label><input id="cfg-playlists_titulo" type="text"></div>
+          <div class="f-field full"><label>Título da seção (Padrão: "Curadoria do selo")</label><input id="cfg-playlists_titulo" type="text"></div>
           <div class="f-field"><label>Playlist 1 — nome</label><input id="cfg-playlist1_nome" type="text"></div>
-          <div class="f-field"><label>Playlist 1 — ID Spotify</label><input id="cfg-playlist1_id" type="text" placeholder="APENAS o código, ex: 6sAavHyk7s27TaXji0vxzF (NÃO cole o link inteiro!)"></div>
+          <div class="f-field"><label>Playlist 1 — ID Spotify</label><input id="cfg-playlist1_id" type="text" placeholder="ex: 2lgoPMSE9e7lxEumGbBaGn"></div>
           <div class="f-field"><label>Playlist 2 — nome</label><input id="cfg-playlist2_nome" type="text"></div>
-          <div class="f-field"><label>Playlist 2 — ID Spotify</label><input id="cfg-playlist2_id" type="text" placeholder="APENAS o código. Ex: 2cyXUj8Qhe3nZ0rbng87nR (Apague tudo depois do ?)"></div>
+          <div class="f-field"><label>Playlist 2 — ID Spotify</label><input id="cfg-playlist2_id" type="text" placeholder="ex: 2cyXUj8Qhe3nZ0rbng87nR"></div>
         </div>
 
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">7 · HOME — Seção Manifesto</h2>
@@ -288,7 +277,24 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         </div>
         
         <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
+          
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px;border-top:2px solid var(--border-light);padding-top:20px">11 · SEO e Redes Sociais (Google, WhatsApp, Facebook)</h2>
+        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
+            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
+                <strong>Como o Google e o WhatsApp veem sua Home.</strong> Preencha para aparecer bonito nas buscas.
+                (Álbuns e Notícias têm SEO automático).
+            </p>
+        </div>
+        <div class="f-grid">
+            <div class="f-field full"><label>Título SEO (máx. 60 caracteres)</label><input id="cfg-seo_title" type="text" maxlength="60" placeholder="Ex: Pôr do Som — Selo Independente de Brasilidades"></div>
+            <div class="f-field full"><label>Descrição SEO (máx. 155 caracteres)</label><textarea id="cfg-seo_description" style="min-height:80px" maxlength="155" placeholder="Ex: Selo independente dedicado a samba de raiz, MPB e brasilidades."></textarea></div>
+            <div class="f-field full"><label>Palavras-chave (separadas por vírgula)</label><input id="cfg-seo_keywords" type="text" placeholder="samba de raiz, MPB, brasilidades"></div>
+            <div class="f-field full"><label>URL da Imagem de Destaque (1200x630px)</label><input id="cfg-seo_og_image" type="url" placeholder="https://... ou deixe vazio para usar a logo"></div>
+        </div>
+
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
           <button class="btn-salvar" id="btn-salvar-config" onclick="salvarConfig()">💾 Salvar Textos do Site</button>
+        </div>
         </div>
       </div>
     </div>
@@ -394,6 +400,70 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         <small>Clique em "＋ Nova Notícia" para o primeiro lançamento.</small>
       </div>
     </div>
+
+    <!-- ABA ANALYTICS & FERRAMENTAS -->
+    <div id="pagina-analytics" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Analytics & Ferramentas</h1>
+          <p class="page-sub" style="margin-bottom:0">Acesse as plataformas externas e configure a escalabilidade do projeto.</p>
+        </div>
+      </div>
+      
+      <!-- SEÇÃO 1: LINKS DE FERRAMENTAS -->
+      <div style="margin-bottom:3rem">
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🔗 Ferramentas Externas</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:1.5rem">
+            <a href="https://search.google.com/search-console" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <div style="background:var(--bg-card,#1a1a1a);border:1px solid var(--border-light);border-radius:6px;padding:1.5rem;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+                    <div style="font-size:2rem;margin-bottom:0.5rem">🔍</div>
+                    <h4 style="margin:0 0 0.5rem;color:#fff">Google Search Console</h4>
+                    <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Termos de busca no Google e IA.</p>
+                </div>
+            </a>
+            <a href="https://analytics.google.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <div style="background:var(--bg-card,#1a1a1a);border:1px solid var(--border-light);border-radius:6px;padding:1.5rem;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+                    <div style="font-size:2rem;margin-bottom:0.5rem">📊</div>
+                    <h4 style="margin:0 0 0.5rem;color:#fff">Google Analytics</h4>
+                    <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Visitas, tempo no site e origem.</p>
+                </div>
+            </a>
+            <a href="https://artists.spotify.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <div style="background:var(--bg-card,#1a1a1a);border:1px solid var(--border-light);border-radius:6px;padding:1.5rem;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+                    <div style="font-size:2rem;margin-bottom:0.5rem">🎵</div>
+                    <h4 style="margin:0 0 0.5rem;color:#fff">Spotify for Artists</h4>
+                    <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Streams e ouvintes mensais.</p>
+                </div>
+            </a>
+            <a href="https://studio.youtube.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+                <div style="background:var(--bg-card,#1a1a1a);border:1px solid var(--border-light);border-radius:6px;padding:1.5rem;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+                    <div style="font-size:2rem;margin-bottom:0.5rem"></div>
+                    <h4 style="margin:0 0 0.5rem;color:#fff">YouTube Studio</h4>
+                    <p style="margin:0;font-size:0.85rem;color:var(--text-muted)">Retenção e origem do tráfego.</p>
+                </div>
+            </a>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 2: CONFIGURAÇÕES DA AGÊNCIA (ESCALABILIDADE) -->
+      <div style="margin-bottom:3rem; border-bottom:1px solid var(--border-light); padding-bottom:2rem">
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🏢 Configurações da Agência e Rodapé</h2>
+        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
+            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
+                <strong>Personalize a assinatura da KA e o rodapé jurídico.</strong>
+                Isso permite replicar este template para outros clientes mudando apenas estes campos.
+            </p>
+        </div>
+        <div class="f-grid">
+            <div class="f-field"><label>Nome da Agência</label><input id="cfg-agencia_nome" type="text" value="KA. Agência Criativa."></div>
+            <div class="f-field"><label>Link da Agência</label><input id="cfg-agencia_link" type="url" value="https://kaagenciacriativa.com.br/"></div>
+            <div class="f-field full"><label>Slogan da Agência</label><input id="cfg-agencia_slogan" type="text" value="Presença digital sem ruído"></div>
+            <div class="f-field full"><label>Texto Jurídico do Rodapé</label><input id="cfg-rodape_direitos" type="text" placeholder="Ex: Todos os direitos autorais das obras pertencem aos seus respectivos artistas."></div>
+            <div class="f-field full"><label>Texto do Banner LGPD</label><input id="cfg-lgpd_texto" type="text" value="Este site utiliza cookies para melhorar sua experiência."></div>
+        </div>
+      </div>
+    </div>
+
   
     <!-- ABA ANALYTICS & FERRAMENTAS -->
     <div id="pagina-analytics" class="hidden">
@@ -403,17 +473,71 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           <p class="page-sub" style="margin-bottom:0">Monitoramento, SEO e configurações de escalabilidade.</p>
         </div>
       </div>
-      <div class="table-wrap" style="padding:2rem; margin-top:1rem">
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🎯 SEO e Redes Sociais</h2>
-        <div class="f-grid" style="margin-bottom:2rem">
-            <div class="f-field full"><label>Título SEO</label><input id="cfg-seo_title" type="text"></div>
-            <div class="f-field full"><label>Descrição SEO</label><textarea id="cfg-seo_description"></textarea></div>
-            <div class="f-field full"><label>Palavras-chave</label><input id="cfg-seo_keywords" type="text"></div>
-            <div class="f-field full"><label>Imagem de Destaque (URL)</label><input id="cfg-seo_og_image" type="url"></div>
+
+      <!-- SEÇÃO SEO -->
+      <div style="margin-bottom:3rem; border-bottom:1px solid var(--border-light); padding-bottom:2rem">
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem"> SEO e Redes Sociais (Google, WhatsApp)</h2>
+        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
+            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
+                <strong>Como o Google e o WhatsApp veem sua Home.</strong> Preencha para aparecer bonito nas buscas.
+            </p>
         </div>
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🔗 Ferramentas Externas</h2>
-        <p style="margin-bottom:2rem">Acesse: <a href="https://search.google.com/search-console" target="_blank">Search Console</a>, <a href="https://analytics.google.com" target="_blank">Analytics</a>, <a href="https://artists.spotify.com" target="_blank">Spotify</a>, <a href="https://studio.youtube.com" target="_blank">YouTube</a>.</p>
-        
+        <div class="f-grid">
+            <div class="f-field full"><label>Título SEO (máx. 60 caracteres)</label><input id="cfg-seo_title" type="text" maxlength="60" placeholder="Ex: Pôr do Som — Selo Independente"></div>
+            <div class="f-field full"><label>Descrição SEO (máx. 155 caracteres)</label><textarea id="cfg-seo_description" style="min-height:80px" maxlength="155" placeholder="Ex: Selo independente de brasilidades."></textarea></div>
+            <div class="f-field full"><label>Palavras-chave (separadas por vírgula)</label><input id="cfg-seo_keywords" type="text" placeholder="samba, MPB, brasilidades"></div>
+            <div class="f-field full"><label>URL da Imagem de Destaque (1200x630px)</label><input id="cfg-seo_og_image" type="url" placeholder="https://... ou deixe vazio"></div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO FERRAMENTAS EXTERNAS -->
+      <div style="margin-bottom:3rem; border-bottom:1px solid var(--border-light); padding-bottom:2rem">
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem"> Ferramentas Externas</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:1rem">
+            <a href="https://search.google.com/search-console" target="_blank" style="text-decoration:none;color:inherit">
+                <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;padding:1rem;text-align:center">
+                    <div style="font-size:1.5rem">🔍</div>
+                    <div style="font-size:0.8rem;font-weight:600;margin-top:0.5rem">Search Console</div>
+                </div>
+            </a>
+            <a href="https://analytics.google.com" target="_blank" style="text-decoration:none;color:inherit">
+                <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;padding:1rem;text-align:center">
+                    <div style="font-size:1.5rem"></div>
+                    <div style="font-size:0.8rem;font-weight:600;margin-top:0.5rem">Analytics</div>
+                </div>
+            </a>
+            <a href="https://artists.spotify.com" target="_blank" style="text-decoration:none;color:inherit">
+                <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;padding:1rem;text-align:center">
+                    <div style="font-size:1.5rem">🎵</div>
+                    <div style="font-size:0.8rem;font-weight:600;margin-top:0.5rem">Spotify</div>
+                </div>
+            </a>
+            <a href="https://studio.youtube.com" target="_blank" style="text-decoration:none;color:inherit">
+                <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;padding:1rem;text-align:center">
+                    <div style="font-size:1.5rem">📺</div>
+                    <div style="font-size:0.8rem;font-weight:600;margin-top:0.5rem">YouTube</div>
+                </div>
+            </a>
+        </div>
+      </div>
+
+      <!-- SEÇÃO AGÊNCIA (ESCALABILIDADE) -->
+      <div style="margin-bottom:2rem">
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:0 0 1rem">🏢 Configurações da Agência (Template KA)</h2>
+        <div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:1rem;margin-bottom:1.5rem">
+            <p style="margin:0;font-size:0.8rem;color:#ccc;line-height:1.5">
+                <strong>Personalize a assinatura da agência e o rodapé.</strong>
+                Permite replicar este template para outros clientes.
+            </p>
+        </div>
+        <div class="f-grid">
+            <div class="f-field"><label>Nome da Agência</label><input id="cfg-agencia_nome" type="text" value="KA. Agência Criativa."></div>
+            <div class="f-field"><label>Link da Agência</label><input id="cfg-agencia_link" type="url" value="https://kaagenciacriativa.com.br/"></div>
+            <div class="f-field full"><label>Slogan da Agência</label><input id="cfg-agencia_slogan" type="text" value="Presença digital sem ruído"></div>
+            <div class="f-field full"><label>Texto Jurídico do Rodapé</label><input id="cfg-rodape_direitos" type="text" placeholder="Ex: Direitos autorais reservados aos artistas."></div>
+            <div class="f-field full"><label>Texto do Banner LGPD</label><input id="cfg-lgpd_texto" type="text" value="Este site utiliza cookies para melhorar sua experiência."></div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -479,7 +603,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             <div class="f-field full"><label>Link</label><input id="fp-link" type="url" placeholder="https://..."></div>
             <div class="f-field full"><label>Relatorio (PDF)</label><input id="fp-relatorio" type="url" placeholder="https://..."></div>
             <div class="f-field full"><label>Tags (virgulas)</label><input id="fp-tags" type="text" placeholder="Festival, Cultura"></div>
-            <div class="f-field full"><label>Descricao</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fp-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fp-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fp-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdH3('fp-corpo')" title="Subtítulo menor">H3</button><button type="button" class="btn-md" onclick="mdLink('fp-corpo')" title="Link">🔗</button><button type="button" class="btn-md" onclick="mdImagem('fp-corpo')" title="Imagem com legenda">🖼️</button><button type="button" class="btn-md" onclick="mdYoutube('fp-corpo')" title="Vídeo do YouTube">▶</button><button type="button" class="btn-md" onclick="mdSpotify('fp-corpo')" title="Embed Spotify">🎵</button><button type="button" class="btn-md" onclick="mdCitacao('fp-corpo')" title="Citação">❝</button></div><textarea id="fp-corpo" style="min-height:220px"></textarea></div>
+            <div class="f-field full"><label>Descricao</label><textarea id="fp-corpo" style="min-height:140px"></textarea></div>
           </div>
         </div>
       </div>
@@ -575,7 +699,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             </label>
           </div>
           <div class="f-field full"><label>Resumo (aparece na lista)</label><textarea id="fn-resumo" style="min-height:70px"></textarea></div>
-          <div class="f-field full"><label>Conteúdo da notícia</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fn-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdH3('fn-corpo')" title="Subtítulo menor">H3</button><button type="button" class="btn-md" onclick="mdLink('fn-corpo')" title="Link">🔗</button><button type="button" class="btn-md" onclick="mdImagem('fn-corpo')" title="Imagem com legenda">🖼️</button><button type="button" class="btn-md" onclick="mdYoutube('fn-corpo')" title="Vídeo do YouTube">▶</button><button type="button" class="btn-md" onclick="mdSpotify('fn-corpo')" title="Embed Spotify">🎵</button><button type="button" class="btn-md" onclick="mdCitacao('fn-corpo')" title="Citação">❝</button></div><textarea id="fn-corpo" style="min-height:220px"></textarea>
+          <div class="f-field full"><label>Conteúdo da notícia</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fn-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdLink('fn-corpo')" title="Link">🔗</button></div><textarea id="fn-corpo" style="min-height:220px"></textarea></div>
         </div>
       </div>
     </div>
@@ -1224,51 +1348,7 @@ function mdTitulo(id) {
   ta.focus();
   ta.setSelectionRange(ini + 3, ini + 3);
 }
-function mdImagem(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const legenda = prompt("Legenda da imagem:", "Legenda da foto") || "Legenda da foto";
-  const credito = prompt("Crédito (opcional):", "Foto: Nome do Fotógrafo") || "";
-  const url = prompt("URL ou caminho da imagem:", "/images/uploads/nome-da-imagem.jpg") || "/images/uploads/exemplo.jpg";
-  const novo = "!" + "[" + legenda + (credito ? " / " + credito : "") + "](" + url + ")\n";
-  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(ini);
-  ta.focus();
-  ta.setSelectionRange(ini + novo.length, ini + novo.length);
-}
-function mdYoutube(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const url = prompt("URL do YouTube:", "https://www.youtube.com/watch?v=") || "https://www.youtube.com/watch?v=XXXXXXXXXXX";
-  const novo = url + "\n";
-  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(ini);
-  ta.focus();
-  ta.setSelectionRange(ini + novo.length, ini + novo.length);
-}
-function mdSpotify(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const url = prompt("URL do Spotify (track, album ou playlist):", "https://open.spotify.com/track/") || "https://open.spotify.com/track/XXXXXXXXXX";
-  const novo = "{{spotify: " + url + "}}\n";
-  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(ini);
-  ta.focus();
-  ta.setSelectionRange(ini + novo.length, ini + novo.length);
-}
-function mdCitacao(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const linhaIni = ta.value.lastIndexOf("\n", ini - 1) + 1;
-  ta.value = ta.value.substring(0, linhaIni) + "> " + ta.value.substring(linhaIni);
-  ta.focus();
-  ta.setSelectionRange(ini + 2, ini + 2);
-}
-function mdH3(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const linhaIni = ta.value.lastIndexOf("\n", ini - 1) + 1;
-  ta.value = ta.value.substring(0, linhaIni) + "### " + ta.value.substring(linhaIni);
-  ta.focus();
-  ta.setSelectionRange(ini + 4, ini + 4);
-}function mdLink(id) {
+function mdLink(id) {
   const ta = document.getElementById(id);
   const ini = ta.selectionStart, fim = ta.selectionEnd;
   const sel = ta.value.substring(ini, fim) || "texto do link";
@@ -1618,7 +1698,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
+const CFG_CAMPOS = ["seo_title","seo_description","seo_keywords","seo_og_image","agencia_nome","agencia_link","agencia_slogan","rodape_direitos","lgpd_texto","hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
 let cfgSha = null;
 
 async function carregarConfig() {
@@ -1723,18 +1803,6 @@ async function _subirImagemRepo(caminho, b64, msg) {
 }
 
 </script>
-
-    <!-- KA Agência Criativa - Assinatura no Painel -->
-    <div style="text-align:center;padding:2rem 0 1rem;border-top:1px solid var(--border-light);margin-top:2rem">
-        <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">
-            <div style="width:60px;height:60px;margin:0 auto 0.8rem;background:linear-gradient(135deg,#111 0%,#222 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);border:2px solid #d4af37">
-                <span style="color:#d4af37;font-weight:900;font-size:1.4rem;letter-spacing:1px">KA</span>
-            </div>
-            <div style="color:#e0e0e0;font-size:0.75rem;text-align:center;font-weight:600;letter-spacing:0.5px;margin-bottom:0.2rem">KA. Agência Criativa.</div>
-            <div style="color:#888;font-size:0.65rem;text-align:center;font-style:italic;letter-spacing:0.5px">Presença digital sem ruído</div>
-        </a>
-    </div>
-
 </body>
 </html>
 <style>

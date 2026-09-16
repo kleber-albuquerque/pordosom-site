@@ -217,7 +217,6 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         <div class="f-grid">
           <div class="f-field full"><label>Slogan (título grande)</label><input id="cfg-hero_slogan" type="text"></div>
           <div class="f-field full"><label>Texto de apresentação</label><textarea id="cfg-hero_texto" style="min-height:90px"></textarea></div>
-          <div class="f-field full"><label>Texto do indicador de rolagem (opcional)</label><input id="cfg-hero_scroll_texto" type="text" placeholder="Ex: Role para descobrir (ou deixe vazio)"></div>
             <div class="f-field full" style="margin-top:1rem; padding-top:1rem; border-top:1px dashed var(--border)">
                 <label>🖼️ Imagem de Fundo do Hero (Caminho ou URL)</label>
                 <input id="cfg-hero_imagem" type="text" placeholder="Ex: /img/hero-nova.jpg ou https://...">
@@ -479,7 +478,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             <div class="f-field full"><label>Link</label><input id="fp-link" type="url" placeholder="https://..."></div>
             <div class="f-field full"><label>Relatorio (PDF)</label><input id="fp-relatorio" type="url" placeholder="https://..."></div>
             <div class="f-field full"><label>Tags (virgulas)</label><input id="fp-tags" type="text" placeholder="Festival, Cultura"></div>
-            <div class="f-field full"><label>Descricao</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fp-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fp-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fp-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdH3('fp-corpo')" title="Subtítulo menor">H3</button><button type="button" class="btn-md" onclick="mdLink('fp-corpo')" title="Link">🔗</button><button type="button" class="btn-md" onclick="mdImagem('fp-corpo')" title="Imagem com legenda">🖼️</button><button type="button" class="btn-md" onclick="mdYoutube('fp-corpo')" title="Vídeo do YouTube">▶</button><button type="button" class="btn-md" onclick="mdSpotify('fp-corpo')" title="Embed Spotify">🎵</button><button type="button" class="btn-md" onclick="mdCitacao('fp-corpo')" title="Citação">❝</button></div><textarea id="fp-corpo" style="min-height:220px"></textarea></div>
+            <div class="f-field full"><label>Descricao</label><textarea id="fp-corpo" style="min-height:140px"></textarea></div>
           </div>
         </div>
       </div>
@@ -575,7 +574,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
             </label>
           </div>
           <div class="f-field full"><label>Resumo (aparece na lista)</label><textarea id="fn-resumo" style="min-height:70px"></textarea></div>
-          <div class="f-field full"><label>Conteúdo da notícia</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fn-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdH3('fn-corpo')" title="Subtítulo menor">H3</button><button type="button" class="btn-md" onclick="mdLink('fn-corpo')" title="Link">🔗</button><button type="button" class="btn-md" onclick="mdImagem('fn-corpo')" title="Imagem com legenda">🖼️</button><button type="button" class="btn-md" onclick="mdYoutube('fn-corpo')" title="Vídeo do YouTube">▶</button><button type="button" class="btn-md" onclick="mdSpotify('fn-corpo')" title="Embed Spotify">🎵</button><button type="button" class="btn-md" onclick="mdCitacao('fn-corpo')" title="Citação">❝</button></div><textarea id="fn-corpo" style="min-height:220px"></textarea>
+          <div class="f-field full"><label>Conteúdo da notícia</label><div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap"><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','**','**')" title="Negrito"><b>B</b></button><button type="button" class="btn-md" onclick="mdWrap('fn-corpo','*','*')" title="Itálico"><i>I</i></button><button type="button" class="btn-md" onclick="mdTitulo('fn-corpo')" title="Subtítulo">H2</button><button type="button" class="btn-md" onclick="mdLink('fn-corpo')" title="Link">🔗</button></div><textarea id="fn-corpo" style="min-height:220px"></textarea></div>
         </div>
       </div>
     </div>
@@ -1224,51 +1223,7 @@ function mdTitulo(id) {
   ta.focus();
   ta.setSelectionRange(ini + 3, ini + 3);
 }
-function mdImagem(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const legenda = prompt("Legenda da imagem:", "Legenda da foto") || "Legenda da foto";
-  const credito = prompt("Crédito (opcional):", "Foto: Nome do Fotógrafo") || "";
-  const url = prompt("URL ou caminho da imagem:", "/images/uploads/nome-da-imagem.jpg") || "/images/uploads/exemplo.jpg";
-  const novo = "!" + "[" + legenda + (credito ? " / " + credito : "") + "](" + url + ")\n";
-  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(ini);
-  ta.focus();
-  ta.setSelectionRange(ini + novo.length, ini + novo.length);
-}
-function mdYoutube(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const url = prompt("URL do YouTube:", "https://www.youtube.com/watch?v=") || "https://www.youtube.com/watch?v=XXXXXXXXXXX";
-  const novo = url + "\n";
-  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(ini);
-  ta.focus();
-  ta.setSelectionRange(ini + novo.length, ini + novo.length);
-}
-function mdSpotify(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const url = prompt("URL do Spotify (track, album ou playlist):", "https://open.spotify.com/track/") || "https://open.spotify.com/track/XXXXXXXXXX";
-  const novo = "{{spotify: " + url + "}}\n";
-  ta.value = ta.value.substring(0, ini) + novo + ta.value.substring(ini);
-  ta.focus();
-  ta.setSelectionRange(ini + novo.length, ini + novo.length);
-}
-function mdCitacao(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const linhaIni = ta.value.lastIndexOf("\n", ini - 1) + 1;
-  ta.value = ta.value.substring(0, linhaIni) + "> " + ta.value.substring(linhaIni);
-  ta.focus();
-  ta.setSelectionRange(ini + 2, ini + 2);
-}
-function mdH3(id) {
-  const ta = document.getElementById(id);
-  const ini = ta.selectionStart;
-  const linhaIni = ta.value.lastIndexOf("\n", ini - 1) + 1;
-  ta.value = ta.value.substring(0, linhaIni) + "### " + ta.value.substring(linhaIni);
-  ta.focus();
-  ta.setSelectionRange(ini + 4, ini + 4);
-}function mdLink(id) {
+function mdLink(id) {
   const ta = document.getElementById(id);
   const ini = ta.selectionStart, fim = ta.selectionEnd;
   const sel = ta.value.substring(ini, fim) || "texto do link";
@@ -1618,7 +1573,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
+const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
 let cfgSha = null;
 
 async function carregarConfig() {

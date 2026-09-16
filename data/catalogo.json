@@ -32,6 +32,18 @@
   ],
   "albuns": [
     {
+      "slug": "frevo-da-ilusao",
+      "titulo": "Tião Carvalho Canta João do Vale",
+      "artista": "Tião Carvalho",
+      "ano": "2006",
+      "capa": "/images/uploads/frevo-da-ilusao.jpg",
+      "generos": [],
+      "destaque": true,
+      "ordem": "1",
+      "spotify": "https://open.spotify.com/intl-pt/album/5lyCKv8CQ7ZSKKs0yvxP4H?si=HzVbV4pvQ16l3CrJpIMkAA",
+      "youtube": "https://www.youtube.com/watch?v=Rsvx9MaICak&list=RDRsvx9MaICak&start_radio=1"
+    },
+    {
       "slug": "baticum-de-bara",
       "titulo": "Baticum de Bará",
       "artista": "Luana Bayô",
@@ -51,25 +63,23 @@
       "artista": "Marco Vilane",
       "ano": "2024",
       "capa": "/images/uploads/eu-apenas-queria-que-voce-soubesse.jpg",
-      "generos": [
-        "mpb"
-      ],
-      "destaque": true,
+      "generos": [],
+      "destaque": false,
       "ordem": "1",
       "spotify": "https://open.spotify.com/track/2QJKf1SatqUhbpm5WcYeXZ",
       "youtube": ""
     },
     {
-      "slug": "frevo-da-ilusao",
-      "titulo": "Frevo da Ilusão",
-      "artista": "Tião Carvalho",
-      "ano": "2025",
-      "capa": "/images/uploads/frevo-da-ilusao.jpg",
+      "slug": "a-comunidade-samba-da-vela",
+      "titulo": "A Comunidade Samba da Vela",
+      "artista": "Samba da Vela",
+      "ano": "2005",
+      "capa": "/images/uploads/a-comunidade-samba-da-vela.jpg",
       "generos": [],
       "destaque": true,
-      "ordem": "1",
-      "spotify": "https://open.spotify.com/artist/0wTtDVcd69RifkABuA9OBb",
-      "youtube": ""
+      "ordem": "4",
+      "spotify": "https://open.spotify.com/intl-pt/album/4g62yZkeAQCV2f4d36nudA?si=ARY6JlUzTAmRCJCjuyFACQ",
+      "youtube": "https://www.youtube.com/watch?v=EFnyJReRcqk"
     },
     {
       "slug": "pelo-caminho-que-eu-trilho-acoustic",
@@ -142,32 +152,16 @@
       "youtube": ""
     },
     {
-      "slug": "boi-chegou",
-      "titulo": "Boi Chegou",
-      "artista": "Ana Maria Carvalho",
-      "ano": "2024",
-      "capa": "",
-      "generos": [
-        "cultura-popular"
-      ],
-      "destaque": false,
-      "ordem": "",
-      "spotify": "",
-      "youtube": "https://www.youtube.com/watch?v=jTG8EQUhgz8"
-    },
-    {
       "slug": "abebe",
       "titulo": "Abebe",
       "artista": "Luana Bayo",
       "ano": "2024",
       "capa": "/images/uploads/abebe.jpg",
-      "generos": [
-        "afro-brasileira"
-      ],
+      "generos": [],
       "destaque": true,
       "ordem": "",
-      "spotify": "https://open.spotify.com/intl-pt/album/23cWEkvUmwLFkCeHPqb9p4?si=8f0xPpQvRQOdNvdCEYczQA",
-      "youtube": ""
+      "spotify": "https://open.spotify.com/intl-pt/album/555copAVGEIxXZHR5J5NyM?si=FsrG1kvLTzav9X3cclJFNQ",
+      "youtube": "https://www.youtube.com/watch?v=ROw_9h76OS4"
     },
     {
       "slug": "pelo-caminho-que-eu-trilho",
@@ -201,9 +195,7 @@
       "artista": "Marco Vilane",
       "ano": "2023",
       "capa": "/images/uploads/cancao-de-enxugar-os-olhos.jpg",
-      "generos": [
-        "mpb"
-      ],
+      "generos": [],
       "destaque": false,
       "ordem": "",
       "spotify": "https://open.spotify.com/album/5nGJXo9QwA8RSC5cWOjXH2",
@@ -221,20 +213,6 @@
       "destaque": false,
       "ordem": "",
       "spotify": "https://open.spotify.com/artist/5OgreO0prRIhQRP3A4S7rm",
-      "youtube": ""
-    },
-    {
-      "slug": "paparu",
-      "titulo": "Paparu",
-      "artista": "Ana Maria Carvalho",
-      "ano": "2022",
-      "capa": "/images/uploads/paparu.jpg",
-      "generos": [
-        "cultura-popular"
-      ],
-      "destaque": false,
-      "ordem": "",
-      "spotify": "https://open.spotify.com/artist/0wTtDVcd69RifkABuA9OBb",
       "youtube": ""
     },
     {
@@ -257,10 +235,8 @@
       "artista": "Marco Vilane",
       "ano": "2022",
       "capa": "/images/uploads/da-boca-pra-dentro.jpg",
-      "generos": [
-        "mpb"
-      ],
-      "destaque": true,
+      "generos": [],
+      "destaque": false,
       "ordem": "",
       "spotify": "https://open.spotify.com/artist/2GtaJVqceVA6xEcFcUQAMD",
       "youtube": ""
@@ -350,6 +326,18 @@
       "youtube": ""
     },
     {
+      "slug": "paparu",
+      "titulo": "Por Mim e Pelo Meu Povo",
+      "artista": "Ana Maria Carvalho",
+      "ano": "2012",
+      "capa": "/images/uploads/paparu.jpg",
+      "generos": [],
+      "destaque": false,
+      "ordem": "",
+      "spotify": "https://open.spotify.com/intl-pt/album/69IfgGBFDr2XFWeVAcpI7P?si=dySJBOqnQq22pg1btHSOBw",
+      "youtube": "https://www.youtube.com/watch?v=xlPVIA1bkB8&list=RDxlPVIA1bkB8&start_radio=1"
+    },
+    {
       "slug": "por-mim-e-pelo-meu-povo",
       "titulo": "Por Mim e Pelo Meu Povo",
       "artista": "Ana Maria Carvalho",
@@ -364,18 +352,16 @@
       "youtube": ""
     },
     {
-      "slug": "danilo-moraes-e-os-criados-mudos",
-      "titulo": "Danilo Moraes e Os Criados Mudos",
-      "artista": "Danilo Moraes e Os Criados Mudos",
-      "ano": "2011",
-      "capa": "",
-      "generos": [
-        "mpb"
-      ],
-      "destaque": false,
+      "slug": "cia-cabelo-de-maria-sao-joao-do-carneirinho",
+      "titulo": "Cia Cabelo de Maria - São João do Carneirinho",
+      "artista": "Cia Cabelo de Maria",
+      "ano": "2009",
+      "capa": "/images/uploads/cia-cabelo-de-maria-sao-joao-do-carneirinho.jpg",
+      "generos": [],
+      "destaque": true,
       "ordem": "",
-      "spotify": "",
-      "youtube": ""
+      "spotify": "https://open.spotify.com/intl-pt/album/11BpQi0890QRsBxUtFJmYZ?si=ywOEDAwcSr-RiA-pedo8PA",
+      "youtube": "https://www.youtube.com/watch?v=Vz4Ybjljhho&list=PLMA1ZpAyWiy5oEm9fNI9RiK0VK6vvYmIQ&index=2"
     },
     {
       "slug": "tiao-carvalho-canta-joao-do-vale",
@@ -397,10 +383,8 @@
       "artista": "Marco Vilane",
       "ano": "2005",
       "capa": "/images/uploads/coisa-alguma.jpg",
-      "generos": [
-        "mpb"
-      ],
-      "destaque": true,
+      "generos": [],
+      "destaque": false,
       "ordem": "",
       "spotify": "https://open.spotify.com/artist/2GtaJVqceVA6xEcFcUQAMD",
       "youtube": ""
@@ -418,57 +402,38 @@
       "ordem": "",
       "spotify": "https://open.spotify.com/artist/0wTtDVcd69RifkABuA9OBb",
       "youtube": ""
-    },
-    {
-      "slug": "vedete-da-favela",
-      "titulo": "Vedete da Favela",
-      "artista": "Luana Bayô",
-      "ano": "",
-      "capa": "/images/uploads/vedete-da-favela.jpg",
-      "generos": [
-        "afro-brasileira"
-      ],
-      "destaque": false,
-      "ordem": "",
-      "spotify": "https://open.spotify.com/album/1baw0TG8FszCLRlFouUcSr",
-      "youtube": ""
-    },
-    {
-      "slug": "pinguco",
-      "titulo": "Pinguço",
-      "artista": "Luana Bayô",
-      "ano": "",
-      "capa": "/images/uploads/pinguco.jpg",
-      "generos": [
-        "afro-brasileira"
-      ],
-      "destaque": false,
-      "ordem": "",
-      "spotify": "https://open.spotify.com/album/7kcfTmgOPjcnhjZQlDIweo",
-      "youtube": ""
-    },
-    {
-      "slug": "deusa",
-      "titulo": "Deusa",
-      "artista": "Luana Bayô",
-      "ano": "",
-      "capa": "/images/uploads/deusa.jpg",
-      "generos": [
-        "afro-brasileira"
-      ],
-      "destaque": false,
-      "ordem": "",
-      "spotify": "https://open.spotify.com/album/2DeEUpc820GIpYw7StibDa",
-      "youtube": ""
     }
   ],
   "posts": [
     {
-      "title": "O Por do Som ganha casa nova",
+      "title": "O Pôr do Som ganha casa nova",
       "resumo": "O novo site do selo reúne o catálogo completo, os festivais e toda a produção audiovisual em um só lugar.",
       "date": "2026-09-12",
       "imagem": "/images/uploads/2026-09-12-o-por-do-som-ganha-casa-nova.jpg",
-      "slug": "o-por-do-som-ganha-casa-nova"
+      "slug": "o-pr-do-som-ganha-casa-nova"
+    }
+  ],
+  "projetos": [
+    {
+      "slug": "festival-malungo",
+      "titulo": "Festival Malungo",
+      "status": "realizado",
+      "ano": "2021",
+      "badge": "Festival Cultural"
+    },
+    {
+      "slug": "festival-mestres-dos-saberes",
+      "titulo": "Festival Mestres dos Saberes",
+      "status": "realizado",
+      "ano": "2018",
+      "badge": "Festival Cultural"
+    },
+    {
+      "slug": "serie-sotaques-do-brasil",
+      "titulo": "Série Sotaques do Brasil",
+      "status": "realizado",
+      "ano": "2020",
+      "badge": "Série Audiovisual"
     }
   ],
   "artistas": [
