@@ -72,17 +72,6 @@ def cfg_str(chave, default=''):
     if isinstance(v, list): v = v[0] if v else ''
     return str(v) if v is not None else default
 
-def _grad_html(t):
-    """Gradiente no trecho marcado com **...**; sem marcação: última palavra (ou tudo, se 1 palavra)."""
-    t = str(t or '')
-    m = re.search(r'\*\*(.+?)\*\*', t)
-    if m:
-        return esc(t[:m.start()]) + '<span class="gradient">' + esc(m.group(1)) + '</span>' + esc(t[m.end():])
-    partes = t.rsplit(' ', 1)
-    if len(partes) == 2:
-        return esc(partes[0]) + ' <span class="gradient">' + esc(partes[1]) + '</span>'
-    return '<span class="gradient">' + esc(t) + '</span>'
-
 def slugify(t):
     t = re.sub(r'[^a-z0-9\s-]', '', str(t or '').lower())
     return re.sub(r'[\s-]+', '-', t.strip())
@@ -268,7 +257,7 @@ def _footer():
             '        </div>\n'
             '        <p class="footer-text">© ' + str(datetime.now().year) + ' Por do Som Cultural · Todos os direitos reservados</p>\n'
             '        <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-color, #332020);text-align:center;opacity:0.5">\n'
-            '            <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;flex-direction:column;align-items:center;gap:.55rem;color:var(--text-muted, #999);transition:opacity 0.3s" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0.5\'">\n'
+            '            <a href="https://kaagenciacriativa.com.br/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;color:var(--text-muted, #999);transition:opacity 0.3s" onmouseover="this.style.opacity=\'1\'" onmouseout="this.style.opacity=\'0.5\'">\n'
             '                <img src="' + BASE + '/img/ka-logo.png" alt="KA. Agência Criativa" style="width:32px;height:32px;border-radius:50%;object-fit:cover">\n'
             '                <div style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.2">\n'
             '                    <span style="font-size:0.7rem;font-weight:700;color:var(--text-secondary, #ccc);letter-spacing:0.5px">KA. Agência Criativa.</span>\n'
@@ -383,7 +372,9 @@ def page_album(a, prev, next_):
 
 # ---------- site.html (o site inteiro, seções por âncoras) ----------
 def _sec(id_, subtitulo, titulo_cfg, desc_cfg=None, conteudo='', alt=False):
-    titulo_html = _grad_html(cfg_str(titulo_cfg))
+    titulo = cfg_str(titulo_cfg)
+    partes = titulo.rsplit(' ', 1)
+    titulo_html = (esc(partes[0]) + ' <span class="gradient">' + esc(partes[1]) + '</span>') if len(partes) == 2 else esc(titulo)
     desc = ''
     if desc_cfg and cfg_str(desc_cfg):
         desc = '\n<p class="section-description">' + esc(cfg_str(desc_cfg)) + '</p>'
@@ -397,7 +388,9 @@ def _sec(id_, subtitulo, titulo_cfg, desc_cfg=None, conteudo='', alt=False):
 def gera_site():
     ATUAL_EH_HOME = True
     # --- HERO ---
-    slog_html = _grad_html(cfg_str('hero_slogan', 'Onde a música nasce'))
+    slog = cfg_str('hero_slogan', 'Onde a música nasce')
+    sp = slog.rsplit(' ', 1)
+    slog_html = esc(sp[0]) + (' <span class="gradient">' + esc(sp[1]) + '</span>' if len(sp) > 1 else '')
     hi = str(SITE_CFG.get('hero_imagem', '') or '').strip()
     hero = ('<section class="hero" style="' + ('background-image: url(' + hi + '); background-size: cover; background-position: center;' if hi else '') + '">\n<div class="hero-bg"></div>\n<div class="hero-bg-overlay"></div>\n'
             '    <div class="hero-noise"></div>\n<div class="hero-content">\n'
@@ -415,7 +408,7 @@ def gera_site():
     sec_grav = ('<section class="teaser" id="gravadora">\n<div class="container">\n'
                 '        <div class="teaser-head">\n'
                 '            <span class="section-subtitle">Gravadora</span>\n'
-                '            <h2 class="section-title">' + _grad_html(cfg_str('grav_titulo')) + '</h2>\n'
+                '            <h2 class="section-title">' + esc(cfg_str('grav_titulo')) + '</h2>\n'
                 '            <p class="section-description">' + esc(cfg_str('grav_descricao')) + '</p>\n'
                 '        </div>\n' + vitrine_js + '\n</div>\n</section>\n')
     # --- PROJETOS (card aponta para a materia interna) ---
@@ -487,7 +480,7 @@ def gera_site():
             if m:
                 cards_pr.append('<div class="fade-in" style="background:var(--bg-card);border:1px solid var(--border-color-light);border-radius:2px;padding:1.4rem"><div style="font-size:.7rem;font-weight:800;letter-spacing:2px;color:var(--brand-accent);margin-bottom:.6rem">' + esc(m.group(1)) + '</div><div style="font-size:.85rem;line-height:1.6;color:var(--text-secondary)">' + esc(m.group(2)) + '</div></div>')
             else:
-                cards_pr.append('<div class="fade-in" style="grid-column:1/-1;background:var(--bg-card);border:1px solid var(--border-color-light);border-radius:2px;padding:1.4rem"><div style="font-size:.7rem;font-weight:800;letter-spacing:2px;color:var(--brand-accent);margin-bottom:.6rem">TRAJETÓRIA</div><div style="font-size:.85rem;line-height:1.7;color:var(--text-secondary)">' + esc(p) + '</div></div>')
+                cards_pr.append('<div class="fade-in" style="grid-column:1/-1;background:var(--gradient-brand-soft);border:1px solid var(--border-color);border-radius:2px;padding:1.4rem;font-size:.85rem;line-height:1.7;color:var(--text-secondary)">' + esc(p) + '</div>')
         sec_premios = _sec('premios', 'Reconhecimento', 'premios_titulo', 'premios_descricao', '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem">' + ''.join(cards_pr) + '</div>')
     # --- EDITORA ---
     sec_ed = ('<section class="teaser" id="editora">\n<div class="container">\n'
@@ -501,21 +494,21 @@ def gera_site():
     email = cfg_str('email_contato', 'contato@pordosom.com.br')
     wa = cfg_str('whatsapp_contato')
     wa_html = ('<a href="https://wa.me/' + esc(wa) + '" class="social-card" style="text-decoration:none">'
-               '<div class="social-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.65 15.02L2 22l5.13-1.32A10 10 0 1 0 12 2Zm0 1.8a8.2 8.2 0 1 1-4.02 15.35l-.29-.17-3.03.78.81-2.96-.19-.3A8.2 8.2 0 0 1 12 3.8Zm-3.1 4.02c-.17 0-.45.06-.68.31-.23.25-.9.88-.9 2.14s.92 2.48 1.05 2.65c.13.17 1.8 2.86 4.44 3.9 2.2.86 2.65.69 3.14.64.49-.05 1.57-.64 1.79-1.26.22-.62.22-1.15.16-1.26-.06-.11-.23-.17-.48-.29l-1.96-.98c-.26-.1-.45-.15-.64.1-.19.25-.73.9-.9 1.09-.16.19-.33.21-.58.09-.25-.13-1.07-.4-2.03-1.26-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.43-.79-1.95-.2-.49-.41-.42-.57-.43l-.36-.01Z"/></svg></div>'
+               '<div class="social-card-icon">📱</div>'
                '<div class="social-card-text"><div class="social-card-label">WhatsApp</div>'
                '<div class="social-card-handle">' + esc(wa) + '</div></div></a>') if wa else ''
     sec_cont = ('<section class="teaser teaser-alt" id="contato">\n<div class="container">\n'
                 '        <div class="teaser-head">\n'
                 '            <span class="section-subtitle">Contato</span>\n'
-                '            <h2 class="section-title">' + _grad_html(cfg_str('contato_titulo', 'Vamos fazer música juntos?')) + '</h2>\n'
+                '            <h2 class="section-title">' + esc(cfg_str('contato_titulo', 'Vamos fazer música juntos?')) + '</h2>\n'
                 '            <p class="section-description">' + esc(cfg_str('contato_descricao')) + '</p>\n'
                 '            <div class="teaser-contato" style="margin-top:1.5rem">\n'
                 '                <a href="mailto:' + esc(email) + '" class="social-card" style="text-decoration:none">\n'
-                '                    <div class="social-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></div>\n'
+                '                    <div class="social-card-icon">✉</div>\n'
                 '                    <div class="social-card-text"><div class="social-card-label">E-mail</div>\n'
                 '                    <div class="social-card-handle">' + esc(email) + '</div></div></a>\n'
                 '                <a href="https://www.instagram.com/pordosomcultural" target="_blank" rel="noopener" class="social-card" style="text-decoration:none">\n'
-                '                    <div class="social-card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.3 6.7h.01"/></svg></div>\n'
+                '                    <div class="social-card-icon">📷</div>\n'
                 '                    <div class="social-card-text"><div class="social-card-label">Instagram</div>\n'
                 '                    <div class="social-card-handle">@pordosomcultural</div></div></a>\n'
                 + wa_html + '\n</div>\n</div>\n</div>\n</section>\n')
@@ -793,7 +786,7 @@ def gera_projetos():
         '<button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
         '<header class="page-header">\n<div class="container">\n'
         '<span class="section-subtitle">Projetos & Festivais</span>\n'
-        '<h1 class="section-title">' + _grad_html(cfg_str('projetos_titulo')) + '</h1>\n'
+        '<h1 class="section-title">' + esc(cfg_str('projetos_titulo')) + '</h1>\n'
         '<p class="section-description">' + esc(cfg_str('projetos_descricao')) + '</p>\n'
         '</div>\n</header>\n'
         '<section style="padding:3rem 0">\n<div class="container">\n'
@@ -884,7 +877,7 @@ def gera_catalogo():
             '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
             '<header class="page-header">\n<div class="container">\n'
             '        <span class="section-subtitle">Gravadora</span>\n'
-            '        <h1 class="section-title">' + _grad_html(cfg_str('grav_titulo')) + '</h1>\n'
+            '        <h1 class="section-title">' + esc(cfg_str('grav_titulo')) + '</h1>\n'
             '        <p class="section-description">' + esc(cfg_str('grav_descricao')) + '</p>\n'
             '    </div>\n</header>\n'
             '<section style="padding-top:2rem">\n<div class="container">\n' + filtros_js + '\n'
@@ -892,7 +885,7 @@ def gera_catalogo():
             '<section class="teaser teaser-alt" style="padding-top:2rem">\n<div class="container">\n'
             '        <div class="teaser-head">\n'
             '            <span class="section-subtitle">Gravadora</span>\n'
-            '            <h2 class="section-title">' + _grad_html(cfg_str('artistas_titulo')) + '</h2>\n'
+            '            <h2 class="section-title">' + esc(cfg_str('artistas_titulo')) + '</h2>\n'
             '            <p class="section-description">' + esc(cfg_str('artistas_descricao')) + '</p>\n'
             '        </div>\n<div class="artistas-grid" id="artistas-grid"></div>\n'
             '    </div>\n</section>\n' + _footer() + _scripts() + _js_dados())
@@ -917,7 +910,7 @@ def gera_audiovisual():
     playlists = ('<section class="teaser teaser-alt">\n<div class="container">\n'
                  '        <div class="teaser-head">\n'
                  '            <span class="section-subtitle">Playlists</span>\n'
-                 '            <h2 class="section-title">' + _grad_html(cfg_str('playlists_titulo', 'Curadoria do selo')) + '</h2>\n'
+                 '            <h2 class="section-title">' + esc(cfg_str('playlists_titulo', 'Curadoria do selo')) + '</h2>\n'
                  '        </div>\n<div class="teaser-playlists">\n'
                  '            <iframe src="https://open.spotify.com/embed/playlist/' + p1id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 1"></iframe>\n'
                  '            <iframe src="https://open.spotify.com/embed/playlist/' + p2id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 2"></iframe>\n'
@@ -928,7 +921,7 @@ def gera_audiovisual():
             '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
             '<header class="page-header">\n<div class="container">\n'
             '        <span class="section-subtitle">Audiovisual</span>\n'
-            '        <h1 class="section-title">' + _grad_html(cfg_str('audio_titulo')) + '</h1>\n'
+            '        <h1 class="section-title">' + esc(cfg_str('audio_titulo')) + '</h1>\n'
             '        <p class="section-description">' + esc(cfg_str('audio_descricao')) + '</p>\n'
             '    </div>\n</header>\n'
             '<section style="padding-top:2rem">\n<div class="container">\n'

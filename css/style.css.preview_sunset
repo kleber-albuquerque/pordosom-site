@@ -1648,35 +1648,3 @@ section {
 
 /* ===== MATÉRIA EDITORIAL (letra capitular) ===== */
 .materia-corpo > p:first-of-type::first-letter { font-size: 3.4rem; font-weight: 800; float: left; line-height: .85; padding: .06em .12em 0 0; color: var(--brand-primary-light); }
-
-/* ===== PREVIEW PÔR DO SOL → RADIANT EARTH (só detalhes de texto) ===== */
-:root { --sunset: linear-gradient(95deg, #ffd76a 0%, #f2a03d 30%, #e2653a 65%, #b04a32 100%); }
-.gradient,
-.stat-num,
-.hero-subtitle,
-.section-subtitle,
-.album-kicker,
-.teaser-link,
-.plat-link,
-.manifesto-signature {
-  background: var(--sunset) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
-}
-.teaser-link:hover, .plat-link:hover { filter: brightness(1.25); }
-
-/* ===== GRADIENTE: caixas abraçam o texto (varredura visível) ===== */
-.hero-subtitle, .section-subtitle, .album-kicker, .manifesto-signature, .teaser-link, .plat-link { width: fit-content; }
-.hero-subtitle, .manifesto-signature { margin-left: auto; margin-right: auto; }
-
-/* ===== AJUSTES FINAIS v6.1 ===== */
-.hero-title .gradient { display: block; }
-.hero-subtitle, .section-subtitle, .album-kicker, .manifesto-signature { display: inline-block; width: auto; }
-.social-card-icon { display: flex; align-items: center; justify-content: center; }
-
-/* ===== HERO 2 LINHAS (linha 1 inteira + linha 2 gradiente) ===== */
-.hero-content { max-width: 1200px; }
-.hero-title { max-width: 1150px; margin-left: auto; margin-right: auto; }
-.hero-title .gradient { display: block; }
