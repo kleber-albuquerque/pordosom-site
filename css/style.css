@@ -1645,3 +1645,6 @@ section {
 /* ===== HERO semitransparente: raios do canvas visíveis ===== */
 .hero-bg{opacity:0.5 !important}
 .hero-bg-overlay{opacity:0.6 !important}
+
+/* ===== MATÉRIA EDITORIAL (letra capitular) ===== */
+.materia-corpo > p:first-of-type::first-letter { font-size: 3.4rem; font-weight: 800; float: left; line-height: .85; padding: .06em .12em 0 0; color: var(--brand-primary-light); }

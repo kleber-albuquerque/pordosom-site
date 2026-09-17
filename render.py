@@ -113,6 +113,7 @@ def md_html_v2(texto):
         m_sp = re.match(r'^\{\{spotify:\s*(.+?)\}\}\s*$', t)
         m_gal = re.match(r'^\{\{galeria:\s*(.+?)\}\}\s*$', t)
         m_num = re.match(r'^\{\{numeros:\s*(.+?)\}\}\s*$', t)
+        m_des = re.match(r'^\{\{destaque:\s*(.+?)\}\}\s*$', t)
         if m_img:
             legenda, url = m_img.group(1), m_img.group(2)
             cred = ''
@@ -133,6 +134,8 @@ def md_html_v2(texto):
             out.append('<div style="margin:2rem 0"><iframe src="https://www.youtube.com/embed/' + m_yt.group(1) + '" style="aspect-ratio:16/9;width:100%;border:0;border-radius:4px" loading="lazy" allowfullscreen title="Vídeo"></iframe></div>')
         elif m_sp:
             out.append('<iframe src="' + esc(sp_embed(m_sp.group(1))) + '?utm_source=generator" style="width:100%;border:0;border-radius:12px;margin:2rem 0" height="152" loading="lazy" title="Ouvir no Spotify"></iframe>')
+        elif m_des:
+            out.append('<div style="margin:2.6rem auto;max-width:620px;text-align:center;font-size:1.3rem;font-weight:700;line-height:1.55;color:var(--text-primary);font-style:italic">“' + inline(m_des.group(1)) + '”</div>')
         elif m_num:
             cells = ''
             for x in [s.strip() for s in m_num.group(1).split('|') if s.strip()]:
@@ -635,6 +638,17 @@ def gera_posts():
         prev_h = ('<a class="album-nav-link" href="' + BASE + '/posts/' + slugify(prev_p.get('title','post')) + '.html">&#8592; ' + esc(prev_p.get('title',''))[:40] + '</a>') if prev_p else '<span></span>'
         next_h = ('<a class="album-nav-link" href="' + BASE + '/posts/' + slugify(next_p.get('title','post')) + '.html">' + esc(next_p.get('title',''))[:40] + ' &#8594;</a>') if next_p else '<span></span>'
         share_html = _share(DOMINIO + BASE + '/posts/' + slugify(p.get('title','post')) + '.html')
+        outros = [q for q in posts if q is not p][:3]
+        rel_html = ''
+        if outros:
+            cards_rel = ''
+            for q in outros:
+                qim = q.get('imagem', '')
+                if isinstance(qim, list): qim = qim[0] if qim else ''
+                qsrc = (BASE + qim) if str(qim).startswith('/') else (qim or BASE + '/pordosom-profile.jpg')
+                cards_rel += '<a href="' + BASE + '/posts/' + slugify(q.get('title', 'post')) + '.html" style="text-decoration:none;background:var(--bg-card);border:1px solid var(--border-color-light);border-radius:2px;overflow:hidden;display:block"><img src="' + esc(qsrc) + '" alt="" style="width:100%;height:110px;object-fit:cover" loading="lazy"><div style="padding:.8rem .9rem;font-size:.8rem;font-weight:700;color:var(--text-primary);line-height:1.4">' + esc(q.get('title', '')) + '</div></a>'
+            rel_html = '<div style="margin:3rem 0 0"><div style="font-size:.68rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--brand-accent);margin-bottom:1rem">Leia também</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem">' + cards_rel + '</div></div>'
+        assinatura = '<div style="margin:2.5rem 0 0;padding:1.4rem;background:var(--bg-card);border:1px solid var(--border-color-light);border-radius:2px;display:flex;gap:1rem;align-items:center"><img src="' + BASE + '/pordosom-profile.jpg" alt="" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0"><div style="font-size:.8rem;line-height:1.6;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Sobre a Por do Som</strong><br>Selo independente, produtora cultural e gravadora dedicada às brasilidades desde 2001. <a href="' + BASE + '/site.html#quemsomos" style="color:var(--brand-primary-light)">Conheça nossa história →</a></div></div>'
         body = ('<header class="header" id="header">\n<a href="' + BASE + '/site.html" class="logo">\n'
                 '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
                 '        <span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav() +
@@ -642,11 +656,11 @@ def gera_posts():
                 '<main class="album-page">\n<div class="container">\n'
                 '        <div style="max-width:760px;margin:0 auto">\n'
                 '            <span class="album-kicker">Notícia · ' + data + ' · ' + calcular_tempo_leitura(p.get('corpo', '')) + '</span>\n'
-                '            <h1 class="album-titulo-grande" style="font-size:clamp(1.6rem,4vw,2.4rem)">' + esc(p.get('title', '')) + '</h1>\n'
+                '            <h1 class="album-titulo-grande" style="font-size:clamp(1.6rem,4vw,2.4rem)">' + esc(p.get('title', '')) + '</h1>\n'                '            <div style="font-size:.78rem;color:var(--text-muted);margin:.5rem 0 1.4rem;letter-spacing:.4px">Por <strong style="color:var(--text-secondary)">' + esc(cfg_str('autor_padrao', 'Redação Por do Som')) + '</strong></div>\n'
                 '            <div class="album-meta-info">' + esc(p.get('resumo', '')) + '</div>\n'
                 '        </div>\n' + img + '\n'
                 '        <div style="max-width:680px;margin:0 auto;font-size:.98rem;line-height:2;color:var(--text-secondary)">\n'
-                + md_html(p.get('corpo', '')) + '\n</div>\n'
+                + md_html(p.get('corpo', '')) + rel_html + assinatura + '\n</div>\n'
                 '        <div class="album-navegacao">\n' + prev_h + '\n'
                 '            <a class="album-nav-link" href="' + BASE + '/noticias.html">Todas as notícias</a>\n' + next_h + '\n'
                 '        </div>\n' + share_html + '\n</div>\n</main>\n' + _footer() + _scripts())
