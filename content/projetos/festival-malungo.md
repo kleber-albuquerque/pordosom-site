@@ -16,3 +16,9 @@ A 2ª edição do Festival Malungo acontece entre os dias 25 e 31 de março de 2
 O Festival Malungo é um evento inédito de música que reúne artistas de diferentes nichos e estilos da música popular brasileira, como samba, bumba meu boi, coco, samba de roda, afro, partido-alto, entre outros. As apresentações virtuais acontecem depois de circulação por diversos palcos dos CEU’s da cidade de São Paulo (SP), em 2023, com o objetivo de aumentar o acesso à cultura e atingir novos públicos.
 
 A palavra ‘malungo’ significa amigo, companheiro, camarada, aquele que não deixa o parceiro no meio do caminho. “O termo é adequado para nomear o projeto, considerando o grande time de artistas unidos para cantar e fortalecer a música que traz o som e a vibração de nossas raízes africanas”, explica o produtor e diretor artístico Sérgio Mendonça.
+
+
+
+{{galeria: /images/uploads/2026-09-17-gal-lwguw.jpg}}
+
+https://www.youtube.com/watch?v=lmVf87iV_0g&t=1583s
