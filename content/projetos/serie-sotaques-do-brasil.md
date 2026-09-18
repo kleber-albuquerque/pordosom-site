@@ -3,7 +3,7 @@ titulo: "Série Sotaques do Brasil"
 status: "realizado"
 badge: "Série Audiovisual"
 ano: 2020
-imagem: "/img/project-sotaques.jpg"
+imagem: "/images/uploads/projeto-serie-sotaques-do-brasil.jpg"
 link: "https://www.youtube.com/playlist?list=PLFwSUQfrxbVRhtZUUYrhVvTT6IEBlzUFI"
 relatorio: ""
 tags:
