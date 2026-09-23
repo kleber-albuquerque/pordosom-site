@@ -325,6 +325,17 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           <div class="f-field"><label>WhatsApp (com DDI)</label><input id="cfg-whatsapp_contato" type="text" placeholder="55 11 9..."></div>
         </div>
         
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">12 · HOME — Seção Notícias (comportamento)</h2>
+        <div class="f-grid">
+          <div class="f-field full">
+            <label>Quantidade de notícias na home</label>
+            <input id="cfg-noticias_home_qtd" type="number" min="1" max="12" placeholder="3">
+            <p class="hint" style="font-size:0.7rem;color:var(--text-muted);margin-top:0.3rem">
+              Quantas notícias aparecem na grade da home (1 a 12). As demais ficam acessíveis em "Ver todas as notícias".
+            </p>
+          </div>
+        </div>
+
         <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border-light);display:flex;justify-content:flex-end">
           <button class="btn-salvar" id="btn-salvar-config" onclick="salvarConfig()">💾 Salvar Textos do Site</button>
         </div>
@@ -1760,7 +1771,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","autor_padrao","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","premios_titulo","premios_descricao","premio1","premio2","premio3","premio4","premio5","premio6","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
+const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","autor_padrao","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","premios_titulo","premios_descricao","premio1","premio2","premio3","premio4","premio5","premio6","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","noticias_home_qtd","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
 let cfgSha = null;
 
 async function carregarConfig() {
