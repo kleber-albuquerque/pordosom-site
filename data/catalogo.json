@@ -406,6 +406,13 @@
   ],
   "posts": [
     {
+      "title": "Nova Música no Planeta! Marco Vilane e Danilo Moraes - O Urubu Está com Raiva do Boi",
+      "resumo": "\"Nova Música no Planeta!",
+      "date": "2026-09-18",
+      "imagem": "/images/uploads/2026-09-18-nova-musica-no-planeta-marco-vilane-e-danilo-moraes-o-urubu-esta-com-raiva-do-boi.jpg",
+      "slug": "nova-msica-no-planeta-marco-vilane-e-danilo-moraes-o-urubu-est-com-raiva-do-boi"
+    },
+    {
       "title": "O Pôr do Som ganha casa nova",
       "resumo": "O novo site do selo reúne o catálogo completo, os festivais e toda a produção audiovisual em um só lugar.",
       "date": "2026-09-12",
@@ -416,9 +423,9 @@
   "projetos": [
     {
       "slug": "festival-malungo",
-      "titulo": "Festival Malungo",
+      "titulo": "Festival Malungo destaca raízes africanas da música popular brasileira",
       "status": "realizado",
-      "ano": "2021",
+      "ano": "2024",
       "badge": "Festival Cultural"
     },
     {

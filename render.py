@@ -394,6 +394,51 @@ def _sec(id_, subtitulo, titulo_cfg, desc_cfg=None, conteudo='', alt=False):
             '            <h2 class="section-title">' + titulo_html + '</h2>' + desc + '\n'
             '        </div>\n' + conteudo + '\n</div>\n</section>\n')
 
+def _card_noticia(p):
+    """Card de notícia (vertical, para grades)."""
+    partes = str(p.get('date', '')).split('-')
+    data = '/'.join(reversed(partes)) if len(partes) == 3 else ''
+    im = p.get('imagem', '')
+    if isinstance(im, list): im = im[0] if im else ''
+    img = (BASE + im) if str(im).startswith('/') else (im or BASE + '/pordosom-profile.jpg')
+    slug = slugify(p.get('title', 'post'))
+    return (
+        '<a href="' + BASE + '/posts/' + slug + '.html" class="card-noticia fade-in">'
+        '<div class="card-noticia-img">'
+        '<img src="' + esc(img) + '" alt="' + esc(p.get('title', '')) + '" loading="lazy">'
+        '</div>'
+        '<div class="card-noticia-info">'
+        '<div class="card-noticia-meta">' + data + ' · ' + calcular_tempo_leitura(p.get('corpo', '')) + '</div>'
+        '<h3 class="card-noticia-titulo">' + esc(p.get('title', '')) + '</h3>'
+        '<p class="card-noticia-resumo">' + esc(str(p.get('resumo', ''))[:140]) + '…</p>'
+        '<span class="card-noticia-link">Ler notícia →</span>'
+        '</div>'
+        '</a>'
+    )
+
+def _card_projeto(p):
+    """Card de projeto (vertical, para grades)."""
+    st = str(p.get('status', 'realizado'))
+    st_cls = 'realizado' if st != 'captacao' else 'captacao'
+    st_lbl = '✓ Realizado' if st != 'captacao' else '★ Em captação'
+    img = str(p.get('imagem', '') or '')
+    img_src = (BASE + img) if img.startswith('/') else (img or BASE + '/pordosom-profile.jpg')
+    slug = p.get('slug', slugify(p.get('titulo', 'projeto')))
+    corpo_txt = str(p.get('corpo', '') or '')
+    return (
+        '<div class="project-card fade-in">'
+        '<div class="project-card-visual">'
+        '<img class="project-card-img" src="' + esc(img_src) + '" alt="' + esc(p['titulo']) + '" loading="lazy">'
+        '<span class="project-badge ' + st_cls + '">' + st_lbl + '</span>'
+        '</div>'
+        '<div class="project-body">'
+        '<h3 class="project-title">' + esc(p['titulo']) + '</h3>'
+        '<p class="project-desc">' + esc(corpo_txt[:160]) + ('…' if len(corpo_txt) > 160 else '') + '</p>'
+        '<a href="' + BASE + '/projetos/' + slug + '.html" class="project-link">Ver projeto →</a>'
+        '</div>'
+        '</div>'
+    )
+
 def gera_site():
     ATUAL_EH_HOME = True
     # --- HERO ---
@@ -406,10 +451,18 @@ def gera_site():
             '        <p class="hero-description">' + esc(cfg_str('hero_texto')) + '</p>\n'
             '    </div>\n<div class="hero-scroll">\n        <span>' + esc(cfg_str('hero_scroll_texto', '')) + '</span>\n'
             '        <div class="hero-scroll-line"></div>\n    </div>\n</section>\n')
-    # --- NOTICIAS (banner da ultima) ---
-    banner_js = ('<div class="container"><div id="banner-noticia"></div></div>')
-    sec_noticias = ('<section class="teaser" id="noticias" style="padding-top:2rem;padding-bottom:2rem">\n'
-                    + banner_js + '\n<div style="text-align:center;margin-top:1.5rem"><a class="teaser-link" style="justify-content:center" href="' + BASE + '/noticias.html">Todas as notícias →</a></div>\n</section>\n')
+    # --- NOTÍCIAS (grade com as 3 mais recentes) ---
+    posts_home = posts[:3]
+    cards_noticias = ''.join(_card_noticia(p) for p in posts_home) if posts_home else '<p style="text-align:center;color:var(--text-muted)">Nenhuma notícia publicada ainda.</p>'
+    sec_noticias = ('<section class="teaser" id="noticias">\n<div class="container">\n'
+                    '        <div class="teaser-head">\n'
+                    '            <span class="section-subtitle">Notícias</span>\n'
+                    '            <h2 class="section-title">Do <span class="gradient">selo</span></h2>\n'
+                    '        </div>\n'
+                    '        <div class="grade-noticias">' + cards_noticias + '</div>\n'
+                    '        <div style="text-align:center;margin-top:2.5rem">\n'
+                    '            <a class="btn btn-outline" style="text-decoration:none" href="' + BASE + '/noticias.html">Ver todas as notícias →</a>\n'
+                    '        </div>\n</div>\n</section>\n')
     # --- GRAVADORA (catalogo + filtros + artistas) ---
     vitrine_js = '<div class="vitrine-grid" id="vitrine"></div>\n<div style="text-align:center;margin-top:2.5rem"><a href="' + BASE + '/catalogo.html" class="btn btn-outline" style="text-decoration:none">Ver catálogo completo (' + str(len(albuns)) + ' obras) →</a></div>'
     sec_grav = ('<section class="teaser" id="gravadora">\n<div class="container">\n'
@@ -418,26 +471,15 @@ def gera_site():
                 '            <h2 class="section-title">' + _grad_html(cfg_str('grav_titulo')) + '</h2>\n'
                 '            <p class="section-description">' + esc(cfg_str('grav_descricao')) + '</p>\n'
                 '        </div>\n' + vitrine_js + '\n</div>\n</section>\n')
-    # --- PROJETOS (card aponta para a materia interna) ---
-    cards_p = []
-    for p in projetos[:1]:
-        img = p.get('imagem') or ''
-        if isinstance(img, list): img = img[0] if img else ''
-        img_src = (BASE + img) if str(img).startswith('/') else (img or BASE + '/pordosom-profile.jpg')
-        st_cls = 'status-realizado' if str(p.get('status')) != 'captacao' else 'status-captacao'
-        st_lbl = '✓ Realizado' if str(p.get('status')) != 'captacao' else '★ Em captação'
-        slug = p.get('slug', slugify(p.get('titulo', 'projeto')))
-        corpo_txt = str(p.get('corpo', '') or '')
-        cards_p.append(
-            '<div class="projeto-card"><div class="galeria">'
-            '<img src="' + esc(img_src) + '" alt="' + esc(p['titulo']) + '" loading="lazy" onerror="this.style.display=\'none\'"></div>'
-            '<div class="projeto-corpo"><span class="projeto-badge ' + st_cls + '">' + st_lbl + '</span>'
-            '<h3>' + esc(p['titulo']) + '</h3>'
-            '<p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">' + esc(corpo_txt[:180]) + ('…' if len(corpo_txt) > 180 else '') + '</p>'
-            '<a href="' + BASE + '/projetos/' + slug + '.html" class="teaser-link" style="margin-top:14px">Ver projeto →</a>'
-            '</div></div>')
+    # --- PROJETOS (grade com todos) ---
+    cards_p = [_card_projeto(p) for p in projetos]
+    conteudo_proj = '<div class="grade-projetos">' + ''.join(cards_p) + '</div>'
+    if len(projetos) > 6:
+        conteudo_proj += ('<div style="text-align:center;margin-top:2.5rem">'
+                          '<a href="' + BASE + '/projetos.html" class="btn btn-outline" style="text-decoration:none">'
+                          'Ver todos os projetos →</a></div>')
     sec_proj = _sec('projetos', 'Projetos & Festivais', 'projetos_titulo', 'projetos_descricao',
-                    '\n'.join(cards_p) + ('\n<div style="text-align:center;margin-top:2.5rem"><a href="' + BASE + '/projetos.html" class="btn btn-outline" style="text-decoration:none">Ver todos os projetos (' + str(len(projetos)) + ') →</a></div>' if len(projetos) > 1 else ''), alt=True)
+                    conteudo_proj, alt=True)
     # --- AUDIOVISUAL (clips por grupo) ---
     _clips_home = clips[:4]
     vids_home = '\n'.join('            <iframe src="https://www.youtube.com/embed/' + str(c.get('yt_id', '')) +
@@ -597,21 +639,8 @@ def gera_site():
 def gera_noticias():
     global ATUAL_EH_HOME
     ATUAL_EH_HOME = False
-    itens = []
-    for _i, p in enumerate(posts):
-        partes = str(p.get('date', '')).split('-')
-        data = '/'.join(reversed(partes)) if len(partes) == 3 else ''
-        im = p.get('imagem', '')
-        if isinstance(im, list): im = im[0] if im else ''
-        img = (BASE + im) if str(im).startswith('/') else (im or BASE + '/pordosom-profile.jpg')
-        itens.append('<a href="' + BASE + '/posts/' + slugify(p.get('title', 'post')) + '.html" style="text-decoration:none;display:flex;gap:1rem;align-items:center;padding:1rem;background:var(--bg-card);border:1px solid var(--border-color-light);border-radius:2px">'
-            '<img src="' + esc(img) + '" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:4px;flex-shrink:0" loading="lazy">'
-            '<div style="flex:1;min-width:0">'
-            '<div style="font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--brand-accent);margin-bottom:.3rem">' + data + ' · ' + calcular_tempo_leitura(p.get('corpo', '')) + '</div>'
-            '<div style="font-weight:700;color:var(--text-primary);margin-bottom:.3rem">' + esc(p.get('title', '')) + '</div>'
-            '<div style="font-size:.8rem;color:var(--text-secondary);line-height:1.5">' + esc(str(p.get('resumo', ''))[:140]) + '</div></div>'
-            '<div style="color:var(--brand-primary-light);font-size:1.1rem">→</div></a>')
-    lista_html = '<div style="display:grid;gap:1rem;max-width:760px;margin:0 auto">' + '\n'.join(itens) + '</div>' if itens else '<p style="text-align:center;color:var(--text-muted)">Nenhuma notícia publicada ainda.</p>'
+    cards = ''.join(_card_noticia(p) for p in posts) if posts else '<p style="text-align:center;color:var(--text-muted)">Nenhuma notícia publicada ainda.</p>'
+    lista_html = '<div class="grade-noticias">' + cards + '</div>'
     body = ('<header class="header" id="header">\n<a href="' + BASE + '/index.html" class="logo">\n'
         '<span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
         '<span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav('Notícias') +
@@ -625,6 +654,7 @@ def gera_noticias():
     with open(os.path.join(BASE_DIR, 'noticias.html'), 'w', encoding='utf-8') as f:
         f.write(_doc('Notícias — Por do Som', 'Lançamentos, projetos e novidades do selo Por do Som.', body))
     print('✔ noticias.html gerada (' + str(len(posts)) + ' notícias)')
+
 
 # ---------- Páginas de notícia ----------
 def gera_posts():
@@ -770,23 +800,14 @@ def page_projeto(p, prev=None, next_=None):
 def gera_projetos():
     global ATUAL_EH_HOME
     ATUAL_EH_HOME = False
-    cards_r = []
-    cards_c = []
-    for p in projetos:
-        st = str(p.get('status','realizado'))
-        st_cls = 'realizado' if st != 'captacao' else 'captacao'
-        st_lbl = '✓ Realizado' if st != 'captacao' else '★ Em captação'
-        img = str(p.get('imagem','') or '')
-        img_src = (BASE + img) if img.startswith('/') else (img or BASE + '/pordosom-profile.jpg')
-        slug = p.get('slug', slugify(p.get('titulo','projeto')))
-        corpo_txt = str(p.get('corpo','') or '')
-        (cards_r if st != 'captacao' else cards_c).append('<div class="projeto-card"><div class="galeria">'
-            '<img src="' + esc(img_src) + '" alt="' + esc(p['titulo']) + '" loading="lazy" onerror="this.style.display=\'none\'"></div>'
-            '<div class="projeto-corpo"><span class="projeto-badge ' + st_cls + '">' + st_lbl + '</span>'
-            '<h3>' + esc(p['titulo']) + '</h3>'
-            '<p style="font-size:.9rem;line-height:1.8;color:var(--text-secondary)">' + esc(corpo_txt[:220]) + ('…' if len(corpo_txt) > 220 else '') + '</p>'
-            '<a href="' + BASE + '/projetos/' + slug + '.html" class="teaser-link" style="margin-top:14px">Ver projeto →</a>'
-            '</div></div>')
+    realizados = [p for p in projetos if str(p.get('status', 'realizado')) != 'captacao']
+    captacao = [p for p in projetos if str(p.get('status', 'realizado')) == 'captacao']
+    html_realizados = '<div class="grade-projetos">' + ''.join(_card_projeto(p) for p in realizados) + '</div>'
+    html_captacao = ''
+    if captacao:
+        html_captacao = ('<h2 class="section-title" style="font-size:1.2rem;margin:3rem 0 1.5rem;text-align:left">'
+                         '★ Em captação — disponíveis para leis de incentivo</h2>\n'
+                         '<div class="grade-projetos">' + ''.join(_card_projeto(p) for p in captacao) + '</div>')
     body = ('<header class="header" id="header">\n<a href="' + BASE + '/index.html" class="logo">\n'
         '<span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
         '<span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav('Projetos') +
@@ -797,15 +818,16 @@ def gera_projetos():
         '<p class="section-description">' + esc(cfg_str('projetos_descricao')) + '</p>\n'
         '</div>\n</header>\n'
         '<section style="padding:3rem 0">\n<div class="container">\n'
-        + '\n'.join(cards_r) + (('\n<h2 class="section-title" style="font-size:1.2rem;margin:3rem 0 1.5rem;text-align:left">★ Em captação — disponíveis para leis de incentivo</h2>\n' + '\n'.join(cards_c)) if cards_c else '') + '\n</div>\n</section>\n' + _footer() + _scripts())
+        + html_realizados + html_captacao + '\n</div>\n</section>\n' + _footer() + _scripts())
     with open(os.path.join(BASE_DIR, 'projetos.html'), 'w', encoding='utf-8') as f:
         f.write(_doc('Projetos & Festivais', cfg_str('projetos_descricao')[:155], body))
     os.makedirs(os.path.join(BASE_DIR, 'projetos'), exist_ok=True)
     for _i, p in enumerate(projetos):
-        slug = p.get('slug', slugify(p.get('titulo','projeto')))
+        slug = p.get('slug', slugify(p.get('titulo', 'projeto')))
         with open(os.path.join(BASE_DIR, 'projetos', slug + '.html'), 'w', encoding='utf-8') as f:
             f.write(page_projeto(p, projetos[_i - 1] if _i > 0 else None, projetos[_i + 1] if _i < len(projetos) - 1 else None))
     print('✔ projetos.html + ' + str(len(projetos)) + ' páginas de projeto geradas')
+
 
 def gera_robots():
     txt = "User-agent: *\nAllow: /\nSitemap: " + DOMINIO + BASE + "/sitemap.xml\n"

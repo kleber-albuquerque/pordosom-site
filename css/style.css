@@ -1680,3 +1680,172 @@ section {
 .hero-content { max-width: 1200px; }
 .hero-title { max-width: 1150px; margin-left: auto; margin-right: auto; }
 .hero-title .gradient { display: block; }
+
+/* ===== GRADES DE NOTÍCIAS E PROJETOS (Lote 1) ===== */
+.grade-noticias,
+.grade-projetos {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* ===== CARD DE NOTÍCIA ===== */
+.card-noticia {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color-light);
+    border-radius: 2px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.4s ease;
+}
+.card-noticia:hover {
+    transform: translateY(-4px);
+    border-color: var(--brand-primary-light);
+    background: var(--bg-card-hover);
+}
+.card-noticia-img {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+.card-noticia-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85) saturate(1.05);
+    transition: all 0.5s ease;
+}
+.card-noticia:hover .card-noticia-img img {
+    filter: brightness(1) saturate(1.15);
+    transform: scale(1.04);
+}
+.card-noticia-info {
+    padding: 1.2rem 1.3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.card-noticia-meta {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--brand-accent);
+    margin-bottom: 0.6rem;
+}
+.card-noticia-titulo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin-bottom: 0.6rem;
+}
+.card-noticia-resumo {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    flex: 1;
+    margin-bottom: 1rem;
+}
+.card-noticia-link {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--brand-primary-light);
+    transition: gap 0.3s ease;
+}
+
+/* ===== AJUSTE NO CARD DE PROJETO ===== */
+.project-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color-light);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+.project-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--brand-primary-light);
+}
+.project-card-visual {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+.project-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.75) saturate(1.1);
+    transition: all 0.5s ease;
+}
+.project-card:hover .project-card-img {
+    filter: brightness(0.9) saturate(1.15);
+    transform: scale(1.04);
+}
+.project-badge {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.8rem;
+    z-index: 2;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+}
+.project-badge.realizado {
+    background: var(--brand-primary);
+    color: var(--brand-cream);
+    border: 1px solid var(--brand-primary-light);
+}
+.project-badge.captacao {
+    background: rgba(232, 160, 74, 0.15);
+    color: var(--brand-accent);
+    border: 1px solid rgba(232, 160, 74, 0.35);
+}
+.project-body {
+    padding: 1.3rem 1.3rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.project-title {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+}
+.project-desc {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    flex: 1;
+    margin-bottom: 1rem;
+}
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--brand-primary-light);
+    text-decoration: none;
+    transition: gap 0.3s ease;
+}
+.project-link:hover { gap: 0.8rem; }
+
+@media (max-width: 560px) {
+    .grade-noticias,
+    .grade-projetos { grid-template-columns: 1fr; }
+}
