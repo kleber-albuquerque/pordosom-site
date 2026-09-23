@@ -1849,3 +1849,49 @@ section {
     .grade-noticias,
     .grade-projetos { grid-template-columns: 1fr; }
 }
+
+/* ===== PAGINAÇÃO DE NOTÍCIAS (Lote 1b) ===== */
+.paginacao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+.paginacao .pag-num,
+.paginacao .pag-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 0.85rem;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color-light);
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.paginacao .pag-num:hover,
+.paginacao .pag-link:hover {
+    border-color: var(--brand-primary-light);
+    color: var(--brand-primary-light);
+    transform: translateY(-2px);
+}
+.paginacao .pag-ativo {
+    background: var(--brand-primary);
+    color: var(--brand-cream);
+    border-color: var(--brand-primary-light);
+    pointer-events: none;
+}
+.paginacao .pag-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}

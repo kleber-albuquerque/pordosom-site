@@ -36,6 +36,9 @@ GRUPOS_AV = {
     'mestres': 'Festival Mestres dos Saberes', 'outros': 'Outros vídeos do canal',
 }
 
+# Paginação server-side de notícias (Lote 1b)
+NOTICIAS_POR_PAGINA = 9
+
 # ---------- Parser ----------
 def parse_md(caminho):
     with open(caminho, encoding='utf-8') as f:
@@ -302,7 +305,7 @@ def _scripts():
             'document.querySelectorAll(".fade-in").forEach(el=>fadeObserver.observe(el));\n'
             '</script>\n')
 
-def _doc(title, desc, body, img_og=None):
+def _doc(title, desc, body, img_og=None, url=None):
     final_title = SITE_CFG.get('seo_title', title + ' | Por do Som') if title == 'Por do Som | Selo Independente & Produtora Cultural' else (title + ' | Por do Som')
     final_desc = SITE_CFG.get('seo_description', desc) if desc == cfg_str('hero_texto', 'Selo dedicado às Brasilidades')[:155] else desc
     if img_og and img_og.startswith('<'):
@@ -311,7 +314,7 @@ def _doc(title, desc, body, img_og=None):
     if img_og and img_og.startswith('/'):
         img_og = DOMINIO + BASE + img_og
     final_img = img_og if img_og else (SITE_CFG.get('seo_og_image') or (DOMINIO + BASE + '/pordosom-profile.jpg'))
-    final_url = DOMINIO + BASE + '/site.html'
+    final_url = url if url else (DOMINIO + BASE + '/site.html')
     keywords = SITE_CFG.get('seo_keywords', '')
     return ('<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
@@ -451,8 +454,13 @@ def gera_site():
             '        <p class="hero-description">' + esc(cfg_str('hero_texto')) + '</p>\n'
             '    </div>\n<div class="hero-scroll">\n        <span>' + esc(cfg_str('hero_scroll_texto', '')) + '</span>\n'
             '        <div class="hero-scroll-line"></div>\n    </div>\n</section>\n')
-    # --- NOTÍCIAS (grade com as 3 mais recentes) ---
-    posts_home = posts[:3]
+    # --- NOTÍCIAS (grade com N mais recentes; N vem do painel) ---
+    try:
+        _qtd_home = int(str(cfg_str('noticias_home_qtd', '3')).strip() or '3')
+    except (ValueError, TypeError):
+        _qtd_home = 3
+    _qtd_home = max(1, min(_qtd_home, 12))
+    posts_home = posts[:_qtd_home]
     cards_noticias = ''.join(_card_noticia(p) for p in posts_home) if posts_home else '<p style="text-align:center;color:var(--text-muted)">Nenhuma notícia publicada ainda.</p>'
     sec_noticias = ('<section class="teaser" id="noticias">\n<div class="container">\n'
                     '        <div class="teaser-head">\n'
@@ -639,21 +647,53 @@ def gera_site():
 def gera_noticias():
     global ATUAL_EH_HOME
     ATUAL_EH_HOME = False
-    cards = ''.join(_card_noticia(p) for p in posts) if posts else '<p style="text-align:center;color:var(--text-muted)">Nenhuma notícia publicada ainda.</p>'
-    lista_html = '<div class="grade-noticias">' + cards + '</div>'
-    body = ('<header class="header" id="header">\n<a href="' + BASE + '/index.html" class="logo">\n'
-        '<span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
-        '<span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav('Notícias') +
-        '<button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
-        '<header class="page-header">\n<div class="container">\n'
-        '<span class="section-subtitle">Notícias do selo</span>\n'
-        '<h1 class="section-title">Lançamentos, projetos e novidades</h1>\n'
-        '<p class="section-description">Tudo o que a Por do Som está fazendo agora — em matérias completas.</p>\n'
-        '</div>\n</header>\n'
-        '<section style="padding:3rem 0">\n<div class="container">\n' + lista_html + '\n</div>\n</section>\n' + _footer() + _scripts())
-    with open(os.path.join(BASE_DIR, 'noticias.html'), 'w', encoding='utf-8') as f:
-        f.write(_doc('Notícias — Por do Som', 'Lançamentos, projetos e novidades do selo Por do Som.', body))
-    print('✔ noticias.html gerada (' + str(len(posts)) + ' notícias)')
+    total = len(posts)
+    total_pag = max(1, (total + NOTICIAS_POR_PAGINA - 1) // NOTICIAS_POR_PAGINA) if total else 1
+    for pagina in range(1, total_pag + 1):
+        ini = (pagina - 1) * NOTICIAS_POR_PAGINA
+        fim = ini + NOTICIAS_POR_PAGINA
+        posts_pag = posts[ini:fim]
+        cards = ''.join(_card_noticia(p) for p in posts_pag)
+        lista_html = ('<div class="grade-noticias">' + cards + '</div>') if cards else '<p style="text-align:center;color:var(--text-muted)">Nenhuma notícia publicada ainda.</p>'
+        nav_pag = ''
+        if total_pag > 1:
+            itens = []
+            if pagina > 1:
+                prev_url = 'noticias.html' if pagina == 2 else 'noticias-' + str(pagina - 1) + '.html'
+                itens.append('<a class="pag-link" href="' + BASE + '/' + prev_url + '">← Anterior</a>')
+            else:
+                itens.append('<span class="pag-link pag-disabled">← Anterior</span>')
+            for n in range(1, total_pag + 1):
+                url_n = 'noticias.html' if n == 1 else 'noticias-' + str(n) + '.html'
+                cls = 'pag-num pag-ativo' if n == pagina else 'pag-num'
+                itens.append('<a class="' + cls + '" href="' + BASE + '/' + url_n + '">' + str(n) + '</a>')
+            if pagina < total_pag:
+                itens.append('<a class="pag-link" href="' + BASE + '/noticias-' + str(pagina + 1) + '.html">Próxima →</a>')
+            else:
+                itens.append('<span class="pag-link pag-disabled">Próxima →</span>')
+            nav_pag = '<nav class="paginacao">' + ''.join(itens) + '</nav>'
+        if pagina == 1:
+            sub = 'Notícias do selo'
+            titulo_pag = 'Notícias — Por do Som'
+            url_pag = DOMINIO + BASE + '/noticias.html'
+        else:
+            sub = 'Notícias do selo · Página ' + str(pagina) + ' de ' + str(total_pag)
+            titulo_pag = 'Notícias — Página ' + str(pagina) + ' — Por do Som'
+            url_pag = DOMINIO + BASE + '/noticias-' + str(pagina) + '.html'
+        body = ('<header class="header" id="header">\n<a href="' + BASE + '/index.html" class="logo">\n'
+            '<span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '<span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav('Notícias') +
+            '<button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+            '<header class="page-header">\n<div class="container">\n'
+            '<span class="section-subtitle">' + sub + '</span>\n'
+            '<h1 class="section-title">Lançamentos, projetos e novidades</h1>\n'
+            '<p class="section-description">Tudo o que a Por do Som está fazendo agora — em matérias completas.</p>\n'
+            '</div>\n</header>\n'
+            '<section style="padding:3rem 0">\n<div class="container">\n' + lista_html + '\n' + nav_pag + '\n</div>\n</section>\n' + _footer() + _scripts())
+        nome_arq = 'noticias.html' if pagina == 1 else 'noticias-' + str(pagina) + '.html'
+        with open(os.path.join(BASE_DIR, nome_arq), 'w', encoding='utf-8') as f:
+            f.write(_doc(titulo_pag, 'Lançamentos, projetos e novidades do selo Por do Som.', body, url=url_pag))
+    print('✔ ' + str(total_pag) + ' página(s) de notícias geradas (' + str(total) + ' notícias)')
 
 
 # ---------- Páginas de notícia ----------
@@ -727,7 +767,7 @@ def gera_json():
                     'img': str(a.get('img','') or '')} for a in artistas]
     posts_js = [{'title': str(p.get('title','')), 'resumo': str(p.get('resumo','')),
                  'date': str(p.get('date','')), 'imagem': str(p.get('imagem','') or ''),
-                 'slug': slugify(p.get('title','post'))} for p in posts[:3]]
+                 'slug': slugify(p.get('title','post'))} for p in posts]
     projetos_js = [{'slug': p['slug'], 'titulo': str(p.get('titulo','')), 'status': str(p.get('status','')),
                     'ano': str(p.get('ano','')), 'badge': str(p.get('badge',''))} for p in projetos]
     cat = {'base': BASE,
@@ -836,9 +876,12 @@ def gera_robots():
     print('✔ robots.txt gerado')
 
 def gera_sitemap():
+    total_pag = max(1, (len(posts) + NOTICIAS_POR_PAGINA - 1) // NOTICIAS_POR_PAGINA) if posts else 1
+    urls_noticias = [DOMINIO + '/noticias.html'] + [DOMINIO + '/noticias-' + str(n) + '.html' for n in range(2, total_pag + 1)]
     urls = [DOMINIO + '/site.html'] + [DOMINIO + '/albuns/' + a['slug'] + '.html' for a in albuns] + \
            [DOMINIO + '/posts/' + slugify(p.get('title','')) + '.html' for p in posts] + \
-           [DOMINIO + '/projetos/' + p['slug'] + '.html' for p in projetos] + [DOMINIO + '/noticias.html']
+           [DOMINIO + '/projetos/' + p['slug'] + '.html' for p in projetos] + \
+           urls_noticias
     hoje = datetime.now().strftime('%Y-%m-%d')
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     for u in urls:
@@ -847,6 +890,7 @@ def gera_sitemap():
     with open(os.path.join(BASE_DIR, 'sitemap.xml'), 'w', encoding='utf-8') as f:
         f.write(sm)
     print('✔ sitemap.xml (' + str(len(urls)) + ' URLs)')
+
 
 # ---------- JS para páginas de dados (catálogo, etc.) ----------
 def _js_dados():
