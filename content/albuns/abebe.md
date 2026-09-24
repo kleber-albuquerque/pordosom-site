@@ -12,6 +12,14 @@ youtube: "https://www.youtube.com/watch?v=ROw_9h76OS4"
 apple: ""
 deezer: "https://link.deezer.com/s/34oXbecEGhAxECEMffoZf"
 texto_en: "The abebé is Oxum's sacred instrument — and the name Luana Bayô chose for this moment. Afro-Brazilian references run through the work: rhythms from the terreiro, melody soaring above, a voice carrying ancestry without the weight of a museum. Tradition sung in the present tense."
+produtor: "teste"
+engenheiro: "teste"
+estudio: ""
+ano_gravacao: ""
+musicos:
+isrc: ""
+gravadora: ""
+distribuidora: ""
 ---
 
  Abebé é o instrumento sagrado de Oxum — e também o nome que Luana Bayô escolheu para este momento. Referências afro-brasileiras atravessam a obra: ritmos que vêm do terreiro, melodia que voa por cima, uma voz que carrega ancestralidade sem peso de museu.
