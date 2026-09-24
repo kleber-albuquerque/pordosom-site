@@ -366,19 +366,54 @@ def page_album(a, prev, next_):
               "name": a['titulo'], "byArtist": {"@type": "MusicGroup", "name": a['artista']},
               "genre": generos_str, "datePublished": str(a.get('ano', '')),
               "publisher": {"@type": "Organization", "name": "Por do Som"}}
+    if a.get('produtor'): schema["producer"] = {"@type": "Person", "name": str(a['produtor'])}
+    if a.get('engenheiro'): schema["recordedBy"] = {"@type": "Person", "name": str(a['engenheiro'])}
+    if a.get('estudio'): schema["recordedAt"] = {"@type": "Place", "name": str(a['estudio'])}
+    if a.get('ano_gravacao'): schema["dateCreated"] = str(a['ano_gravacao'])
+    if a.get('gravadora'): schema["productionCompany"] = {"@type": "Organization", "name": str(a['gravadora'])}
+    if a.get('isrc'): schema["isrcCode"] = str(a['isrc'])
+
     embeds = ''
     if a.get('spotify'):
-        embeds += '\n<iframe src="' + esc(sp_embed(a['spotify'])) + '" height="152" loading="lazy" title="Ouvir no Spotify"></iframe>'
+        embeds += '\n<iframe class="album-iframe-spotify" src="' + esc(sp_embed(a['spotify'])) + '" height="380" loading="lazy" title="Ouvir no Spotify"></iframe>'
     yid = yt_id(a.get('youtube', ''))
     if yid:
         embeds += '\n<iframe src="https://www.youtube.com/embed/' + yid + '" style="aspect-ratio:16/9" loading="lazy" allowfullscreen title="Vídeo"></iframe>'
     plats = ''.join('<a class="plat-link" href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(n) + '</a>'
                     for n, u in [('Spotify', a.get('spotify', '')), ('YouTube', a.get('youtube', '')),
                                  ('Apple', a.get('apple', '')), ('Deezer', a.get('deezer', ''))] if u)
+
+    _ficha_items = [
+        ('Produtor musical', a.get('produtor')),
+        ('Engenheiro de som', a.get('engenheiro')),
+        ('Estúdio', a.get('estudio')),
+        ('Ano de gravação', a.get('ano_gravacao')),
+        ('Músicos participantes', a.get('musicos')),
+        ('ISRC', a.get('isrc')),
+        ('Gravadora', a.get('gravadora')),
+        ('Distribuidora', a.get('distribuidora')),
+    ]
+    _ficha_linhas = ''
+    for _lbl, _val in _ficha_items:
+        if _val:
+            if isinstance(_val, list):
+                _val = ' · '.join(str(x) for x in _val)
+            _ficha_linhas += ('<div class="album-ficha-linha">'
+                              '<div class="album-ficha-label">' + esc(_lbl) + '</div>'
+                              '<div class="album-ficha-valor">' + esc(_val) + '</div>'
+                              '</div>')
+    ficha_html = ''
+    if _ficha_linhas:
+        ficha_html = ('<aside class="album-ficha">'
+                      '<div class="album-ficha-titulo">Ficha técnica</div>'
+                      + _ficha_linhas +
+                      '</aside>')
+
     prev_h = ('<a class="album-nav-link" href="' + BASE + '/albuns/' + prev['slug'] + '.html">&#8592; ' + esc(prev['titulo']) + '</a>') if prev else '<span></span>'
     next_h = ('<a class="album-nav-link" href="' + BASE + '/albuns/' + next_['slug'] + '.html">' + esc(next_['titulo']) + ' &#8594;</a>') if next_ else '<span></span>'
     capa = str(a.get('capa', '') or '')
     capa_src = (BASE + capa) if capa.startswith('/') else capa
+    conteudo_cls = 'album-conteudo' if ficha_html else 'album-conteudo album-conteudo-sem-ficha'
     body = ('<header class="header" id="header">\n<a href="' + BASE + '/site.html" class="logo">\n'
             '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
             '        <span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav() +
@@ -391,15 +426,21 @@ def page_album(a, prev, next_):
             '                <h1 class="album-titulo-grande">' + esc(a['titulo']) + '</h1>\n'
             '                <div class="album-artista-grande">' + esc(a['artista']) + '</div>\n'
             '                <div class="album-descricao">' + md_html_v2(a.get('corpo', '')) + '</div>\n'
-            + ('<p class="album-descricao-en">' + esc(a.get('texto_en', '')) + '</p>' if a.get('texto_en') else '') +
-            '                <div class="album-embeds">' + embeds + '\n</div>\n'
-            '                <div class="album-plataformas">' + plats + '</div>\n'
-            '            </div>\n</div>\n'
-            '        <div class="album-navegacao">\n' + prev_h + '\n'
-            '            <a class="album-nav-link" href="' + BASE + '/index.html">← Voltar para Home</a>\n'
-            '            ' + next_h + '\n</div>\n</div>\n</main>\n' + _footer() + _scripts())
+            + ('<p class="album-descricao-en">' + esc(a.get('texto_en', '')) + '</p>' if a.get('texto_en') else '')
+            + '            </div>\n</div>\n'
+            + '<div class="' + conteudo_cls + '">\n'
+            + (ficha_html if ficha_html else '')
+            + '            <div class="album-player">\n'
+            + '                <div class="album-embeds">' + embeds + '\n</div>\n'
+            + '                <div class="album-plataformas">' + plats + '</div>\n'
+            + '            </div>\n'
+            + '</div>\n'
+            + '        <div class="album-navegacao">\n' + prev_h + '\n'
+            + '            <a class="album-nav-link" href="' + BASE + '/index.html">← Voltar para Home</a>\n'
+            + '            ' + next_h + '\n</div>\n</div>\n</main>\n' + _footer() + _scripts())
     d = _doc(a['titulo'] + ' — ' + a['artista'], (a.get('corpo') or a['titulo'])[:155], body, img_og=capa)
     return d.replace('</head>', '<script type="application/ld+json">\n' + json.dumps(schema, ensure_ascii=False) + '\n</script>\n</head>')
+
 
 # ---------- site.html (o site inteiro, seções por âncoras) ----------
 def _sec(id_, subtitulo, titulo_cfg, desc_cfg=None, conteudo='', alt=False):
@@ -665,7 +706,7 @@ def gera_site():
                '    const contagem = { todos: CAT.albuns.length };\n'
                '    CAT.generos.forEach(g => { contagem[g.id] = CAT.albuns.filter(a=>a.generos.includes(g.id)).length });\n'
                '    filtrosEl.innerHTML = `<button class="filtro ativo" data-g="todos">Todos <span class="count">${contagem.todos}</span></button>` +\n'
-               '      CAT.generos.filter(g=>contagem[g.id]>0).map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]}</span></button>`).join("");\n'
+               '      CAT.generos.map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]||0}</span></button>`).join("");\n'
                '    const nomeG = id => (CAT.generos.find(g=>g.id===id)||{}).nome || id;\n'
                '    function renderGrid(g){\n'
                '      const lista = g==="todos" ? CAT.albuns : CAT.albuns.filter(a=>a.generos.includes(g));\n'
@@ -1090,7 +1131,7 @@ def _js_dados():
             '    const contagem = { todos: CAT.albuns.length };\n'
             '    CAT.generos.forEach(g => { contagem[g.id] = CAT.albuns.filter(a=>a.generos.includes(g.id)).length });\n'
             '    filtrosEl.innerHTML = `<button class="filtro ativo" data-g="todos">Todos <span class="count">${contagem.todos}</span></button>` +\n'
-            '      CAT.generos.filter(g=>contagem[g.id]>0).map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]}</span></button>`).join("");\n'
+            '      CAT.generos.map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]||0}</span></button>`).join("");\n'
             '    const nomeG = id => (CAT.generos.find(g=>g.id===id)||{}).nome || id;\n'
             '    function renderGrid(g){\n'
             '      const lista = g==="todos" ? CAT.albuns : CAT.albuns.filter(a=>a.generos.includes(g));\n'

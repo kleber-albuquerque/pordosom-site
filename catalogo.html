@@ -132,7 +132,7 @@ document.querySelectorAll(".fade-in").forEach(el=>fadeObserver.observe(el));
     const contagem = { todos: CAT.albuns.length };
     CAT.generos.forEach(g => { contagem[g.id] = CAT.albuns.filter(a=>a.generos.includes(g.id)).length });
     filtrosEl.innerHTML = `<button class="filtro ativo" data-g="todos">Todos <span class="count">${contagem.todos}</span></button>` +
-      CAT.generos.filter(g=>contagem[g.id]>0).map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]}</span></button>`).join("");
+      CAT.generos.map(g=>`<button class="filtro" data-g="${g.id}">${g.nome} <span class="count">${contagem[g.id]||0}</span></button>`).join("");
     const nomeG = id => (CAT.generos.find(g=>g.id===id)||{}).nome || id;
     function renderGrid(g){
       const lista = g==="todos" ? CAT.albuns : CAT.albuns.filter(a=>a.generos.includes(g));
