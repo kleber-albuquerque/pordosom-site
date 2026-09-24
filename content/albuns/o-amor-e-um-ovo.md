@@ -4,7 +4,6 @@ artista: "Marco Vilane"
 ano: 2025
 capa: "/images/uploads/o-amor-e-um-ovo.jpg"
  generos:
-  - mpb
 destaque: false
 faixas: 1
 ordem: ""
@@ -14,10 +13,11 @@ apple: ""
 deezer: ""
 texto_en: ""
 produtor: "teste"
-engenheiro: ""
+engenheiro: "teste"
 estudio: "teste"
 ano_gravacao: ""
 musicos:
+  - joão da silva (violão)
 isrc: ""
 gravadora: ""
 distribuidora: ""
