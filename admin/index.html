@@ -289,17 +289,49 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           <div class="f-field"><label>Playlist 2 — ID Spotify</label><input id="cfg-playlist2_id" type="text" placeholder="APENAS o código. Ex: 2cyXUj8Qhe3nZ0rbng87nR (Apague tudo depois do ?)"></div>
         </div>
 
-        <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">7 · HOME — Seção Manifesto</h2>
-        <div class="f-grid">
-          <div class="f-field full"><label>Parágrafo 1</label><textarea id="cfg-manifesto_texto1" style="min-height:100px"></textarea></div>
-          <div class="f-field full"><label>Parágrafo 2</label><textarea id="cfg-manifesto_texto2" style="min-height:100px"></textarea></div>
-          <div class="f-field full"><label>Parágrafo 3</label><textarea id="cfg-manifesto_texto3" style="min-height:100px"></textarea></div>
-        </div>
-
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">8 · HOME — Seção Quem Somos</h2>
         <div class="f-grid">
-          <div class="f-field full"><label>Currículo do selo</label><textarea id="cfg-quemsomos_texto" style="min-height:130px"></textarea></div>
+          <div class="f-field full"><label>Texto do selo (aceita formatação rica)</label>
+            <div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap">
+              <button type="button" class="btn-md" onclick="mdWrap('cfg-quemsomos_texto','**','**')" title="Negrito"><b>B</b></button>
+              <button type="button" class="btn-md" onclick="mdWrap('cfg-quemsomos_texto','*','*')" title="Itálico"><i>I</i></button>
+              <button type="button" class="btn-md" onclick="mdTitulo('cfg-quemsomos_texto')" title="Subtítulo">H2</button>
+              <button type="button" class="btn-md" onclick="mdH3('cfg-quemsomos_texto')" title="Subtítulo menor">H3</button>
+              <button type="button" class="btn-md" onclick="mdLink('cfg-quemsomos_texto')" title="Link">🔗</button>
+              <button type="button" class="btn-md" onclick="mdImagemUpload('cfg-quemsomos_texto')" title="Imagem com legenda">🖼️</button>
+              <button type="button" class="btn-md" onclick="mdGaleriaUpload('cfg-quemsomos_texto')" title="Galeria de fotos">🎞️</button>
+              <button type="button" class="btn-md" onclick="mdCitacao('cfg-quemsomos_texto')" title="Citação">❝</button>
+            </div>
+            <textarea id="cfg-quemsomos_texto" style="min-height:220px"></textarea>
+          </div>
           <div class="f-field full"><label>Link do Portfolio (opcional)</label><input id="cfg-portfolio_link" type="url" placeholder="https://..."></div>
+        </div>
+
+        <h2 style="font-size:14px;color:var(--brand-primary);margin:32px 0 20px">8b · Página do Sérgio Mendonça (fundador)</h2>
+        <div class="f-grid">
+          <div class="f-field"><label>Nome</label><input id="cfg-sergio_nome" type="text" placeholder="Sérgio Mendonça"></div>
+          <div class="f-field"><label>Cargo / Título</label><input id="cfg-sergio_role" type="text" placeholder="Fundador e Diretor Artístico"></div>
+          <div class="f-field full"><label>Bio curta (1-2 linhas de apresentação)</label><input id="cfg-sergio_bio_curta" type="text"></div>
+          <div class="f-field full"><label>Foto (caminho no repositório)</label><input id="cfg-sergio_foto" type="text" placeholder="/images/uploads/sergio.jpg"></div>
+          <div class="f-field full"><label>Ou suba uma nova foto (sobrescreve a atual)</label>
+            <div id="cfg-sergio-foto-preview" style="width:160px;height:160px;border-radius:50%;border:2px dashed var(--border);overflow:hidden;background:var(--bg-darker);display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="subirFotoSergio()">
+              <span style="font-size:.7rem;color:var(--text-muted);text-align:center;padding:1rem;line-height:1.4">Clique para<br>escolher</span>
+            </div>
+            <input type="file" id="cfg-sergio-foto-file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="fotoSergioEscolhida(event)">
+          </div>
+          <div class="f-field full"><label>Currículo completo (aceita formatação rica)</label>
+            <div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap">
+              <button type="button" class="btn-md" onclick="mdWrap('cfg-sergio_curriculo','**','**')" title="Negrito"><b>B</b></button>
+              <button type="button" class="btn-md" onclick="mdWrap('cfg-sergio_curriculo','*','*')" title="Itálico"><i>I</i></button>
+              <button type="button" class="btn-md" onclick="mdTitulo('cfg-sergio_curriculo')" title="Subtítulo">H2</button>
+              <button type="button" class="btn-md" onclick="mdH3('cfg-sergio_curriculo')" title="Subtítulo menor">H3</button>
+              <button type="button" class="btn-md" onclick="mdLink('cfg-sergio_curriculo')" title="Link">🔗</button>
+              <button type="button" class="btn-md" onclick="mdImagemUpload('cfg-sergio_curriculo')" title="Imagem com legenda">🖼️</button>
+              <button type="button" class="btn-md" onclick="mdGaleriaUpload('cfg-sergio_curriculo')" title="Galeria de fotos">🎞️</button>
+              <button type="button" class="btn-md" onclick="mdCitacao('cfg-sergio_curriculo')" title="Citação">❝</button>
+            </div>
+            <textarea id="cfg-sergio_curriculo" style="min-height:280px"></textarea>
+          </div>
         </div>
 
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">9 · HOME — Reconhecimento (prêmios)</h2>
@@ -869,7 +901,13 @@ function parseMd(texto) {
     if (mk) {
       const k = mk[1], v = mk[2].trim(); lista = k;
       const ms = v.match(/^"(.*)"$/) || v.match(/^'(.*)'$/);
-      if (ms) meta[k] = ms[1];
+      if (ms) {
+        let val = ms[1];
+        if (val.startsWith("b64:")) {
+          try { val = decodeURIComponent(escape(atob(val.slice(4)))); } catch (e) {}
+        }
+        meta[k] = val;
+      }
       else if (v === '') meta[k] = [];
       else if (v === 'true') meta[k] = true;
       else if (v === 'false') meta[k] = false;
@@ -2127,7 +2165,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","autor_padrao","manifesto_texto1","manifesto_texto2","manifesto_texto3","quemsomos_texto","portfolio_link","premios_titulo","premios_descricao","premio1","premio2","premio3","premio4","premio5","premio6","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","noticias_home_qtd","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id"];
+const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","autor_padrao","quemsomos_texto","portfolio_link","premios_titulo","premios_descricao","premio1","premio2","premio3","premio4","premio5","premio6","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","noticias_home_qtd","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id","sergio_nome","sergio_role","sergio_bio_curta","sergio_foto","sergio_curriculo"];
 let cfgSha = null;
 
 async function carregarConfig() {
@@ -2153,11 +2191,18 @@ async function salvarConfig() {
   const btn = document.getElementById("btn-salvar-config");
   btn.disabled = true; btn.textContent = "Salvando…";
   try {
-    const q = s => '"' + (s||"").replace(/"/g, '\\\"').replace(/\n/g, " ") + '"';
+    if (typeof sergioFotoNova !== 'undefined' && sergioFotoNova) {
+      await _subirImagemRepo("images/uploads/sergio.jpg", sergioFotoNova, "Atualiza foto do Sérgio");
+      document.getElementById("cfg-sergio_foto").value = "/images/uploads/sergio.jpg";
+      sergioFotoNova = null;
+    }
+    const RICH = ["quemsomos_texto", "sergio_curriculo"];
+    const qSingle = s => '"' + (s||"").replace(/"/g, '\\"').replace(/\n/g, " ") + '"';
+    const qRich = s => '"b64:' + btoa(unescape(encodeURIComponent(s || ""))) + '"';
     let md = "---\n";
     CFG_CAMPOS.forEach(c => {
       const el = document.getElementById("cfg-" + c);
-      md += c + ": " + q(el ? el.value : "") + "\n";
+      md += c + ": " + (RICH.includes(c) ? qRich(el ? el.value : "") : qSingle(el ? el.value : "")) + "\n";
     });
     md += "---\n";
     const conteudo = btoa(unescape(encodeURIComponent(md)));
@@ -2196,6 +2241,18 @@ document.querySelectorAll('.side-item[data-pagina="config"]').forEach(btn => {
 // ---------- Upload de imagens institucionais ----------
 let logoSiteNova = null;
 let heroSiteNova = null;
+let sergioFotoNova = null;
+
+function subirFotoSergio() { document.getElementById("cfg-sergio-foto-file").click(); }
+function fotoSergioEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 800, 0.85, (b64, kb) => {
+    sergioFotoNova = b64;
+    document.getElementById("cfg-sergio-foto-preview").innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="Foto Sérgio" style="width:100%;height:100%;object-fit:cover">';
+    toast("Foto do Sérgio pronta: " + kb + "KB — será enviada ao salvar textos");
+  });
+}
 
 function subirLogoSite() { document.getElementById("cfg-logo-file").click(); }
 function subirHeroSite() { document.getElementById("cfg-hero-file").click(); }
