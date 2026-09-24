@@ -2022,3 +2022,93 @@ section {
 @media (max-width: 560px) {
     .grade-playlists { grid-template-columns: 1fr; }
 }
+
+/* ===== QUEM SOMOS — texto rico (Lote 3a) ===== */
+.quemsomos-texto {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--text-secondary);
+}
+.quemsomos-texto h2 {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin: 2.2rem 0 1rem;
+}
+.quemsomos-texto h3 {
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brand-accent);
+    margin: 2rem 0 0.8rem;
+}
+.quemsomos-texto p { margin: 1rem 0; }
+.quemsomos-texto strong { color: var(--text-primary); font-weight: 600; }
+.quemsomos-texto figure { margin: 2rem 0; text-align: center; }
+.quemsomos-texto img { max-width: 100%; border-radius: 4px; margin: 0 auto; display: block; }
+.quemsomos-texto blockquote {
+    border-left: 3px solid var(--brand-primary);
+    padding: 0.6rem 0 0.6rem 1.4rem;
+    margin: 1.8rem 0;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+.quemsomos-texto a { color: var(--brand-primary-light); }
+
+/* ===== PÁGINA SÉRGIO MENDONÇA ===== */
+.sergio-hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+@media (min-width: 900px) {
+    .sergio-hero { grid-template-columns: minmax(280px, 380px) 1fr; gap: 3.5rem; }
+}
+.sergio-foto {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+.sergio-foto img { width: 100%; display: block; }
+.sergio-curriculo {
+    max-width: 760px;
+    margin: 0 auto;
+    font-size: 0.98rem;
+    line-height: 1.9;
+    color: var(--text-secondary);
+}
+.sergio-curriculo h2 {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin: 2.2rem 0 1rem;
+}
+.sergio-curriculo h3 {
+    font-size: 1.02rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brand-accent);
+    margin: 1.8rem 0 0.7rem;
+}
+.sergio-curriculo p { margin: 1rem 0; }
+.sergio-curriculo strong { color: var(--text-primary); font-weight: 600; }
+.sergio-curriculo ul, .sergio-curriculo ol { margin: 1rem 0 1rem 1.5rem; }
+.sergio-curriculo li { margin: 0.4rem 0; }
+.sergio-curriculo blockquote {
+    border-left: 3px solid var(--brand-primary);
+    padding: 0.6rem 0 0.6rem 1.4rem;
+    margin: 1.8rem 0;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+.sergio-curriculo figure { margin: 2rem 0; text-align: center; }
+.sergio-curriculo img { max-width: 100%; border-radius: 4px; margin: 0 auto; display: block; }
+.sergio-curriculo a { color: var(--brand-primary-light); }
