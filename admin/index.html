@@ -347,7 +347,35 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         </div>
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">10 · HOME — Seção Editora & Direitos</h2>
         <div class="f-grid">
-          <div class="f-field full"><label>Texto</label><textarea id="cfg-editora_texto" style="min-height:110px"></textarea></div>
+          <div class="f-field full"><label>Título da página (opcional)</label><input id="cfg-editora_titulo" type="text" placeholder="Editora &amp; Direitos"></div>
+          <div class="f-field full"><label>Texto principal — Editora &amp; Direitos (aceita formatação rica)</label>
+            <div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap">
+              <button type="button" class="btn-md" onclick="mdWrap('cfg-editora_texto','**','**')" title="Negrito"><b>B</b></button>
+              <button type="button" class="btn-md" onclick="mdWrap('cfg-editora_texto','*','*')" title="Itálico"><i>I</i></button>
+              <button type="button" class="btn-md" onclick="mdTitulo('cfg-editora_texto')" title="Subtítulo">H2</button>
+              <button type="button" class="btn-md" onclick="mdH3('cfg-editora_texto')" title="Subtítulo menor">H3</button>
+              <button type="button" class="btn-md" onclick="mdLink('cfg-editora_texto')" title="Link">🔗</button>
+              <button type="button" class="btn-md" onclick="mdImagemUpload('cfg-editora_texto')" title="Imagem com legenda">🖼️</button>
+              <button type="button" class="btn-md" onclick="mdGaleriaUpload('cfg-editora_texto')" title="Galeria de fotos">🎞️</button>
+              <button type="button" class="btn-md" onclick="mdCitacao('cfg-editora_texto')" title="Citação">❝</button>
+            </div>
+            <textarea id="cfg-editora_texto" style="min-height:220px"></textarea>
+          </div>
+          <div class="f-field full" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px dashed var(--border)"><label style="font-size:.72rem;color:var(--brand-accent);letter-spacing:2px;font-weight:700">📋 ADMINISTRAÇÃO DE OBRAS MUSICAIS</label></div>
+          <div class="f-field full"><label>Título da seção (opcional)</label><input id="cfg-editora_admin_titulo" type="text" placeholder="Administração de obras musicais"></div>
+          <div class="f-field full"><label>Texto — Administração de obras musicais (aceita formatação rica)</label>
+            <div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap">
+              <button type="button" class="btn-md" onclick="mdWrap('cfg-editora_admin_texto','**','**')" title="Negrito"><b>B</b></button>
+              <button type="button" class="btn-md" onclick="mdWrap('cfg-editora_admin_texto','*','*')" title="Itálico"><i>I</i></button>
+              <button type="button" class="btn-md" onclick="mdTitulo('cfg-editora_admin_texto')" title="Subtítulo">H2</button>
+              <button type="button" class="btn-md" onclick="mdH3('cfg-editora_admin_texto')" title="Subtítulo menor">H3</button>
+              <button type="button" class="btn-md" onclick="mdLink('cfg-editora_admin_texto')" title="Link">🔗</button>
+              <button type="button" class="btn-md" onclick="mdImagemUpload('cfg-editora_admin_texto')" title="Imagem com legenda">🖼️</button>
+              <button type="button" class="btn-md" onclick="mdGaleriaUpload('cfg-editora_admin_texto')" title="Galeria de fotos">🎞️</button>
+              <button type="button" class="btn-md" onclick="mdCitacao('cfg-editora_admin_texto')" title="Citação">❝</button>
+            </div>
+            <textarea id="cfg-editora_admin_texto" style="min-height:220px"></textarea>
+          </div>
         </div>
 
         <h2 style="font-size:14px;color:var(--brand-primary);margin:24px 0 20px">11 · HOME — Seção Contato</h2>
@@ -2199,7 +2227,7 @@ async function excluirVideo(x) {
 // ==========================================================
 // PARTE 7 - CONFIGURACOES DO SITE
 // ==========================================================
-const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","autor_padrao","quemsomos_texto","portfolio_link","premios_titulo","premios_descricao","premio1","premio2","premio3","premio4","premio5","premio6","editora_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","noticias_home_qtd","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id","sergio_nome","sergio_role","sergio_bio_curta","sergio_foto","sergio_curriculo"];
+const CFG_CAMPOS = ["hero_imagem", "seo_title","seo_description","seo_keywords","seo_og_image","hero_slogan","hero_texto","hero_scroll_texto","autor_padrao","quemsomos_texto","portfolio_link","premios_titulo","premios_descricao","premio1","premio2","premio3","premio4","premio5","premio6","editora_titulo","editora_texto","editora_admin_titulo","editora_admin_texto","grav_titulo","grav_descricao","artistas_titulo","artistas_descricao","projetos_titulo","projetos_descricao","audio_titulo","audio_descricao","noticias_titulo","noticias_descricao","noticias_home_qtd","contato_titulo","contato_descricao","email_contato","whatsapp_contato","home_vitrine_titulo","home_vitrine_descricao","home_projetos_titulo","home_projetos_descricao","home_audio_titulo","home_playlists_titulo","playlist1_nome","playlist1_id","playlist2_nome","playlist2_id","sergio_nome","sergio_role","sergio_bio_curta","sergio_foto","sergio_curriculo"];
 let cfgSha = null;
 
 async function carregarConfig() {
@@ -2230,7 +2258,7 @@ async function salvarConfig() {
       document.getElementById("cfg-sergio_foto").value = "/images/uploads/sergio.jpg";
       sergioFotoNova = null;
     }
-    const RICH = ["quemsomos_texto", "sergio_curriculo"];
+    const RICH = ["quemsomos_texto", "sergio_curriculo", "editora_texto", "editora_admin_texto"];
     const qSingle = s => '"' + (s||"").replace(/"/g, '\\"').replace(/\n/g, " ") + '"';
     const qRich = s => '"b64:' + btoa(unescape(encodeURIComponent(s || ""))) + '"';
     let md = "---\n";
