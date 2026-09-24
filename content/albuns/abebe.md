@@ -14,7 +14,7 @@ deezer: "https://link.deezer.com/s/34oXbecEGhAxECEMffoZf"
 texto_en: "The abebé is Oxum's sacred instrument — and the name Luana Bayô chose for this moment. Afro-Brazilian references run through the work: rhythms from the terreiro, melody soaring above, a voice carrying ancestry without the weight of a museum. Tradition sung in the present tense."
 produtor: "teste"
 engenheiro: "teste"
-estudio: ""
+estudio: "teste"
 ano_gravacao: ""
 musicos:
 isrc: ""
