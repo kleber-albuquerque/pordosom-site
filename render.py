@@ -573,28 +573,22 @@ def gera_site():
     else:
         playlists_html = '<p style="text-align:center;color:var(--text-muted)">Nenhuma playlist cadastrada ainda.</p>'
     sec_pl = _sec('playlists', 'Playlists', 'home_playlists_titulo', None, playlists_html, alt=True)
-    # --- MANIFESTO ---
-    manifesto_ps = '\n'.join('<p class="manifesto-text">' + esc(cfg_str('manifesto_texto' + str(i))) + '</p>' for i in (1, 2, 3) if cfg_str('manifesto_texto' + str(i)))
+    # --- QUEM SOMOS (com stats migrados do manifesto + link pro Sérgio) ---
     stats = [('31', 'Obras no catálogo'), ('10+', 'Artistas'), ('3', 'Festivais próprios'), ('42', 'Vídeos produzidos')]
     stats_html = '\n'.join('<div class="stat-item fade-in"><div class="stat-num">' + n + '</div><div class="stat-label">' + l + '</div></div>' for n, l in stats)
-    sec_manif = ('<section class="teaser" id="manifesto">\n<div class="container">\n'
-                 '        <div class="manifesto-content">\n'
-                 '            <span class="section-subtitle">Manifesto</span>\n'
-                 '            <h2 class="section-title">Som que <span class="gradient">pulsa Brasil</span></h2>\n'
-                 '            ' + manifesto_ps + '\n'
-                 '            <p class="manifesto-signature">— Por do Som Cultural</p>\n'
-                 '            <div class="manifesto-stats" style="margin-top:3rem">\n' + stats_html + '\n</div>\n'
-                 '        </div>\n</div>\n</section>\n')
-    # --- QUEM SOMOS ---
     portfolio = cfg_str('portfolio_link')
-    port_html = ('<div style="margin-top:3rem" class="fade-in"><a href="' + esc(portfolio) + '" target="_blank" rel="noopener" '
+    port_html = ('<div style="margin-top:2rem" class="fade-in"><a href="' + esc(portfolio) + '" target="_blank" rel="noopener" '
                  'class="btn btn-outline" style="text-decoration:none">Currículo completo &amp; Portfolio ↗</a></div>') if portfolio else ''
+    _sergio_nome = cfg_str('sergio_nome', 'Sérgio Mendonça')
+    sergio_link = ('<div style="margin-top:2rem" class="fade-in"><a href="' + BASE + '/sergio-mendonca.html" '
+                   'class="btn btn-outline" style="text-decoration:none">Conheça a trajetória de ' + esc(_sergio_nome) + ' →</a></div>')
     sec_qs = ('<section class="teaser teaser-alt" id="quemsomos">\n<div class="container">\n'
               '        <div class="manifesto-content">\n'
               '            <span class="section-subtitle">Quem Somos</span>\n'
               '            <h2 class="section-title">Mais de 20 anos <span class="gradient">cantando o Brasil</span></h2>\n'
-              '            <p class="manifesto-text">' + esc(cfg_str('quemsomos_texto')) + '</p>\n'
-              + port_html + '\n</div>\n</div>\n</section>\n')
+              '            <div class="quemsomos-texto">' + md_html_v2(cfg_str('quemsomos_texto')) + '</div>\n'
+              '            <div class="manifesto-stats" style="margin-top:3rem">\n' + stats_html + '\n</div>\n'
+              + port_html + sergio_link + '\n        </div>\n</div>\n</section>\n')
     # --- RECONHECIMENTO (prêmios do portfolio) ---
     premios = [cfg_str('premio' + str(i)) for i in range(1, 7)]
     premios = [p for p in premios if p]
@@ -705,7 +699,7 @@ def gera_site():
             '        <span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav() +
             '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
             + hero + sec_noticias + sec_grav + sec_proj + sec_ed + sec_av + sec_pl
-            + sec_manif + sec_qs + sec_premios + sec_cont + '\n' + _footer() + _scripts() + js_site)
+            + sec_qs + sec_premios + sec_cont + '\n' + _footer() + _scripts() + js_site)
     _conteudo = _doc('Por do Som | Selo Independente & Produtora Cultural',
                      cfg_str('hero_texto', 'Selo dedicado às Brasilidades')[:155], body)
     for _alvo in ('site.html', 'index.html'):
@@ -880,6 +874,39 @@ def gera_playlists():
     print('✔ playlists.html + ' + str(len(playlists)) + ' páginas de playlist geradas')
 
 
+# ---------- Página Sérgio Mendonça (fundador) ----------
+def gera_sergio():
+    global ATUAL_EH_HOME
+    ATUAL_EH_HOME = False
+    nome = cfg_str('sergio_nome', 'Sérgio Mendonça')
+    role = cfg_str('sergio_role', 'Fundador e Diretor Artístico')
+    bio = cfg_str('sergio_bio_curta')
+    curriculo = cfg_str('sergio_curriculo')
+    foto = cfg_str('sergio_foto')
+    foto_src = (BASE + foto) if foto.startswith('/') else foto
+    foto_html = ('<div class="sergio-foto"><img src="' + esc(foto_src) + '" alt="' + esc(nome) + '" loading="lazy"></div>') if foto_src else ''
+    curriculo_html = md_html_v2(curriculo) if curriculo else '<p style="color:var(--text-muted);text-align:center;font-style:italic">Currículo em breve.</p>'
+    body = ('<header class="header" id="header">\n<a href="' + BASE + '/site.html" class="logo">\n'
+            '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '        <span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav('Quem Somos') +
+            '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+            '<main class="album-page">\n<div class="container">\n'
+            '        <div class="sergio-hero">\n' + foto_html + '<div>\n'
+            '            <span class="album-kicker">' + esc(role) + '</span>\n'
+            '            <h1 class="album-titulo-grande">' + esc(nome) + '</h1>\n'
+            + (('<div class="album-descricao" style="font-style:italic">' + esc(bio) + '</div>') if bio else '') +
+            '        </div>\n</div>\n'
+            '        <div class="sergio-curriculo">' + curriculo_html + '</div>\n'
+            '        <div class="album-navegacao">\n'
+            '            <a class="album-nav-link" href="' + BASE + '/site.html#quemsomos">← Voltar para Quem Somos</a>\n'
+            '            <a class="album-nav-link" href="' + BASE + '/site.html#contato">Fale com o selo →</a>\n'
+            '        </div>\n'
+            '</div>\n</main>\n' + _footer() + _scripts())
+    with open(os.path.join(BASE_DIR, 'sergio-mendonca.html'), 'w', encoding='utf-8') as f:
+        f.write(_doc(nome + ' — ' + role, (bio[:155] if bio else 'Trajetória do fundador do selo Por do Som.'), body, img_og=(foto_src or None)))
+    print('✔ sergio-mendonca.html gerada')
+
+
 def gera_json():
     def _n(a):
         capa = a.get('capa','')
@@ -1019,7 +1046,8 @@ def gera_sitemap():
            [DOMINIO + '/posts/' + slugify(p.get('title','')) + '.html' for p in posts] + \
            [DOMINIO + '/projetos/' + p['slug'] + '.html' for p in projetos] + \
            urls_noticias + \
-           [DOMINIO + '/playlists.html'] + [DOMINIO + '/playlists/' + p.get('slug', slugify(p.get('titulo','playlist'))) + '.html' for p in playlists]
+           [DOMINIO + '/playlists.html'] + [DOMINIO + '/playlists/' + p.get('slug', slugify(p.get('titulo','playlist'))) + '.html' for p in playlists] + \
+           [DOMINIO + '/sergio-mendonca.html']
     hoje = datetime.now().strftime('%Y-%m-%d')
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     for u in urls:
@@ -1148,6 +1176,7 @@ if __name__ == '__main__':
     gera_audiovisual()
     gera_projetos()
     gera_playlists()
+    gera_sergio()
     gera_albuns()
     gera_noticias()
     gera_posts()
