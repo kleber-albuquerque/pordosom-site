@@ -443,6 +443,26 @@
       "badge": "Série Audiovisual"
     }
   ],
+  "playlists": [
+    {
+      "slug": "samba-raiz-e-partido-alto",
+      "titulo": "Samba Raiz e Partido Alto",
+      "plataforma": "spotify",
+      "embed_id": "https://open.spotify.com/playlist/2lgoPMSE9e7lxEumGbBaGn?si=fa7e776a47954830",
+      "capa": "",
+      "descricao_curta": "Playlist do selo Por do Som.",
+      "destaque": true
+    },
+    {
+      "slug": "musica-afro-brasileira",
+      "titulo": "Música Afro Brasileira",
+      "plataforma": "spotify",
+      "embed_id": "https://open.spotify.com/playlist/3IeOpRI0JqG5tYkzaVazZu?si=ea8084ecf8484607",
+      "capa": "",
+      "descricao_curta": "Playlist do selo Por do Som.",
+      "destaque": true
+    }
+  ],
   "artistas": [
     {
       "nome": "Aloysio Letra",

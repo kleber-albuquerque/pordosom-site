@@ -21,6 +21,7 @@ PASTA = {
     'projetos': os.path.join(BASE_DIR, 'content', 'projetos'),
     'audiovisual': os.path.join(BASE_DIR, 'content', 'audiovisual'),
     'config': os.path.join(BASE_DIR, 'content', 'config'),
+    'playlists': os.path.join(BASE_DIR, 'content', 'playlists'),
 }
 BASE = '/pordosom-site'
 DOMINIO = 'https://kleber-albuquerque.github.io' + BASE
@@ -209,6 +210,7 @@ artistas = _ler(os.path.join(BASE_DIR, 'content', 'artistas'))
 posts = _ler(PASTA['posts'])
 projetos = _ler(PASTA['projetos'])
 clips = _ler(PASTA['audiovisual'])
+playlists = _ler(PASTA['playlists'])
 
 SITE_CFG = {}
 cfg_path = os.path.join(PASTA['config'], 'site.md')
@@ -240,13 +242,20 @@ _sem = [a for a in albuns if _ordem(a)[0] == 1]
 _sem.sort(key=lambda a: (str(a.get('ano', '')), a['titulo']), reverse=True)
 albuns[:] = sorted(_com, key=_ordem) + _sem
 
+def _pl_ordem(p):
+    o = p.get('ordem')
+    if isinstance(o, list): o = o[0] if o else None
+    try: return int(str(o).strip()) if o is not None and str(o).strip() else 999
+    except: return 999
+playlists.sort(key=lambda p: (_pl_ordem(p), str(p.get('titulo', '')).lower()))
+
 # ---------- Templates compartilhados ----------
 ATUAL_EH_HOME = True
 
 def _nav(ativo=None):
     ITENS = [('Home', BASE + '/site.html'), ('Gravadora', '#gravadora'),
              ('Projetos', '#projetos'), ('Editora & Direitos', '#editora'),
-             ('Audiovisual', '#audiovisual'), ('Playlists', '#playlists'),
+             ('Audiovisual', '#audiovisual'), ('Playlists', BASE + '/playlists.html'),
              ('Notícias', BASE + '/noticias.html'), ('Quem Somos', '#quemsomos'),
              ('Contato', '#contato')]
     linhas = []
@@ -442,6 +451,61 @@ def _card_projeto(p):
         '</div>'
     )
 
+def embed_playlist_url(plataforma, embed_id):
+    """Normaliza qualquer formato (ID puro ou URL) para uma URL de embed."""
+    p = str(plataforma or 'spotify').lower().strip()
+    e = str(embed_id or '').strip()
+    if not e:
+        return ''
+    if p == 'spotify':
+        m = re.search(r'(?:playlist|album|track|artist)/([A-Za-z0-9]{22})', e)
+        if m:
+            return 'https://open.spotify.com/embed/playlist/' + m.group(1)
+        if re.match(r'^[A-Za-z0-9]{22}$', e):
+            return 'https://open.spotify.com/embed/playlist/' + e
+        return e
+    if p == 'youtube':
+        m = re.search(r'list=([A-Za-z0-9_-]+)', e)
+        if m:
+            return 'https://www.youtube.com/embed/videoseries?list=' + m.group(1)
+        m = re.search(r'(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{11})', e)
+        if m:
+            return 'https://www.youtube.com/embed/' + m.group(1)
+        if e.startswith('PL') or e.startswith('UU') or e.startswith('OL'):
+            return 'https://www.youtube.com/embed/videoseries?list=' + e
+        return 'https://www.youtube.com/embed/' + e
+    if p == 'deezer':
+        m = re.search(r'(?:playlist|album|track)/(\d+)', e)
+        if m:
+            return 'https://widget.deezer.com/widget/dark/playlist/' + m.group(1)
+        if re.match(r'^\d+$', e):
+            return 'https://widget.deezer.com/widget/dark/playlist/' + e
+        return e
+    return e
+
+
+def _card_playlist(p):
+    """Card de playlist (vertical, para grades)."""
+    capa = str(p.get('capa', '') or '')
+    capa_src = (BASE + capa) if capa.startswith('/') else (capa or BASE + '/pordosom-profile.jpg')
+    slug = p.get('slug', slugify(p.get('titulo', 'playlist')))
+    desc = str(p.get('descricao_curta', '') or '')
+    plat = str(p.get('plataforma', 'spotify') or 'spotify').lower().strip()
+    return (
+        '<a href="' + BASE + '/playlists/' + slug + '.html" class="card-playlist fade-in">'
+        '<div class="card-playlist-img">'
+        '<img src="' + esc(capa_src) + '" alt="' + esc(p.get('titulo', '')) + '" loading="lazy">'
+        '<span class="card-playlist-plat">' + esc(plat) + '</span>'
+        '</div>'
+        '<div class="card-playlist-info">'
+        '<h3 class="card-playlist-titulo">' + esc(p.get('titulo', '')) + '</h3>'
+        '<p class="card-playlist-resumo">' + esc(desc[:140]) + ('…' if len(desc) > 140 else '') + '</p>'
+        '<span class="card-playlist-link">Ouvir →</span>'
+        '</div>'
+        '</a>'
+    )
+
+
 def gera_site():
     ATUAL_EH_HOME = True
     # --- HERO ---
@@ -496,13 +560,18 @@ def gera_site():
               'class="btn btn-outline" style="text-decoration:none">Ver todos os vídeos (' + str(len(clips)) + ') →</a></div>')
     sec_av = _sec('audiovisual', 'Audiovisual', 'audio_titulo', 'audio_descricao',
                   '<div class="teaser-videos">\n' + vids_home + '\n</div>' + btn_av)
-    # --- PLAYLISTS ---
-    p1id = _sp_id(cfg_str('playlist1_id', '2lgoPMSE9e7lxEumGbBaGn'))
-    p2id = _sp_id(cfg_str('playlist2_id', '2cyXUj8Qhe3nZ0rbng87nR'))
-    playlists_html = ('<div class="teaser-playlists">\n'
-                      '            <iframe src="https://open.spotify.com/embed/playlist/' + p1id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 1"></iframe>\n'
-                      '            <iframe src="https://open.spotify.com/embed/playlist/' + p2id + '?utm_source=generator" height="380" style="width:100%;border-radius:12px;border:none" loading="lazy" title="Playlist 2"></iframe>\n'
-                      '        </div>')
+    # --- PLAYLISTS (teaser) ---
+    playlists_destaque = [p for p in playlists if p.get('destaque')][:3]
+    if not playlists_destaque:
+        playlists_destaque = playlists[:3]
+    if playlists_destaque:
+        cards_pl = ''.join(_card_playlist(p) for p in playlists_destaque)
+        btn_pl = ('<div style="text-align:center;margin-top:2.5rem">'
+                  '<a href="' + BASE + '/playlists.html" class="btn btn-outline" style="text-decoration:none">'
+                  'Ver todas as playlists (' + str(len(playlists)) + ') →</a></div>')
+        playlists_html = '<div class="grade-playlists">' + cards_pl + '</div>' + btn_pl
+    else:
+        playlists_html = '<p style="text-align:center;color:var(--text-muted)">Nenhuma playlist cadastrada ainda.</p>'
     sec_pl = _sec('playlists', 'Playlists', 'home_playlists_titulo', None, playlists_html, alt=True)
     # --- MANIFESTO ---
     manifesto_ps = '\n'.join('<p class="manifesto-text">' + esc(cfg_str('manifesto_texto' + str(i))) + '</p>' for i in (1, 2, 3) if cfg_str('manifesto_texto' + str(i)))
@@ -749,6 +818,68 @@ def gera_posts():
         n += 1
     print('✔ ' + str(n) + ' páginas de notícia geradas')
     # ---------- catalogo.json ----------
+# ---------- Página individual de playlist ----------
+def page_playlist(p, prev, next_):
+    global ATUAL_EH_HOME
+    ATUAL_EH_HOME = False
+    capa = str(p.get('capa', '') or '')
+    capa_src = (BASE + capa) if capa.startswith('/') else capa
+    embed_url = embed_playlist_url(p.get('plataforma', 'spotify'), p.get('embed_id', ''))
+    embed_html = ''
+    if embed_url:
+        embed_html = ('<div class="playlist-embed"><iframe src="' + esc(embed_url) +
+                      '" loading="lazy" allowfullscreen title="' + esc(p.get('titulo', '')) +
+                      '" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe></div>')
+    plat = str(p.get('plataforma', 'spotify') or 'spotify').lower().strip()
+    prev_h = ('<a class="album-nav-link" href="' + BASE + '/playlists/' + prev['slug'] + '.html">&#8592; ' + esc(prev.get('titulo','')) + '</a>') if prev else '<span></span>'
+    next_h = ('<a class="album-nav-link" href="' + BASE + '/playlists/' + next_['slug'] + '.html">' + esc(next_.get('titulo','')) + ' &#8594;</a>') if next_ else '<span></span>'
+    texto_html = md_html_v2(p.get('corpo', '')) if p.get('corpo') else ''
+    share_html = _share(DOMINIO + BASE + '/playlists/' + p['slug'] + '.html')
+    body = ('<header class="header" id="header">\n<a href="' + BASE + '/site.html" class="logo">\n'
+            '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '        <span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav('Playlists') +
+            '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+            '<main class="album-page">\n<div class="container">\n'
+            '        <div class="playlist-hero">\n'
+            + (('<div class="playlist-capa-grande"><img src="' + esc(capa_src) + '" alt="' + esc(p.get('titulo','')) + '" loading="lazy"></div>') if capa_src else '')
+            + '<div>\n'
+            '                <span class="album-kicker">Playlist · ' + esc(plat) + '</span>\n'
+            '                <h1 class="album-titulo-grande">' + esc(p.get('titulo','')) + '</h1>\n'
+            + (('<div class="album-descricao">' + esc(p.get('descricao_curta','')) + '</div>') if p.get('descricao_curta') else '')
+            + embed_html
+            + '</div>\n</div>\n'
+            + (('<div class="playlist-texto">' + texto_html + '</div>') if texto_html else '')
+            + '<div class="album-navegacao">\n' + prev_h + '\n'
+            '            <a class="album-nav-link" href="' + BASE + '/playlists.html">Todas as playlists</a>\n'
+            '            ' + next_h + '\n</div>\n' + share_html + '\n</div>\n</main>\n' + _footer() + _scripts())
+    return _doc('Playlist: ' + p.get('titulo',''), str(p.get('descricao_curta',''))[:155], body, img_og=(capa_src or None))
+
+
+def gera_playlists():
+    global ATUAL_EH_HOME
+    ATUAL_EH_HOME = False
+    cards = ''.join(_card_playlist(p) for p in playlists) if playlists else '<p style="text-align:center;color:var(--text-muted)">Nenhuma playlist cadastrada ainda.</p>'
+    lista_html = '<div class="grade-playlists">' + cards + '</div>'
+    body = ('<header class="header" id="header">\n<a href="' + BASE + '/site.html" class="logo">\n'
+        '<span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+        '<span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav('Playlists') +
+        '<button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+        '<header class="page-header">\n<div class="container">\n'
+        '<span class="section-subtitle">Curadoria do selo</span>\n'
+        '<h1 class="section-title">' + _grad_html(cfg_str('home_playlists_titulo', 'Playlists')) + '</h1>\n'
+        '<p class="section-description">Seleções musicais que traduzem a alma da Por do Som — ouça no Spotify, YouTube ou Deezer.</p>\n'
+        '</div>\n</header>\n'
+        '<section style="padding:3rem 0">\n<div class="container">\n' + lista_html + '\n</div>\n</section>\n' + _footer() + _scripts())
+    with open(os.path.join(BASE_DIR, 'playlists.html'), 'w', encoding='utf-8') as f:
+        f.write(_doc('Playlists — Por do Som', 'Curadoria musical do selo Por do Som.', body))
+    os.makedirs(os.path.join(BASE_DIR, 'playlists'), exist_ok=True)
+    for _i, p in enumerate(playlists):
+        slug = p.get('slug', slugify(p.get('titulo', 'playlist')))
+        with open(os.path.join(BASE_DIR, 'playlists', slug + '.html'), 'w', encoding='utf-8') as f:
+            f.write(page_playlist(p, playlists[_i - 1] if _i > 0 else None, playlists[_i + 1] if _i < len(playlists) - 1 else None))
+    print('✔ playlists.html + ' + str(len(playlists)) + ' páginas de playlist geradas')
+
+
 def gera_json():
     def _n(a):
         capa = a.get('capa','')
@@ -770,16 +901,22 @@ def gera_json():
                  'slug': slugify(p.get('title','post'))} for p in posts]
     projetos_js = [{'slug': p['slug'], 'titulo': str(p.get('titulo','')), 'status': str(p.get('status','')),
                     'ano': str(p.get('ano','')), 'badge': str(p.get('badge',''))} for p in projetos]
+    playlists_js = [{'slug': p.get('slug', slugify(p.get('titulo','playlist'))), 'titulo': str(p.get('titulo','')),
+                     'plataforma': str(p.get('plataforma','spotify') or 'spotify'),
+                     'embed_id': str(p.get('embed_id','') or ''), 'capa': str(p.get('capa','') or ''),
+                     'descricao_curta': str(p.get('descricao_curta','') or ''),
+                     'destaque': bool(p.get('destaque'))} for p in playlists]
     cat = {'base': BASE,
            'generos': [{'id': k, 'nome': v} for k, v in GENEROS.items()],
            'albuns': [_n(a) for a in albuns],
            'posts': posts_js,
            'projetos': projetos_js,
+           'playlists': playlists_js,
            'artistas': artistas_js}
     os.makedirs(os.path.join(BASE_DIR, 'data'), exist_ok=True)
     with open(os.path.join(BASE_DIR, 'data', 'catalogo.json'), 'w', encoding='utf-8') as f:
         json.dump(cat, f, ensure_ascii=False, indent=2)
-    print('OK catalogo.json (' + str(len(albuns)) + ' albuns, ' + str(len(posts_js)) + ' posts, ' + str(len(artistas_js)) + ' artistas, ' + str(len(projetos_js)) + ' projetos)')
+    print('OK catalogo.json (' + str(len(albuns)) + ' albuns, ' + str(len(posts_js)) + ' posts, ' + str(len(artistas_js)) + ' artistas, ' + str(len(projetos_js)) + ' projetos, ' + str(len(playlists_js)) + ' playlists)')
 
 def gera_albuns():
     os.makedirs(os.path.join(BASE_DIR, 'albuns'), exist_ok=True)
@@ -881,7 +1018,8 @@ def gera_sitemap():
     urls = [DOMINIO + '/site.html'] + [DOMINIO + '/albuns/' + a['slug'] + '.html' for a in albuns] + \
            [DOMINIO + '/posts/' + slugify(p.get('title','')) + '.html' for p in posts] + \
            [DOMINIO + '/projetos/' + p['slug'] + '.html' for p in projetos] + \
-           urls_noticias
+           urls_noticias + \
+           [DOMINIO + '/playlists.html'] + [DOMINIO + '/playlists/' + p.get('slug', slugify(p.get('titulo','playlist'))) + '.html' for p in playlists]
     hoje = datetime.now().strftime('%Y-%m-%d')
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     for u in urls:
@@ -1009,6 +1147,7 @@ if __name__ == '__main__':
     gera_catalogo()
     gera_audiovisual()
     gera_projetos()
+    gera_playlists()
     gera_albuns()
     gera_noticias()
     gera_posts()
