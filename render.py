@@ -262,7 +262,7 @@ ATUAL_EH_HOME = True
 
 def _nav(ativo=None):
     ITENS = [('Home', BASE + '/site.html'), ('Gravadora', '#gravadora'),
-             ('Projetos', '#projetos'), ('Editora & Direitos', '#editora'),
+             ('Projetos', '#projetos'), ('Editora & Direitos', BASE + '/editora.html'),
              ('Audiovisual', '#audiovisual'), ('Playlists', BASE + '/playlists.html'),
              ('Notícias', BASE + '/noticias.html'), ('Quem Somos', '#quemsomos'),
              ('Contato', '#contato')]
@@ -555,6 +555,21 @@ def _card_playlist(p):
     )
 
 
+def _plain(md):
+    """Extrai texto plano do Markdown para teasers da home."""
+    t = str(md or '')
+    t = re.sub(r'!\[.*?\]\(.*?\)', '', t)
+    t = re.sub(r'\[(.+?)\]\(.+?\)', r'\1', t)
+    t = re.sub(r'\*\*(.+?)\*\*', r'\1', t)
+    t = re.sub(r'\*(.+?)\*', r'\1', t)
+    t = re.sub(r'^#{1,6}\s*', '', t, flags=re.MULTILINE)
+    t = re.sub(r'^>\s*', '', t, flags=re.MULTILINE)
+    t = re.sub(r'\{\{.*?\}\}', '', t)
+    t = re.sub(r'https?://\S+', '', t)
+    t = re.sub(r'\s+', ' ', t).strip()
+    return t
+
+
 def gera_site():
     ATUAL_EH_HOME = True
     # --- HERO ---
@@ -651,13 +666,17 @@ def gera_site():
             else:
                 cards_pr.append('<div class="fade-in" style="grid-column:1/-1;background:var(--bg-card);border:1px solid var(--border-color-light);border-radius:2px;padding:1.4rem"><div style="font-size:.7rem;font-weight:800;letter-spacing:2px;color:var(--brand-accent);margin-bottom:.6rem">TRAJETÓRIA</div><div style="font-size:.85rem;line-height:1.7;color:var(--text-secondary)">' + esc(p) + '</div></div>')
         sec_premios = _sec('premios', 'Reconhecimento', 'premios_titulo', 'premios_descricao', '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem">' + ''.join(cards_pr) + '</div>')
-    # --- EDITORA ---
+    # --- EDITORA (teaser) ---
+    _texto_ed = _plain(cfg_str('editora_texto'))
+    _resumo_ed = _texto_ed[:280] + ('…' if len(_texto_ed) > 280 else '')
+    if not _resumo_ed:
+        _resumo_ed = 'Editora, direitos autorais e administração de obras musicais do selo Por do Som.'
     sec_ed = ('<section class="teaser" id="editora">\n<div class="container">\n'
               '        <div class="manifesto-content">\n'
               '            <span class="section-subtitle">Editora &amp; Direitos</span>\n'
               '            <h2 class="section-title">Administração de <span class="gradient">obras musicais</span></h2>\n'
-              '            <p class="manifesto-text">' + esc(cfg_str('editora_texto')) + '</p>\n'
-              '            <p class="manifesto-signature">Consultoria: <a href="#contato" style="color:var(--brand-primary-light);text-decoration:none;text-transform:none;letter-spacing:normal">fale com o selo</a></p>\n'
+              '            <p class="manifesto-text">' + esc(_resumo_ed) + '</p>\n'
+              '            <div style="margin-top:2rem"><a href="' + BASE + '/editora.html" class="btn btn-outline" style="text-decoration:none">Saiba mais sobre a Editora →</a></div>\n'
               '        </div>\n</div>\n</section>\n')
     # --- CONTATO ---
     email = cfg_str('email_contato', 'contato@pordosom.com.br')
@@ -956,6 +975,46 @@ def gera_sergio():
     print('✔ sergio-mendonca.html gerada')
 
 
+# ---------- Página Editora & Direitos ----------
+def gera_editora():
+    global ATUAL_EH_HOME
+    ATUAL_EH_HOME = False
+    titulo = cfg_str('editora_titulo', 'Editora & Direitos')
+    titulo_adm = cfg_str('editora_admin_titulo', 'Administração de obras musicais')
+    texto_ed = cfg_str('editora_texto')
+    texto_adm = cfg_str('editora_admin_texto')
+    sec1 = md_html_v2(texto_ed) if texto_ed else '<p style="color:var(--text-muted);text-align:center;font-style:italic">Conteúdo em breve.</p>'
+    sec2 = ''
+    if texto_adm:
+        sec2 = ('<section class="editora-secao editora-secao-alt" id="administracao">\n'
+                '<div class="container">\n'
+                '        <h2 class="section-title" style="text-align:left;font-size:1.6rem">' + _grad_html(titulo_adm) + '</h2>\n'
+                '        <div class="editora-texto">' + md_html_v2(texto_adm) + '</div>\n'
+                '</div>\n</section>\n')
+    body = ('<header class="header" id="header">\n<a href="' + BASE + '/site.html" class="logo">\n'
+            '        <span class="logo-mark"><img src="' + BASE + '/pordosom-profile.jpg" alt="Por do Som"></span>\n'
+            '        <span class="logo-text">PÔR DO SOM</span>\n</a>\n' + _nav('Editora & Direitos') +
+            '    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>\n</header>\n'
+            '<header class="page-header">\n<div class="container">\n'
+            '        <span class="section-subtitle">Editora &amp; Direitos</span>\n'
+            '        <h1 class="section-title">' + _grad_html(titulo) + '</h1>\n'
+            '        <p class="section-description">Direitos autorais, licenciamento e administração de obras musicais — com o cuidado que a música brasileira merece.</p>\n'
+            '</div>\n</header>\n'
+            '<section class="editora-secao">\n'
+            '<div class="container">\n'
+            '        <div class="editora-texto">' + sec1 + '</div>\n'
+            '</div>\n</section>\n'
+            + sec2 +
+            '<section class="teaser teaser-alt">\n<div class="container" style="text-align:center">\n'
+            '        <p style="font-size:.95rem;color:var(--text-secondary);margin-bottom:1.5rem;max-width:640px;margin-left:auto;margin-right:auto">Quer saber mais sobre direitos, licenciamento ou administração de obras? Fale com o selo.</p>\n'
+            '        <a href="' + BASE + '/site.html#contato" class="btn btn-outline" style="text-decoration:none">Entrar em contato →</a>\n'
+            '</div>\n</section>\n'
+            + _footer() + _scripts())
+    with open(os.path.join(BASE_DIR, 'editora.html'), 'w', encoding='utf-8') as f:
+        f.write(_doc(titulo + ' — Por do Som', 'Editora, direitos autorais e administração de obras musicais do selo Por do Som.', body))
+    print('✔ editora.html gerada')
+
+
 def gera_json():
     def _n(a):
         capa = a.get('capa','')
@@ -1096,7 +1155,8 @@ def gera_sitemap():
            [DOMINIO + '/projetos/' + p['slug'] + '.html' for p in projetos] + \
            urls_noticias + \
            [DOMINIO + '/playlists.html'] + [DOMINIO + '/playlists/' + p.get('slug', slugify(p.get('titulo','playlist'))) + '.html' for p in playlists] + \
-           [DOMINIO + '/sergio-mendonca.html']
+           [DOMINIO + '/sergio-mendonca.html'] + \
+           [DOMINIO + '/editora.html']
     hoje = datetime.now().strftime('%Y-%m-%d')
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     for u in urls:
@@ -1226,6 +1286,7 @@ if __name__ == '__main__':
     gera_projetos()
     gera_playlists()
     gera_sergio()
+    gera_editora()
     gera_albuns()
     gera_noticias()
     gera_posts()

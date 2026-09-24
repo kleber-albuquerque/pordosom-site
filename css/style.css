@@ -2174,3 +2174,46 @@ section {
 @media (max-width: 700px) {
     .album-ficha { position: static; }
 }
+
+/* ===== PÁGINA EDITORA & DIREITOS (Lote 5a) ===== */
+.editora-secao {
+    padding: clamp(2.5rem, 5vw, 4rem) 0;
+}
+.editora-secao-alt {
+    background: var(--bg-darker);
+}
+.editora-texto {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1rem;
+    line-height: 1.95;
+    color: var(--text-secondary);
+}
+.editora-texto h2 {
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    margin: 2.2rem 0 1rem;
+}
+.editora-texto h3 {
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brand-accent);
+    margin: 1.8rem 0 0.7rem;
+}
+.editora-texto p { margin: 1rem 0; }
+.editora-texto strong { color: var(--text-primary); font-weight: 600; }
+.editora-texto figure { margin: 2rem 0; text-align: center; }
+.editora-texto img { max-width: 100%; border-radius: 4px; margin: 0 auto; display: block; }
+.editora-texto blockquote {
+    border-left: 3px solid var(--brand-primary);
+    padding: 0.6rem 0 0.6rem 1.4rem;
+    margin: 1.8rem 0;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+.editora-texto a { color: var(--brand-primary-light); }
+.editora-texto ul, .editora-texto ol { margin: 1rem 0 1rem 1.5rem; }
+.editora-texto li { margin: 0.4rem 0; }

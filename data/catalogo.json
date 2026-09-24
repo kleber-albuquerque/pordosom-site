@@ -101,9 +101,7 @@
       "artista": "Marco Vilane",
       "ano": "2025",
       "capa": "/images/uploads/o-amor-e-um-ovo.jpg",
-      "generos": [
-        "mpb"
-      ],
+      "generos": [],
       "destaque": false,
       "ordem": "",
       "spotify": "https://open.spotify.com/track/6zZeyAx4PONg3EZcDIQyOe",
@@ -460,6 +458,15 @@
       "embed_id": "https://open.spotify.com/playlist/3IeOpRI0JqG5tYkzaVazZu?si=ea8084ecf8484607",
       "capa": "",
       "descricao_curta": "Playlist do selo Por do Som.",
+      "destaque": true
+    },
+    {
+      "slug": "musica-para-criancas",
+      "titulo": "Música para Crianças",
+      "plataforma": "spotify",
+      "embed_id": "https://open.spotify.com/playlist/37tPgIVIw9dQm0zNz3ooGa?si=4a0c4cfbeaff41b0",
+      "capa": "",
+      "descricao_curta": "Cantigas de Roda, Roda de Histósias, Trava Línguas e muito mais",
       "destaque": true
     }
   ],
