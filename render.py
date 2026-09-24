@@ -61,7 +61,15 @@ def parse_md(caminho):
                 k, v = mk.group(1), mk.group(2).strip()
                 lista = k
                 ms = re.match(r'^"(.*)"$', v) or re.match(r"^'(.*)'$", v)
-                if ms: meta[k] = ms.group(1)
+                if ms:
+                    _val = ms.group(1)
+                    if _val.startswith('b64:'):
+                        try:
+                            import base64 as _b64
+                            _val = _b64.b64decode(_val[4:]).decode('utf-8')
+                        except Exception:
+                            pass
+                    meta[k] = _val
                 elif v == '': meta[k] = []
                 elif re.match(r'^\d+$', v): meta[k] = int(v)
                 elif v in ('true', 'false'): meta[k] = v == 'true'
