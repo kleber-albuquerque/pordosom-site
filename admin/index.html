@@ -188,6 +188,7 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
     <button class="side-item" data-pagina="noticias"><span class="icone">📰</span> Notícias</button>
     <button class="side-item" data-pagina="projetos"><span class="icone">🎬</span> Projetos</button>
     <button class="side-item" data-pagina="audiovisual"><span class="icone">🎵</span> Audiovisual</button>
+    <button class="side-item" data-pagina="playlists"><span class="icone">🎧</span> Playlists</button>
     <button class="side-item" data-pagina="config"><span class="icone">⚙️</span> Textos do Site</button>
     <button class="side-item" data-pagina="analytics"><span class="icone">📊</span> Analytics & Ferramentas</button>
     <div class="side-footer">
@@ -444,6 +445,31 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
       </div>
     </div>
   
+    <!-- PLAYLISTS -->
+    <div id="pagina-playlists" class="hidden">
+      <div class="toolbar">
+        <div>
+          <h1 class="page-title">Playlists</h1><div class="search-box"><input type="text" id="search-playlists" placeholder="Buscar playlists..." onkeyup="filtrarTabela('playlists')"></div>
+          <p class="page-sub" style="margin-bottom:0">Curadoria musical do selo — Spotify, YouTube ou Deezer</p>
+        </div>
+        <button class="btn-novo" onclick="abrirNovaPlaylist()">＋ Nova Playlist</button>
+      </div>
+      <div class="loading" id="playlists-loading">Carregando playlists…</div>
+      <div class="table-wrap hidden" id="playlists-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Capa</th><th>Título</th><th>Plataforma</th><th>Ordem</th><th>Home</th><th></th></tr>
+          </thead>
+          <tbody id="playlists-tbody"></tbody>
+        </table>
+      </div>
+      <div class="vazio hidden" id="playlists-vazio">
+        <span class="icone">🎧</span>
+        Nenhuma playlist cadastrada ainda.<br>
+        <small>Clique em "＋ Nova Playlist" para começar.</small>
+      </div>
+    </div>
+
     <!-- ABA ANALYTICS & FERRAMENTAS -->
     <div id="pagina-analytics" class="hidden">
       <div class="toolbar">
@@ -465,7 +491,9 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         
     </div>
 
-  </main>
+  </div>
+</div>
+</main>
 </div>
 <!-- ===== EDITOR DE ÁLBUM ===== -->
   <!-- ===== EDITOR DE VIDEO (simplificado) ===== -->
@@ -630,12 +658,85 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
         </div>
       </div>
     </div>
+    </div>
     <div class="editor-rodape">
       <button class="btn-cancelar" onclick="fecharEditorNoticia()">Cancelar</button>
       <button class="btn-cancelar" onclick="salvarComoCopia('noticia')">📋 Salvar como cópia</button><button class="btn-salvar" id="btn-salvar-noticia" onclick="salvarNoticia()">💾 Salvar Notícia</button>
     </div>
   </div>
 </div>
+<!-- ===== EDITOR DE PLAYLIST ===== -->
+<div class="editor-overlay hidden" id="editor-playlist-overlay">
+  <div class="editor-box">
+    <div class="editor-header">
+      <h2 id="editor-playlist-titulo">Nova Playlist</h2>
+      <button class="editor-fechar" onclick="fecharEditorPlaylist()">✕</button>
+    </div>
+    <div class="editor-grid">
+      <div>
+        <div class="capa-editor" id="playlist-capa-preview" onclick="subirCapaPlaylist()">
+          <span class="capa-hint">🎧<br>Clique para escolher<br>a capa da playlist</span>
+        </div>
+        <input type="file" id="playlist-capa-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="capaPlaylistEscolhida(event)">
+        <button class="btn-capa" onclick="subirCapaPlaylist()">📷 Subir capa</button>
+        <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.5rem;line-height:1.5">
+          Quadrada, até 500KB. Comprima em tinypng.com se precisar.
+        </p>
+      </div>
+      <div>
+        <div class="f-grid">
+          <div class="f-field full"><label>Título</label><input id="fp2-titulo" type="text"></div>
+          <div class="f-field">
+            <label>Plataforma</label>
+            <select id="fp2-plataforma" style="background:var(--bg-dark);border:1px solid var(--border-light);color:var(--text-primary);padding:.75rem .9rem;border-radius:4px;font-family:inherit" onchange="atualizarPlaceholderPlaylist()">
+              <option value="spotify">Spotify</option>
+              <option value="youtube">YouTube</option>
+              <option value="deezer">Deezer</option>
+            </select>
+          </div>
+          <div class="f-field">
+            <label>Destaque na home</label>
+            <label class="f-toggle">
+              <input type="checkbox" id="fp2-destaque">
+              <span class="trilha"><span class="bolinha"></span></span>
+              <span style="font-size:.75rem;color:var(--text-secondary)">Mostrar na home</span>
+            </label>
+          </div>
+          <div class="f-field full"><label>ID ou URL da playlist</label><input id="fp2-embed" type="text" placeholder="" oninput="previewPlaylist()">
+            <p class="hint" id="fp2-embed-hint" style="font-size:.68rem;color:var(--text-muted);margin-top:.3rem">Cole o link completo ou apenas o ID (22 caracteres no Spotify).</p>
+          </div>
+          <div class="f-field full" id="fp2-preview-wrap" style="display:none">
+            <label>Prévia</label>
+            <div style="border-radius:8px;overflow:hidden;border:1px solid var(--border-light)"><iframe id="fp2-preview" style="width:100%;min-height:380px;border:0" title="Prévia"></iframe></div>
+          </div>
+          <div class="f-field full"><label>Descrição curta (aparece no card)</label><textarea id="fp2-descricao" style="min-height:70px"></textarea></div>
+          <div class="f-field"><label>Ordem (opcional)</label><input id="fp2-ordem" type="number" min="1" placeholder="vazio = ordem alfabética"></div>
+          <div class="f-field full"><label>Texto sobre a playlist (opcional)</label>
+            <div style="display:flex;gap:.35rem;margin-bottom:.5rem;flex-wrap:wrap">
+              <button type="button" class="btn-md" onclick="mdWrap('fp2-corpo','**','**')" title="Negrito"><b>B</b></button>
+              <button type="button" class="btn-md" onclick="mdWrap('fp2-corpo','*','*')" title="Itálico"><i>I</i></button>
+              <button type="button" class="btn-md" onclick="mdTitulo('fp2-corpo')" title="Subtítulo">H2</button>
+              <button type="button" class="btn-md" onclick="mdH3('fp2-corpo')" title="Subtítulo menor">H3</button>
+              <button type="button" class="btn-md" onclick="mdLink('fp2-corpo')" title="Link">🔗</button>
+              <button type="button" class="btn-md" onclick="mdImagemUpload('fp2-corpo')" title="Imagem com legenda">🖼️</button>
+              <button type="button" class="btn-md" onclick="mdGaleriaUpload('fp2-corpo')" title="Galeria de fotos">🎞️</button>
+              <button type="button" class="btn-md" onclick="mdYoutube('fp2-corpo')" title="Vídeo do YouTube">▶</button>
+              <button type="button" class="btn-md" onclick="mdSpotify('fp2-corpo')" title="Embed Spotify">🎵</button>
+              <button type="button" class="btn-md" onclick="mdCitacao('fp2-corpo')" title="Citação">❝</button>
+            </div>
+            <textarea id="fp2-corpo" style="min-height:180px"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="editor-rodape">
+      <button class="btn-cancelar" onclick="fecharEditorPlaylist()">Cancelar</button>
+      <button class="btn-cancelar" onclick="salvarComoCopia('playlist')">📋 Salvar como cópia</button>
+      <button class="btn-salvar" id="btn-salvar-playlist" onclick="salvarPlaylist()">💾 Salvar Playlist</button>
+    </div>
+  </div>
+</div>
+
 <script>
 
 function filtrarTabela(tipo) {
@@ -711,6 +812,8 @@ async function entrar() {
     abrirPainel();
     await carregarAlbuns();
     carregarNoticias();
+    carregarProjetos();
+    carregarPlaylists();
   } catch (e) {
     TOKEN = '';
     err.textContent = '❌ ' + e.message;
@@ -730,7 +833,7 @@ document.querySelectorAll('.side-item[data-pagina]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.side-item').forEach(b => b.classList.remove('ativo'));
     btn.classList.add('ativo');
-    ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual', 'config', 'analytics'].forEach(p =>
+    ['inicio', 'albuns', 'noticias', 'projetos', 'audiovisual', 'playlists', 'config', 'analytics'].forEach(p =>
       document.getElementById('pagina-' + p).classList.toggle('hidden', p !== btn.dataset.pagina));
     if (btn.dataset.pagina === 'audiovisual' && VIDEOS && !VIDEOS.length) carregarVideos();
   });
@@ -1247,6 +1350,258 @@ async function excluirNoticia(x) {
   }
 }
 
+
+// ==========================================================
+// PARTE 8 - PLAYLISTS
+// ==========================================================
+let PLAYLISTS = [];
+let playlistAtual = null;
+let capaPlaylistNova = null;
+
+async function carregarPlaylists() {
+  const loading = document.getElementById("playlists-loading");
+  const wrap = document.getElementById("playlists-table-wrap");
+  const vazio = document.getElementById("playlists-vazio");
+  try {
+    const lista = await gh("/repos/" + REPO + "/contents/content/playlists");
+    const mds = Array.isArray(lista) ? lista.filter(f => f.name.endsWith(".md")) : [];
+    PLAYLISTS = [];
+    for (const f of mds) {
+      const blob = await gh("/repos/" + REPO + "/contents/content/playlists/" + f.name);
+      const txt = decodeURIComponent(escape(atob(blob.content.replace(/\n/g, ""))));
+      const { meta, corpo } = parseMd(txt);
+      meta.corpo = corpo;
+      if (Array.isArray(meta.capa)) meta.capa = meta.capa[0] || "";
+      if (typeof meta.capa !== "string") meta.capa = String(meta.capa || "");
+      if (Array.isArray(meta.ordem)) meta.ordem = meta.ordem[0] || "";
+      meta._arquivo = f.name;
+      meta._sha = blob.sha;
+      PLAYLISTS.push(meta);
+    }
+    PLAYLISTS.sort((a, b) => {
+      const oa = parseInt(a.ordem) || 999, ob = parseInt(b.ordem) || 999;
+      if (oa !== ob) return oa - ob;
+      return String(a.titulo || "").localeCompare(String(b.titulo || ""));
+    });
+    const tbody = document.getElementById("playlists-tbody");
+    tbody.innerHTML = PLAYLISTS.map(x => {
+      const capa = x.capa ? (String(x.capa).startsWith("/") ? BASE + x.capa : x.capa) : "";
+      const capaHtml = capa
+        ? `<img class="capa-mini" src="${capa}" alt="" loading="lazy" onerror="this.outerHTML='<div class=\\'sem-capa\\'>🎧</div>'">`
+        : `<div class="sem-capa">🎧</div>`;
+      return "<tr><td>" + capaHtml + "</td>"
+        + "<td><div class=\"titulo-cell\">" + (x.titulo || x._arquivo) + "</div></td>"
+        + "<td><span class=\"tag-genero\">" + (x.plataforma || "spotify") + "</span></td>"
+        + "<td>" + (x.ordem || "—") + "</td>"
+        + "<td>" + (x.destaque ? "<span class=\"destaque-star\">★</span>" : "—") + "</td>"
+        + "<td><button class=\"side-item\" style=\"padding:.4rem .7rem\" title=\"Editar\" onclick=\"abrirEditorPlaylist(PLAYLISTS[" + PLAYLISTS.indexOf(x) + "])\">✏️</button>"
+        + " <button class=\"side-item\" style=\"padding:.4rem .7rem\" title=\"Excluir\" onclick=\"excluirPlaylist(PLAYLISTS[" + PLAYLISTS.indexOf(x) + "])\">🗑️</button></td></tr>";
+    }).join("");
+    loading.classList.add("hidden");
+    if (PLAYLISTS.length) wrap.classList.remove("hidden"); else vazio.classList.remove("hidden");
+  } catch (e) {
+    loading.classList.add("hidden");
+    vazio.classList.remove("hidden");
+  }
+}
+
+function abrirNovaPlaylist() {
+  playlistAtual = { _arquivo: "", _sha: null, titulo: "", plataforma: "spotify",
+                    embed_id: "", capa: "", descricao_curta: "", ordem: "",
+                    destaque: false, corpo: "" };
+  capaPlaylistNova = null;
+  preencherEditorPlaylist();
+  document.getElementById("editor-playlist-titulo").textContent = "Nova Playlist";
+  document.getElementById("editor-playlist-overlay").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function abrirEditorPlaylist(x) {
+  playlistAtual = x;
+  capaPlaylistNova = null;
+  preencherEditorPlaylist();
+  document.getElementById("editor-playlist-titulo").textContent = "Editar: " + (x.titulo || "playlist");
+  document.getElementById("editor-playlist-overlay").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function preencherEditorPlaylist() {
+  document.getElementById("fp2-titulo").value = playlistAtual.titulo || "";
+  document.getElementById("fp2-plataforma").value = String(playlistAtual.plataforma || "spotify");
+  document.getElementById("fp2-embed").value = playlistAtual.embed_id || "";
+  document.getElementById("fp2-descricao").value = playlistAtual.descricao_curta || "";
+  document.getElementById("fp2-ordem").value = playlistAtual.ordem || "";
+  document.getElementById("fp2-corpo").value = playlistAtual.corpo || "";
+  document.getElementById("fp2-destaque").checked = !!playlistAtual.destaque;
+  const prev = document.getElementById("playlist-capa-preview");
+  if (playlistAtual.capa) {
+    const src = String(playlistAtual.capa).startsWith("/") ? BASE + playlistAtual.capa : playlistAtual.capa;
+    prev.innerHTML = '<img src="' + src + '" alt="" onerror="this.outerHTML=\'<span class=&quot;capa-hint&quot;>🎧<br>Clique para escolher<br>a capa da playlist</span>\'">';
+  } else {
+    prev.innerHTML = '<span class="capa-hint">🎧<br>Clique para escolher<br>a capa da playlist</span>';
+  }
+  atualizarPlaceholderPlaylist();
+  previewPlaylist();
+}
+
+function fecharEditorPlaylist() {
+  document.getElementById("editor-playlist-overlay").classList.add("hidden");
+  document.body.style.overflow = "";
+  playlistAtual = null; capaPlaylistNova = null;
+}
+
+function subirCapaPlaylist() { document.getElementById("playlist-capa-input").click(); }
+function capaPlaylistEscolhida(e) {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+  comprimirImagem(arquivo, 600, 0.82, (b64, kb) => {
+    capaPlaylistNova = b64;
+    document.getElementById("playlist-capa-preview").innerHTML = '<img src="data:image/jpeg;base64,' + b64 + '" alt="">';
+    toast("Capa otimizada: " + kb + "KB");
+  });
+}
+
+function atualizarPlaceholderPlaylist() {
+  const plat = document.getElementById("fp2-plataforma").value;
+  const input = document.getElementById("fp2-embed");
+  const hint = document.getElementById("fp2-embed-hint");
+  if (plat === "spotify") {
+    input.placeholder = "https://open.spotify.com/playlist/... ou só o ID (22 chars)";
+    hint.textContent = "Cole o link completo ou apenas o ID (22 caracteres).";
+  } else if (plat === "youtube") {
+    input.placeholder = "https://www.youtube.com/playlist?list=... ou só o ID (PL...)";
+    hint.textContent = "Cole o link da playlist ou apenas o ID (começa com PL, UU ou OL).";
+  } else if (plat === "deezer") {
+    input.placeholder = "https://www.deezer.com/playlist/1234567890 ou só o número";
+    hint.textContent = "Cole o link da playlist ou apenas o número do ID.";
+  }
+}
+
+function _embedPlaylistFromInput(plat, valor) {
+  const e = String(valor || "").trim();
+  if (!e) return "";
+  if (plat === "spotify") {
+    let m = e.match(/(?:playlist|album|track|artist)\/([A-Za-z0-9]{22})/);
+    if (m) return "https://open.spotify.com/embed/playlist/" + m[1];
+    if (/^[A-Za-z0-9]{22}$/.test(e)) return "https://open.spotify.com/embed/playlist/" + e;
+    return e;
+  }
+  if (plat === "youtube") {
+    let m = e.match(/list=([A-Za-z0-9_-]+)/);
+    if (m) return "https://www.youtube.com/embed/videoseries?list=" + m[1];
+    m = e.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+    if (m) return "https://www.youtube.com/embed/" + m[1];
+    if (e.startsWith("PL") || e.startsWith("UU") || e.startsWith("OL")) return "https://www.youtube.com/embed/videoseries?list=" + e;
+    return "https://www.youtube.com/embed/" + e;
+  }
+  if (plat === "deezer") {
+    let m = e.match(/(?:playlist|album|track)\/(\d+)/);
+    if (m) return "https://widget.deezer.com/widget/dark/playlist/" + m[1];
+    if (/^\d+$/.test(e)) return "https://widget.deezer.com/widget/dark/playlist/" + e;
+    return e;
+  }
+  return e;
+}
+
+function previewPlaylist() {
+  const plat = document.getElementById("fp2-plataforma").value;
+  const val = document.getElementById("fp2-embed").value;
+  const url = _embedPlaylistFromInput(plat, val);
+  const wrap = document.getElementById("fp2-preview-wrap");
+  const iframe = document.getElementById("fp2-preview");
+  if (url && /^https?:\/\//.test(url)) {
+    iframe.src = url;
+    wrap.style.display = "block";
+  } else {
+    iframe.src = "";
+    wrap.style.display = "none";
+  }
+}
+
+function montarMdPlaylist() {
+  const val = id => (document.getElementById(id).value || "").trim();
+  const q = s => '"' + (s || "").replace(/"/g, '\\"') + '"';
+  const plat = val("fp2-plataforma") || "spotify";
+  const destaque = document.getElementById("fp2-destaque").checked;
+  return "---\n"
+    + "titulo: " + q(val("fp2-titulo")) + "\n"
+    + "plataforma: " + q(plat) + "\n"
+    + "embed_id: " + q(val("fp2-embed")) + "\n"
+    + "capa: " + q(playlistAtual.capa || "") + "\n"
+    + "descricao_curta: " + q(val("fp2-descricao")) + "\n"
+    + "ordem: " + q(val("fp2-ordem")) + "\n"
+    + "destaque: " + destaque + "\n"
+    + "---\n\n"
+    + val("fp2-corpo") + "\n";
+}
+
+async function salvarPlaylist() {
+  if (!playlistAtual) return;
+  const btn = document.getElementById("btn-salvar-playlist");
+  if (!document.getElementById("fp2-titulo").value.trim()) {
+    toast("⚠️ O título é obrigatório"); return;
+  }
+  btn.disabled = true; btn.textContent = "Salvando…";
+  try {
+    if (capaPlaylistNova) {
+      const baseNome = playlistAtual._arquivo
+        ? playlistAtual._arquivo.replace(".md", "")
+        : slugify(document.getElementById("fp2-titulo").value);
+      const nomeImg = "images/uploads/playlist-" + baseNome + ".jpg";
+      const caminhoImg = "/repos/" + REPO + "/contents/" + nomeImg;
+      let shaImg = null;
+      try { const atual = await gh(caminhoImg); shaImg = atual.sha; } catch (e) {}
+      await gh(caminhoImg, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          message: "Capa da playlist: " + document.getElementById("fp2-titulo").value,
+          content: capaPlaylistNova,
+          ...(shaImg ? {sha: shaImg} : {})
+        })
+      });
+      playlistAtual.capa = "/" + nomeImg;
+    }
+    const conteudo = btoa(unescape(encodeURIComponent(montarMdPlaylist())));
+    const ehNovo = !playlistAtual._sha;
+    const nomeArquivo = ehNovo
+      ? slugify(document.getElementById("fp2-titulo").value) + ".md"
+      : playlistAtual._arquivo;
+    const bodySalvar = {
+      message: (ehNovo ? "Nova playlist: " : "Edita playlist: ") + document.getElementById("fp2-titulo").value,
+      content: conteudo
+    };
+    if (!ehNovo) bodySalvar.sha = playlistAtual._sha;
+    await gh("/repos/" + REPO + "/contents/content/playlists/" + nomeArquivo, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(bodySalvar)
+    });
+    toast("✓ Playlist salva! O site atualiza em ~2 min.");
+    fecharEditorPlaylist();
+    await carregarPlaylists();
+  } catch (e) {
+    toast("❌ Erro ao salvar: " + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "💾 Salvar Playlist";
+  }
+}
+
+async function excluirPlaylist(x) {
+  if (!confirm("Excluir a playlist \"" + (x.titulo || x._arquivo) + "\"?")) return;
+  try {
+    await gh("/repos/" + REPO + "/contents/content/playlists/" + x._arquivo, {
+      method: "DELETE",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: "Exclui playlist: " + x.titulo, sha: x._sha })
+    });
+    toast("✓ Playlist excluída.");
+    await carregarPlaylists();
+  } catch (e) {
+    toast("❌ Erro ao excluir: " + e.message);
+  }
+}
+
 // ---------- Toast ----------
 function toast(msg) {
   const t = document.createElement('div');
@@ -1266,6 +1621,7 @@ function toast(msg) {
       carregarAlbuns();
       carregarNoticias();
       carregarProjetos();
+      carregarPlaylists();
     } catch (e) {
       localStorage.removeItem('pds_token');
       TOKEN = '';
