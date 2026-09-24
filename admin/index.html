@@ -643,6 +643,19 @@ td .artista-cell{font-size:.72rem;color:var(--text-muted)}
           </div>
           <div class="f-field full"><label>Texto do álbum (português)</label><textarea id="f-texto-pt"></textarea></div>
           <div class="f-field full"><label>Texto em inglês (opcional - melhora busca internacional)</label><textarea id="f-texto-en" style="min-height:90px"></textarea></div>
+
+          <div class="f-field full" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px dashed var(--border)">
+            <label style="font-size:.72rem;color:var(--brand-accent);letter-spacing:2px;font-weight:700">📋 FICHA TÉCNICA (opcional)</label>
+            <p class="hint" style="font-size:.65rem;color:var(--text-muted);margin-top:.3rem">Preencha apenas o que quiser que apareça na página do álbum. Campos vazios não são exibidos.</p>
+          </div>
+          <div class="f-field"><label>Produtor musical</label><input id="f-produtor" type="text"></div>
+          <div class="f-field"><label>Engenheiro de som</label><input id="f-engenheiro" type="text"></div>
+          <div class="f-field"><label>Estúdio</label><input id="f-estudio" type="text"></div>
+          <div class="f-field"><label>Ano de gravação</label><input id="f-ano_gravacao" type="text" placeholder="Ex: 2018"></div>
+          <div class="f-field full"><label>Músicos participantes (separe por vírgula)</label><input id="f-musicos" type="text" placeholder="Ex: João Silva (violão), Maria Santos (voz)"></div>
+          <div class="f-field"><label>ISRC</label><input id="f-isrc" type="text" placeholder="Ex: BR-XXX-18-00001"></div>
+          <div class="f-field"><label>Gravadora</label><input id="f-gravadora" type="text"></div>
+          <div class="f-field"><label>Distribuidora</label><input id="f-distribuidora" type="text"></div>
         </div>
       </div>
     </div>
@@ -1033,6 +1046,15 @@ function abrirEditor(album) {
   document.getElementById('f-deezer').value = album.deezer || '';
   document.getElementById('f-texto-pt').value = album.corpo || '';
   document.getElementById('f-texto-en').value = album.texto_en || '';
+
+  document.getElementById('f-produtor').value = album.produtor || '';
+  document.getElementById('f-engenheiro').value = album.engenheiro || '';
+  document.getElementById('f-estudio').value = album.estudio || '';
+  document.getElementById('f-ano_gravacao').value = album.ano_gravacao || '';
+  document.getElementById('f-musicos').value = Array.isArray(album.musicos) ? album.musicos.join(', ') : (album.musicos || '');
+  document.getElementById('f-isrc').value = album.isrc || '';
+  document.getElementById('f-gravadora').value = album.gravadora || '';
+  document.getElementById('f-distribuidora').value = album.distribuidora || '';
   document.getElementById('f-destaque').checked = !!album.destaque;
 
   const marcados = album.generos || [];
@@ -1099,6 +1121,10 @@ function montarMd() {
     : 'generos:';
   const q = s => `"${(s || '').replace(/"/g, '\\"')}"`;
 
+  const _musicosTxt = val('f-musicos');
+  const _musicosArr = _musicosTxt ? _musicosTxt.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const musicosLinhas = _musicosArr.length ? ('musicos:\n' + _musicosArr.map(m => '  - ' + m).join('\n')) : 'musicos:';
+
   return `---
 titulo: ${q(val('f-titulo'))}
 artista: ${q(val('f-artista'))}
@@ -1112,6 +1138,14 @@ youtube: ${q(val('f-youtube'))}
 apple: ${q(val('f-apple'))}
 deezer: ${q(val('f-deezer'))}
 texto_en: ${q(val('f-texto-en'))}
+produtor: ${q(val('f-produtor'))}
+engenheiro: ${q(val('f-engenheiro'))}
+estudio: ${q(val('f-estudio'))}
+ano_gravacao: ${q(val('f-ano_gravacao'))}
+${musicosLinhas}
+isrc: ${q(val('f-isrc'))}
+gravadora: ${q(val('f-gravadora'))}
+distribuidora: ${q(val('f-distribuidora'))}
 ---
 
  ${val('f-texto-pt')}
